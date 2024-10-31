@@ -77,18 +77,11 @@ public class ProductEntity {
     private String barcode;
 
     /**
-     * The brand associated with the product.
-     * This field establishes a many-to-one relationship with the {@link BrandEntity}.
-     */
-    @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private BrandEntity brand;
-
-    /**
      * The model associated with the product.
-     * This field establishes a one-to-one relationship with the {@link ModelEntity}.
+     * This field establishes a one-to-one relationship with the {@link ModelEntity} and cannot be null.
      */
-    @OneToOne
+    @NotNull(message = "${validation.not_null.message}")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, optional = false)
     @JoinColumn(name = "model_id")
     private ModelEntity model;
 
@@ -117,7 +110,7 @@ public class ProductEntity {
      * Establishes a one-to-one relationship with the {@link DimensionsEntity} and is part of the unique constraint
      * on the combination of "name" and "dimensions_id".
      */
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "dimensions_id")
     private DimensionsEntity dimensionsID;
 
