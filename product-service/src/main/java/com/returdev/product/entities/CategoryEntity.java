@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 /**
  * Represents a category entity in the system.
  * This entity is mapped to the "category" table in the database.
@@ -51,13 +49,6 @@ public class CategoryEntity {
     @Size(max = 150, message = "${validation.size.max.message}")
     @Column(name = "summary", nullable = false, length = 150)
     private String summary;
-
-    /**
-     * A list of products associated with the category.
-     * Establishes a one-to-many relationship with {@link ProductEntity}.
-     */
-    @OneToMany(mappedBy = "category")
-    private List<ProductEntity> products;
 
 }
 
