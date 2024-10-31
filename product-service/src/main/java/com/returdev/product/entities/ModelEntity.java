@@ -1,5 +1,6 @@
 package com.returdev.product.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * Represents a model entity in the system.
@@ -58,6 +61,14 @@ public class ModelEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "brand_id")
     private BrandEntity brand;
+
+    /**
+     * The product associated with the model.
+     * This field establishes a one-to-one relationship with {@link ProductEntity}.
+     * Each model can be linked to a specific product, allowing for detailed association in the system.
+     */
+    @OneToMany(mappedBy = "model")
+    private List<ProductEntity> product;
 
     /**
      * Indicates if the model is currently in production.
