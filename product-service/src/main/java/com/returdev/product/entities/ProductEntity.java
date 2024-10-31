@@ -78,12 +78,14 @@ public class ProductEntity {
 
     /**
      * The model associated with the product.
-     * This field establishes a one-to-one relationship with the {@link ModelEntity} and cannot be null.
+     * This field establishes a many-to-one relationship with the {@link ModelEntity}.
+     * It cannot be null and is set to cascade persist and remove operations.
      */
     @NotNull(message = "${validation.not_null.message}")
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, optional = false)
     @JoinColumn(name = "model_id")
     private ModelEntity model;
+
 
     /**
      * The category associated with the product.
