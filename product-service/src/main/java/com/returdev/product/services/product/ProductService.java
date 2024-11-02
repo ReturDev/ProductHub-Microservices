@@ -1,4 +1,4 @@
-package com.returdev.product.service.product;
+package com.returdev.product.services.product;
 
 import com.returdev.product.entities.ModelEntity;
 import com.returdev.product.entities.ProductEntity;

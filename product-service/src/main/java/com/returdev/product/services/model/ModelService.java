@@ -1,4 +1,4 @@
-package com.returdev.product.service.model;
+package com.returdev.product.services.model;
 
 import com.returdev.product.entities.ModelEntity;
 import org.springframework.data.domain.Page;

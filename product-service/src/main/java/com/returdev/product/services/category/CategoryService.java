@@ -1,4 +1,4 @@
-package com.returdev.product.service.category;
+package com.returdev.product.services.category;
 
 
 import com.returdev.product.entities.CategoryEntity;

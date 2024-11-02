@@ -1,4 +1,4 @@
-package com.returdev.product.service.brand;
+package com.returdev.product.services.brand;
 
 
 import com.returdev.product.entities.BrandEntity;
