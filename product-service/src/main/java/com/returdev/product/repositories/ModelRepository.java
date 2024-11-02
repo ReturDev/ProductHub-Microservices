@@ -75,7 +75,7 @@ public interface ModelRepository extends JpaRepository<ModelEntity, Long> {
     ModelEntity updateModelBrand(@Param("modelId") Long modelId, @Param("brandId") Long brandId);
 
     /**
-     * Activates a model using a stored procedure.
+     * Activates a model by setting its production status to active.
      *
      * @param modelId the unique identifier of the model to activate
      */
