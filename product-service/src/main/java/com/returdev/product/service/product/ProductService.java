@@ -25,10 +25,9 @@ public interface ProductService {
      * Retrieves a product by its ID.
      *
      * @param id the unique identifier of the product
-     * @param includeHidden whether to include hidden products in the result
      * @return an Optional containing the found ProductEntity, or empty if not found
      */
-    Optional<ProductEntity> getProductById(Long id, boolean includeHidden);
+    Optional<ProductEntity> getProductById(Long id);
 
     /**
      * Retrieves a list of products by their product code.
@@ -108,40 +107,45 @@ public interface ProductService {
      *
      * @param productId the unique identifier of the product
      * @param newName the new name for the product
+     * @return the updated ProductEntity
      */
-    void updateProductName(Long productId, String newName);
+    ProductEntity updateProductName(Long productId, String newName);
 
     /**
      * Updates the summary of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
      * @param newSummary the new summary for the product
+     * @return the updated ProductEntity
      */
-    void updateProductSummary(Long productId, String newSummary);
+    ProductEntity updateProductSummary(Long productId, String newSummary);
 
     /**
      * Updates the product code of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
      * @param newCode the new product code for the product
+     * @return the updated ProductEntity
      */
-    void updateProductCode(Long productId, String newCode);
+    ProductEntity updateProductCode(Long productId, String newCode);
 
     /**
      * Updates the barcode of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
      * @param barcode the new barcode for the product
+     * @return the updated ProductEntity
      */
-    void updateProductBarcode(Long productId, String barcode);
+    ProductEntity updateProductBarcode(Long productId, String barcode);
 
     /**
      * Updates the model associated with a product.
      *
      * @param productId the unique identifier of the product
      * @param model the new ModelEntity to associate with the product
+     * @return the updated ProductEntity
      */
-    void updateProductModel(Long productId, ModelEntity model);
+    ProductEntity updateProductModel(Long productId, ModelEntity model);
 
     /**
      * Removes a supplier association from a product.
