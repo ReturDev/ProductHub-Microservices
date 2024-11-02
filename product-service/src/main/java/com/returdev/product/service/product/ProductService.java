@@ -74,6 +74,16 @@ public interface ProductService {
     Page<ProductEntity> getProductsByCategoryId(Long categoryId);
 
     /**
+     * Retrieves a paginated list of products by model ID.
+     *
+     * @param modelId the unique identifier of the model
+     * @param pageable pagination information
+     * @param includeHidden whether to include hidden products in the result
+     * @return a Page of ProductEntity associated with the specified model
+     */
+    Page<ProductEntity> getProductsByModelId(Long modelId, Pageable pageable, boolean includeHidden);
+
+    /**
      * Retrieves a paginated list of all products.
      *
      * @param pageable pagination information
@@ -87,10 +97,10 @@ public interface ProductService {
      *
      * @param example an Example containing the search criteria
      * @param pageable pagination information
-     * @param showHiddenProducts whether to show hidden products
+     * @param includeHidden whether to show hidden products
      * @return a Page of ProductEntity matching the example
      */
-    Page<ProductEntity> searchProducts(Example<ProductEntity> example, Pageable pageable, boolean showHiddenProducts);
+    Page<ProductEntity> searchProducts(Example<ProductEntity> example, Pageable pageable, boolean includeHidden);
 
     // UPDATES
 
