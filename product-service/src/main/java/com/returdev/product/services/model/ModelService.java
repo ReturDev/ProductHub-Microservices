@@ -12,8 +12,6 @@ import java.util.Optional;
  */
 public interface ModelService {
 
-    // GET
-
     /**
      * Retrieves a model by its unique ID.
      *
@@ -38,9 +36,7 @@ public interface ModelService {
      * @param pageable pagination information
      * @return a Page of ModelEntity containing models associated with the brand
      */
-    Page<ModelEntity> getModelsByBrandId(Long brandId, Pageable pageable);
-
-    // UPDATE
+    Page<ModelEntity> getModelsByBrandId(Long brandId, boolean includeInactive, Pageable pageable);
 
     /**
      * Updates the details of an existing model.
@@ -77,8 +73,6 @@ public interface ModelService {
      */
     ModelEntity updateModelBrand(Long modelId, Long brandId);
 
-    // SAVE
-
     /**
      * Saves a new model to the system.
      *
@@ -91,19 +85,9 @@ public interface ModelService {
      * Activates a model identified by its ID.
      *
      * @param id the unique identifier of the model
-     * @return the activated ModelEntity
      */
-    ModelEntity activateModel(Long id);
-
-    // DELETE
-
-    /**
-     * Permanently deletes a model identified by its ID.
-     *
-     * @param id the unique identifier of the model
-     */
-    void deleteModel(Long id);
-
+    void activateModel(Long id);
+    
     /**
      * Inactivates a model identified by its ID.
      *
