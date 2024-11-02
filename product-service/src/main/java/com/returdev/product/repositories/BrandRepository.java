@@ -57,8 +57,6 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
     @Query("SELECT b FROM BrandEntity b WHERE b.isActive = true")
     Page<BrandEntity> findAllActiveBrands(Pageable pageable);
 
-    // UPDATE methods
-
     /**
      * Updates the name of a brand using a stored procedure.
      *
@@ -84,15 +82,15 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
     int updateBrandSummary(@Param("id") Long brandId, @Param("summary") String newSummary);
 
     /**
-     * Activates a brand using a stored procedure.
+     * Activates a brand by setting its status to active.
+     * This operation modifies the `isActive` field of the specified brand.
      *
-     * @param brandId the unique identifier of the brand
-     * @return the number of affected rows
+     * @param brandId the unique identifier of the brand to activate
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL activateBrand(:id)", nativeQuery = true)
-    int activateBrand(@Param("id") Long brandId);
+    @Query("UPDATE BrandEntity b SET b.isActive = true WHERE b.id = :id")
+    void activateBrand(@Param("id") Long brandId);
 
     /**
      * Deactivates a brand by setting its isActive status to false.
