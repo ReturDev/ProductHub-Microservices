@@ -2,7 +2,6 @@ package com.returdev.product.service.brand;
 
 
 import com.returdev.product.entities.BrandEntity;
-import com.returdev.product.entities.ModelEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -43,15 +42,6 @@ public interface BrandService {
      * @return a Page of BrandEntity containing all brands
      */
     Page<BrandEntity> getAllBrands(Pageable pageable, boolean includeInactive);
-    /**
-     * Retrieves a paginated list of models associated with a specific brand.
-     *
-     * @param brandId the unique identifier of the brand
-     * @param pageable pagination information
-     * @param includeInactive whether to include inactive models
-     * @return a Page of ModelEntity containing models associated with the brand
-     */
-    Page<ModelEntity> getModelsByBrandId(Long brandId, Pageable pageable, boolean includeInactive);
 
     // UPDATE
 

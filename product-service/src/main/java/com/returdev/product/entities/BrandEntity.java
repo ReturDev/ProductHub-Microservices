@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 /**
  * Represents a brand entity in the system.
  * This entity is mapped to the "brands" table in the database.
@@ -51,15 +49,6 @@ public class BrandEntity {
     @Size(max = 150, message = "${validation.size.max.message}")
     @Column(name = "summary", nullable = false, length = 150)
     private String summary;
-
-    /**
-     * A list of models associated with the brand.
-     * Establishes a one-to-many relationship with {@link ModelEntity}.
-     * This field cannot be null.
-     */
-    @NotNull(message = "${validation.not_null.message}")
-    @OneToMany(mappedBy = "brand")
-    private List<ModelEntity> models;
 
     /**
      * Indicates if the brand is active.
