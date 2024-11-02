@@ -13,8 +13,6 @@ import java.util.Optional;
  */
 public interface BrandService {
 
-    // GET
-
     /**
      * Retrieves a brand by its unique ID, with an option to include inactive brands.
      *
@@ -23,16 +21,25 @@ public interface BrandService {
      */
     Optional<BrandEntity> getBrandById(Long id);
 
-
     /**
      * Retrieves a paginated list of brands whose names contain the specified string.
      *
      * @param name the string to search within brand names
-     * @param pageable pagination information
      * @param includeInactive whether to include inactive brands in the result
+     * @param pageable pagination information
      * @return a Page of BrandEntity containing brands that match the search criteria
      */
-    Page<BrandEntity> getBrandContainingName(String name, Pageable pageable, boolean includeInactive);
+    Page<BrandEntity> getBrandByNameContaining(String name, boolean includeInactive, Pageable pageable);
+
+    /**
+     * Retrieves a paginated list of brands that start with the specified name.
+     *
+     * @param name the prefix of the brand name to filter by
+     * @param includeInactive whether to include inactive brands in the result
+     * @param pageable pagination information
+     * @return a Page of BrandEntity containing brands that start with the specified name
+     */
+    Page<BrandEntity> getBrandByNameStartingWith(String name, boolean includeInactive, Pageable pageable);
 
     /**
      * Retrieves a paginated list of all brands.
@@ -43,7 +50,13 @@ public interface BrandService {
      */
     Page<BrandEntity> getAllBrands(Pageable pageable, boolean includeInactive);
 
-    // UPDATE
+    /**
+     * Updates the details of an existing brand.
+     *
+     * @param brand the BrandEntity containing updated details
+     * @return the updated BrandEntity
+     */
+    BrandEntity updateBrand(BrandEntity brand);
 
     /**
      * Updates the name of a brand.
@@ -63,8 +76,6 @@ public interface BrandService {
      */
     BrandEntity updateBrandSummary(Long brandId, String newSummary);
 
-    // SAVE
-
     /**
      * Saves a new brand entity.
      *
@@ -77,18 +88,8 @@ public interface BrandService {
      * Activates a brand by its ID.
      *
      * @param brandId the unique identifier of the brand
-     * @return the activated BrandEntity
      */
-    BrandEntity activateBrand(Long brandId);
-
-    // DELETE / DEACTIVATE
-
-    /**
-     * Deletes a brand by its ID. This operation should be used with caution.
-     *
-     * @param id the unique identifier of the brand to delete
-     */
-    void deleteBrand(Long id);
+    void activateBrand(Long brandId);
 
     /**
      * Deactivates a brand, making it inactive in the system.
@@ -96,6 +97,7 @@ public interface BrandService {
      * @param id the unique identifier of the brand to deactivate
      */
     void deactivateBrand(Long id);
+
 }
 
 
