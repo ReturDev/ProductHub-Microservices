@@ -1,6 +1,7 @@
 package com.returdev.product.services.category;
 
 import com.returdev.product.entities.CategoryEntity;
+import com.returdev.product.exceptions.InvalidIdentifierException;
 import com.returdev.product.repositories.CategoryRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -71,7 +72,11 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryEntity updateCategory(@Valid CategoryEntity category) {
 
         if (category.getId() == null) {
-            throw new IllegalArgumentException("validation.id_is_null.message");
+            throw new InvalidIdentifierException("exception.id_is_null.message");
+        }
+
+        if (!categoryRepository.existsById(category.getId())) {
+            throw new InvalidIdentifierException("exception.not_exists_by_id.message");
         }
 
         return categoryRepository.save(category);
@@ -81,7 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Override
-    public CategoryEntity updateCategoryName(
+    public Optional<CategoryEntity> updateCategoryName(
             @NotNull(message = "${validation.not_null.message}") Long categoryId,
             @NotBlank(message = "${validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "${validation.size.message}")
@@ -94,7 +99,7 @@ public class CategoryServiceImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Override
-    public CategoryEntity updateCategorySummary(
+    public Optional<CategoryEntity> updateCategorySummary(
             @NotNull(message = "${validation.not_null.message}") Long categoryId,
             @NotNull(message = "${validation.not_null.message}")
             @Size(max = 150, message = "${validation.size.max.message}")
@@ -110,7 +115,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryEntity saveCategory(CategoryEntity category) {
 
         if (category.getId() != null) {
-            throw new IllegalArgumentException("validation.id_is_not_null.message");
+            throw new InvalidIdentifierException("exception.id_is_not_null.message");
         }
 
         return categoryRepository.save(category);
