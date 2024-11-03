@@ -51,27 +51,27 @@ public interface ModelService {
      *
      * @param id the unique identifier of the model
      * @param newName the new name for the model
-     * @return the updated ModelEntity with the new name
+     * @return an Optional containing the updated ModelEntity with the new name
      */
-    ModelEntity updateModelName(Long id, String newName);
+    Optional<ModelEntity> updateModelName(Long id, String newName);
 
     /**
      * Updates the summary of a model identified by its ID.
      *
      * @param id the unique identifier of the model
      * @param newSummary the new summary for the model
-     * @return the updated ModelEntity with the new summary
+     * @return an Optional containing the updated ModelEntity with the new summary
      */
-    ModelEntity updateModelSummary(Long id, String newSummary);
+    Optional<ModelEntity> updateModelSummary(Long id, String newSummary);
 
     /**
      * Updates the brand dependency for the specified model.
      *
      * @param modelId the unique identifier of the model
      * @param brandId the unique identifier of the brand
-     * @return the updated ModelEntity with the new brand association
+     * @return an Optional containing the updated ModelEntity with the new brand association
      */
-    ModelEntity updateModelBrand(Long modelId, Long brandId);
+    Optional<ModelEntity> updateModelBrand(Long modelId, Long brandId);
 
     /**
      * Saves a new model to the system.
