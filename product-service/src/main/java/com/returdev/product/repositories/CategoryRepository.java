@@ -42,22 +42,24 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     /**
      * Updates the name of a category using a stored procedure.
      *
+     * @param categoryId the unique identifier of the category
      * @param newName the new name for the category
      * @return the updated CategoryEntity
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL updateCategoryName(:name)", nativeQuery = true)
-    CategoryEntity updateCategoryName(@Param("name") String newName);
+    @Query(value = "CALL updateCategoryName(:id, :name)", nativeQuery = true)
+    CategoryEntity updateCategoryName(@Param("id") Long categoryId, @Param("name") String newName);
 
     /**
      * Updates the summary of a category using a stored procedure.
      *
+     * @param categoryId the unique identifier of the category
      * @param newSummary the new summary for the category
      * @return the updated CategoryEntity
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL updateCategorySummary(:summary)", nativeQuery = true)
-    CategoryEntity updateCategorySummary(@Param("summary") String newSummary);
+    @Query(value = "CALL updateCategorySummary(:id ,:summary)", nativeQuery = true)
+    CategoryEntity updateCategorySummary(@Param("id") Long categoryId, @Param("summary") String newSummary);
 }
