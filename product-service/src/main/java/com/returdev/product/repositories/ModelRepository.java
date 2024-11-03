@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * Service interface for managing models in the system.
  * Provides methods for retrieving, updating, saving, and deleting models.
@@ -43,36 +45,36 @@ public interface ModelRepository extends JpaRepository<ModelEntity, Long> {
      *
      * @param modelId the unique identifier of the model to update
      * @param newName the new name for the model
-     * @return the updated ModelEntity
+     * @return an Optional containing the updated ModelEntity
      */
     @Modifying
     @Transactional
     @Query(value = "CALL updateModelName(:id, :name)", nativeQuery = true)
-    ModelEntity updateModelName(@Param("id") Long modelId, @Param("name") String newName);
+    Optional<ModelEntity> updateModelName(@Param("id") Long modelId, @Param("name") String newName);
 
     /**
      * Updates the summary of a model using a stored procedure.
      *
      * @param modelId the unique identifier of the model to update
      * @param newSummary the new summary for the model
-     * @return the updated ModelEntity
+     * @return an Optional containing  the updated ModelEntity
      */
     @Modifying
     @Transactional
     @Query(value = "CALL updateModelSummary(:id, :summary)", nativeQuery = true)
-    ModelEntity updateModelSummary(@Param("id") Long modelId, @Param("summary") String newSummary);
+    Optional<ModelEntity> updateModelSummary(@Param("id") Long modelId, @Param("summary") String newSummary);
 
     /**
      * Updates the brand associated with a model using a stored procedure.
      *
      * @param modelId the unique identifier of the model
      * @param brandId the unique identifier of the brand
-     * @return the updated ModelEntity
+     * @return an Optional containing the updated ModelEntity
      */
     @Modifying
     @Transactional
     @Query(value = "CALL updateModelBrand(:modelId, :brandId)", nativeQuery = true)
-    ModelEntity updateModelBrand(@Param("modelId") Long modelId, @Param("brandId") Long brandId);
+    Optional<ModelEntity> updateModelBrand(@Param("modelId") Long modelId, @Param("brandId") Long brandId);
 
     /**
      * Activates a model by setting its production status to active.
