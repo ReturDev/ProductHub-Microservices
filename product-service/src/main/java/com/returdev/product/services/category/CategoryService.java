@@ -59,19 +59,19 @@ public interface CategoryService {
      * Updates the name of a category.
      *
      * @param categoryId the unique identifier of the category
-     * @param newName the new name for the category
-     * @return the updated CategoryEntity
+     * @param newName    the new name for the category
+     * @return an Optional containing the updated CategoryEntity
      */
-    CategoryEntity updateCategoryName(Long categoryId, String newName);
+    Optional<CategoryEntity> updateCategoryName(Long categoryId, String newName);
 
     /**
      * Updates the summary of a category.
      *
      * @param categoryId the unique identifier of the category
      * @param newSummary the new summary for the category
-     * @return the updated CategoryEntity
+     * @return an Optional containing the updated CategoryEntity
      */
-    CategoryEntity updateCategorySummary(Long categoryId, String newSummary);
+    Optional<CategoryEntity> updateCategorySummary(Long categoryId, String newSummary);
 
     /**
      * Saves a new category.
