@@ -1,6 +1,7 @@
 package com.returdev.product.services.brand;
 
 import com.returdev.product.entities.BrandEntity;
+import com.returdev.product.exceptions.InvalidIdentifierException;
 import com.returdev.product.repositories.BrandRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -79,8 +80,12 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandEntity updateBrand(@Valid BrandEntity brand) {
 
-        if (brand.getId() == null){
-            throw new IllegalArgumentException("validation.id_is_null.message");
+        if (brand.getId() == null) {
+            throw new InvalidIdentifierException("exception.id_is_null.message");
+        }
+
+        if (!brandRepository.existsById(brand.getId())) {
+            throw new InvalidIdentifierException("exception.not_exists_by_id.message");
         }
 
         return brandRepository.save(brand);
@@ -91,7 +96,7 @@ public class BrandServiceImpl implements BrandService {
      * {@inheritDoc}
      */
     @Override
-    public BrandEntity updateBrandName(
+    public Optional<BrandEntity> updateBrandName(
             @NotNull(message = "${validation.not_null.message}") Long brandId,
             @NotBlank(message = "${validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "${validation.size.message}")
@@ -104,7 +109,7 @@ public class BrandServiceImpl implements BrandService {
      * {@inheritDoc}
      */
     @Override
-    public BrandEntity updateBrandSummary(
+    public Optional<BrandEntity> updateBrandSummary(
             @NotNull(message = "${validation.not_null.message}") Long brandId,
             @NotNull(message = "${validation.not_null.message}")
             @Size(max = 150, message = "${validation.size.max.message}")
@@ -119,8 +124,8 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandEntity saveBrand(@Valid BrandEntity brand) {
 
-        if (brand.getId() != null){
-            throw new IllegalArgumentException("validation.id_is_not_null.message");
+        if (brand.getId() != null) {
+            throw new InvalidIdentifierException("exception.id_is_not_null.message");
         }
 
         return brandRepository.save(brand);
