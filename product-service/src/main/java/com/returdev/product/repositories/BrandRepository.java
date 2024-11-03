@@ -62,24 +62,24 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
      *
      * @param brandId the unique identifier of the brand
      * @param newName the new name for the brand
-     * @return the number of affected rows
+     * @return the updated BrandEntity with the new name
      */
     @Modifying
     @Transactional
     @Query(value = "CALL updateBrandName(:id, :name)", nativeQuery = true)
-    int updateBrandName(@Param("id") Long brandId, @Param("name") String newName);
+    BrandEntity updateBrandName(@Param("id") Long brandId, @Param("name") String newName);
 
     /**
      * Updates the summary of a brand using a stored procedure.
      *
      * @param brandId the unique identifier of the brand
      * @param newSummary the new summary for the brand
-     * @return the number of affected rows
+     * @return the updated BrandEntity with the new summary
      */
     @Modifying
     @Transactional
     @Query(value = "CALL updateBrandSummary(:id, :summary)", nativeQuery = true)
-    int updateBrandSummary(@Param("id") Long brandId, @Param("summary") String newSummary);
+    BrandEntity updateBrandSummary(@Param("id") Long brandId, @Param("summary") String newSummary);
 
     /**
      * Activates a brand by setting its status to active.
