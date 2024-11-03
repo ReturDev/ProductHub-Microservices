@@ -63,18 +63,18 @@ public interface BrandService {
      *
      * @param brandId the unique identifier of the brand
      * @param newName the new name for the brand
-     * @return the updated BrandEntity
+     * @return an Optional containing the updated BrandEntity
      */
-    BrandEntity updateBrandName(Long brandId, String newName);
+    Optional<BrandEntity> updateBrandName(Long brandId, String newName);
 
     /**
      * Updates the summary of a brand.
      *
      * @param brandId the unique identifier of the brand
      * @param newSummary the new summary for the brand
-     * @return the updated BrandEntity
+     * @return an Optional containing the updated BrandEntity
      */
-    BrandEntity updateBrandSummary(Long brandId, String newSummary);
+    Optional<BrandEntity> updateBrandSummary(Long brandId, String newSummary);
 
     /**
      * Saves a new brand entity.
