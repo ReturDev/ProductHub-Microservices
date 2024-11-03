@@ -94,9 +94,9 @@ public interface BrandService {
     /**
      * Deactivates a brand, making it inactive in the system.
      *
-     * @param id the unique identifier of the brand to deactivate
+     * @param brandId the unique identifier of the brand to deactivate
      */
-    void deactivateBrand(Long id);
+    void deactivateBrand(Long brandId);
 
 }
 
