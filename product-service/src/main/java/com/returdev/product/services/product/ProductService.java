@@ -1,5 +1,6 @@
 package com.returdev.product.services.product;
 
+import com.returdev.product.entities.DimensionsEntity;
 import com.returdev.product.entities.ModelEntity;
 import com.returdev.product.entities.ProductEntity;
 import org.springframework.data.domain.Example;
@@ -19,8 +20,6 @@ import java.util.Optional;
  */
 public interface ProductService {
 
-    // GETS
-
     /**
      * Retrieves a product by its ID.
      *
@@ -30,79 +29,91 @@ public interface ProductService {
     Optional<ProductEntity> getProductById(Long id);
 
     /**
-     * Retrieves a list of products by their product code.
+     * Retrieves a paginated list of products by product code.
      *
-     * @param code the unique product code
+     * @param code the unique code of the product
      * @param includeHidden whether to include hidden products in the result
-     * @return a list of ProductEntity matching the provided code
-     */
-    List<ProductEntity> getProductByCode(String code, boolean includeHidden);
-
-    /**
-     * Retrieves a list of products by their barcode.
-     *
-     * @param barcode the barcode of the product
-     * @param includeHidden whether to include hidden products in the result
-     * @return a list of ProductEntity matching the provided barcode
-     */
-    List<ProductEntity> getProductByBarCode(String barcode, boolean includeHidden);
-
-    /**
-     * Retrieves a paginated list of products whose names contain the specified string.
-     *
-     * @param name the string to search within product names
      * @param pageable pagination information
-     * @param includeHidden whether to include hidden products in the result
-     * @return a Page of ProductEntity containing matching products
+     * @return a Page of ProductEntity matching the specified code
      */
-    Page<ProductEntity> getProductByNameContaining(String name, Pageable pageable, boolean includeHidden);
+    Page<ProductEntity> getProductByCode(String code, boolean includeHidden, Pageable pageable);
 
     /**
-     * Retrieves the supplier IDs associated with a specific product.
+     * Retrieves a paginated list of products by barcode.
+     *
+     * @param barcode the unique barcode of the product
+     * @param includeHidden whether to include hidden products in the result
+     * @param pageable pagination information
+     * @return a Page of ProductEntity matching the specified barcode
+     */
+    Page<ProductEntity> getProductByBarCode(String barcode, boolean includeHidden, Pageable pageable);
+
+    /**
+     * Retrieves a paginated list of products whose names contain a specified string.
+     *
+     * @param name the substring to search for within product names
+     * @param includeHidden whether to include hidden products in the result
+     * @param pageable pagination information
+     * @return a Page of ProductEntity whose names contain the specified string
+     */
+    Page<ProductEntity> getProductByNameContaining(String name, boolean includeHidden, Pageable pageable);
+
+    /**
+     * Retrieves a paginated list of products whose names start with a specified string.
+     *
+     * @param name the prefix to search for within product names
+     * @param includeHidden whether to include hidden products in the result
+     * @param pageable pagination information
+     * @return a Page of ProductEntity whose names start with the specified string
+     */
+    Page<ProductEntity> getProductByNameStartingWith(String name, boolean includeHidden, Pageable pageable);
+
+    /**
+     * Retrieves a list of supplier IDs associated with a given product.
      *
      * @param productId the unique identifier of the product
-     * @return an Optional containing a list of supplier IDs, or empty if none found
+     * @return a List of supplier IDs linked to the specified product
      */
-    Optional<Long> getSupplierIdsByProductId(Long productId);
+    List<Long> getSupplierIdsByProductId(Long productId);
 
     /**
      * Retrieves a paginated list of products by category ID.
      *
      * @param categoryId the unique identifier of the category
+     * @param includeHidden whether to include hidden products in the result
+     * @param pageable pagination information
      * @return a Page of ProductEntity belonging to the specified category
      */
-    Page<ProductEntity> getProductsByCategoryId(Long categoryId);
+    Page<ProductEntity> getProductsByCategoryId(Long categoryId, boolean includeHidden, Pageable pageable);
 
     /**
      * Retrieves a paginated list of products by model ID.
      *
-     * @param modelId the unique identifier of the model
-     * @param pageable pagination information
+     * @param modelId       the unique identifier of the model
      * @param includeHidden whether to include hidden products in the result
+     * @param pageable      pagination information
      * @return a Page of ProductEntity associated with the specified model
      */
-    Page<ProductEntity> getProductsByModelId(Long modelId, Pageable pageable, boolean includeHidden);
+    Page<ProductEntity> getProductsByModelId(Long modelId, boolean includeHidden, Pageable pageable);
 
     /**
      * Retrieves a paginated list of all products.
      *
-     * @param pageable pagination information
      * @param includeHidden whether to include hidden products in the result
+     * @param pageable      pagination information
      * @return a Page of all ProductEntity
      */
-    Page<ProductEntity> getAllProducts(Pageable pageable, boolean includeHidden);
+    Page<ProductEntity> getAllProducts(boolean includeHidden, Pageable pageable);
 
     /**
      * Searches for products based on the provided example.
      *
-     * @param example an Example containing the search criteria
-     * @param pageable pagination information
+     * @param example       an Example containing the search criteria
      * @param includeHidden whether to show hidden products
+     * @param pageable      pagination information
      * @return a Page of ProductEntity matching the example
      */
-    Page<ProductEntity> searchProducts(Example<ProductEntity> example, Pageable pageable, boolean includeHidden);
-
-    // UPDATES
+    Page<ProductEntity> searchProducts(Example<ProductEntity> example, boolean includeHidden, Pageable pageable);
 
     /**
      * Updates the details of an existing product.
@@ -116,7 +127,7 @@ public interface ProductService {
      * Updates the name of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param newName the new name for the product
+     * @param newName   the new name for the product
      * @return the updated ProductEntity
      */
     ProductEntity updateProductName(Long productId, String newName);
@@ -124,7 +135,7 @@ public interface ProductService {
     /**
      * Updates the summary of a product identified by its ID.
      *
-     * @param productId the unique identifier of the product
+     * @param productId  the unique identifier of the product
      * @param newSummary the new summary for the product
      * @return the updated ProductEntity
      */
@@ -134,7 +145,7 @@ public interface ProductService {
      * Updates the product code of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param newCode the new product code for the product
+     * @param newCode   the new product code for the product
      * @return the updated ProductEntity
      */
     ProductEntity updateProductCode(Long productId, String newCode);
@@ -143,7 +154,7 @@ public interface ProductService {
      * Updates the barcode of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param barcode the new barcode for the product
+     * @param barcode   the new barcode for the product
      * @return the updated ProductEntity
      */
     ProductEntity updateProductBarcode(Long productId, String barcode);
@@ -152,13 +163,30 @@ public interface ProductService {
      * Updates the model associated with a product.
      *
      * @param productId the unique identifier of the product
-     * @param model the new ModelEntity to associate with the product
+     * @param model     the new ModelEntity to associate with the product
      * @return the updated ProductEntity
      */
     ProductEntity updateProductModel(Long productId, ModelEntity model);
 
     /**
-     * Removes a supplier association from a product.
+     * Updates the dimensions of a product.
+     *
+     * @param productId the unique identifier of the product
+     * @param dimensions the new dimensions to associate with the product
+     * @return the updated ProductEntity
+     */
+    ProductEntity updateProductDimensions(Long productId, DimensionsEntity dimensions);
+
+    /**
+     * Adds a new supplier association to a product.
+     *
+     * @param productId the unique identifier of the product
+     * @param newSupplierId the unique identifier of the new supplier to add
+     */
+    void addProductSupplier(Long productId, Long newSupplierId);
+
+    /**
+     * Removes an existing supplier association from a product.
      *
      * @param productId the unique identifier of the product
      * @param supplierId the unique identifier of the supplier to remove
@@ -166,14 +194,18 @@ public interface ProductService {
     void removeProductSupplier(Long productId, Long supplierId);
 
     /**
-     * Adds a supplier association to a product.
+     * Marks a product as hidden.
      *
      * @param productId the unique identifier of the product
-     * @param newSupplierId the unique identifier of the new supplier to add
      */
-    void addProductSupplier(Long productId, Long newSupplierId);
+    void hideProduct(Long productId);
 
-    // SAVE
+    /**
+     * Marks a product as visible.
+     *
+     * @param productId the unique identifier of the product
+     */
+    void unhideProduct(Long productId);
 
     /**
      * Saves a new product to the system.
@@ -183,28 +215,5 @@ public interface ProductService {
      */
     ProductEntity saveProduct(ProductEntity product);
 
-    /**
-     * Activates a product identified by its ID.
-     *
-     * @param productId the unique identifier of the product
-     * @return the activated ProductEntity
-     */
-    ProductEntity activateProduct(Long productId);
-
-    // DELETE
-
-    /**
-     * Deactivates a product identified by its ID.
-     *
-     * @param productId the unique identifier of the product
-     */
-    void deactivateProduct(Long productId);
-
-    /**
-     * Permanently deletes a product identified by its ID.
-     *
-     * @param productId the unique identifier of the product
-     */
-    void deleteProductPermanently(Long productId);
 }
 
