@@ -65,14 +65,15 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     Page<ProductEntity> findProductsByNameStartingWith(@Param("name") String name, @Param("includeHidden") boolean includeHidden, Pageable pageable);
 
     /**
-     * Retrieves a list of supplier IDs associated with a specific product ID.
+     * Retrieves a paginated list of products associated with a specific supplier.
      *
-     * @param productId the unique identifier of the product
-     * @param pageable pagination information
-     * @return a Page of supplier IDs related to the specified product
+     * @param id the unique identifier of the supplier whose products are to be retrieved
+     * @param includeHidden a flag indicating whether to include hidden products (true to include, false to exclude)
+     * @param pageable pagination information, including page number and size
+     * @return a Page of ProductEntity containing products associated with the specified supplier
      */
-    @Query("SELECT s FROM ProductEntity p JOIN p.supplierID s WHERE p.id = :id")
-    Page<Long> findSupplierIdsByProductId(@Param("id") Long productId, Pageable pageable);
+    @Query("SELECT p FROM ProductEntity p WHERE (:includeHidden = true OR p.isHidden = false) AND p.id = :id")
+    Page<ProductEntity> findProductsBySupplierId(@Param("id") Long id, @Param("includeHidden") boolean includeHidden, Pageable pageable);
 
     /**
      * Retrieves a paginated list of products by category ID, with an option to include hidden products.
@@ -189,14 +190,14 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     void addProductSupplier(@Param("productId") Long productId, @Param("supplierId") Long supplierId);
 
     /**
-     * Removes a supplier from the product's supplier list.
+     * Removes a supplier from the product's supplier list using a stored procedure.
      *
      * @param productId the unique identifier of the product
      * @param supplierId the unique identifier of the supplier to be removed
      */
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM products_suppliers ps WHERE ps.product_id = :productId AND ps.supplier_id = :supplierId", nativeQuery = true)
+    @Query(value = "CALL delete_product_supplier(:productId, :supplierId)", nativeQuery = true)
     void deleteProductSupplier(@Param("productId") Long productId, @Param("supplierId") Long supplierId);
 
     /**
