@@ -72,9 +72,9 @@ public interface ProductService {
      * Retrieves a list of supplier IDs associated with a given product.
      *
      * @param productId the unique identifier of the product
-     * @return a List of supplier IDs linked to the specified product
+     * @return a Page of supplier IDs linked to the specified product
      */
-    List<Long> getSupplierIdsByProductId(Long productId);
+    Page<Long> getSupplierIdsByProductId(Long productId, Pageable pageable);
 
     /**
      * Retrieves a paginated list of products by category ID.
@@ -89,9 +89,9 @@ public interface ProductService {
     /**
      * Retrieves a paginated list of products by model ID.
      *
-     * @param modelId       the unique identifier of the model
+     * @param modelId the unique identifier of the model
      * @param includeHidden whether to include hidden products in the result
-     * @param pageable      pagination information
+     * @param pageable pagination information
      * @return a Page of ProductEntity associated with the specified model
      */
     Page<ProductEntity> getProductsByModelId(Long modelId, boolean includeHidden, Pageable pageable);
@@ -100,7 +100,7 @@ public interface ProductService {
      * Retrieves a paginated list of all products.
      *
      * @param includeHidden whether to include hidden products in the result
-     * @param pageable      pagination information
+     * @param pageable pagination information
      * @return a Page of all ProductEntity
      */
     Page<ProductEntity> getAllProducts(boolean includeHidden, Pageable pageable);
@@ -108,9 +108,9 @@ public interface ProductService {
     /**
      * Searches for products based on the provided example.
      *
-     * @param example       an Example containing the search criteria
+     * @param example an Example containing the search criteria
      * @param includeHidden whether to show hidden products
-     * @param pageable      pagination information
+     * @param pageable pagination information
      * @return a Page of ProductEntity matching the example
      */
     Page<ProductEntity> searchProducts(Example<ProductEntity> example, boolean includeHidden, Pageable pageable);
@@ -119,63 +119,63 @@ public interface ProductService {
      * Updates the details of an existing product.
      *
      * @param product the ProductEntity with updated details
-     * @return the updated ProductEntity
+     * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProduct(ProductEntity product);
+    Optional<ProductEntity> updateProduct(ProductEntity product);
 
     /**
      * Updates the name of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param newName   the new name for the product
-     * @return the updated ProductEntity
+     * @param newName the new name for the product
+     * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductName(Long productId, String newName);
+    Optional<ProductEntity> updateProductName(Long productId, String newName);
 
     /**
      * Updates the summary of a product identified by its ID.
      *
-     * @param productId  the unique identifier of the product
+     * @param productId the unique identifier of the product
      * @param newSummary the new summary for the product
-     * @return the updated ProductEntity
+     * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductSummary(Long productId, String newSummary);
+    Optional<ProductEntity> updateProductSummary(Long productId, String newSummary);
 
     /**
      * Updates the product code of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param newCode   the new product code for the product
-     * @return the updated ProductEntity
+     * @param newCode the new product code for the product
+     * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductCode(Long productId, String newCode);
+    Optional<ProductEntity> updateProductCode(Long productId, String newCode);
 
     /**
      * Updates the barcode of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param barcode   the new barcode for the product
-     * @return the updated ProductEntity
+     * @param barcode the new barcode for the product
+     * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductBarcode(Long productId, String barcode);
+    Optional<ProductEntity> updateProductBarcode(Long productId, String barcode);
 
     /**
      * Updates the model associated with a product.
      *
      * @param productId the unique identifier of the product
-     * @param model     the new ModelEntity to associate with the product
-     * @return the updated ProductEntity
+     * @param model the new ModelEntity to associate with the product
+     * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductModel(Long productId, ModelEntity model);
+    Optional<ProductEntity> updateProductModel(Long productId, ModelEntity model);
 
     /**
      * Updates the dimensions of a product.
      *
      * @param productId the unique identifier of the product
      * @param dimensions the new dimensions to associate with the product
-     * @return the updated ProductEntity
+     * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductDimensions(Long productId, DimensionsEntity dimensions);
+    Optional<ProductEntity> updateProductDimensions(Long productId, DimensionsEntity dimensions);
 
     /**
      * Adds a new supplier association to a product.
