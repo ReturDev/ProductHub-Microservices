@@ -97,15 +97,18 @@ public class ProductEntity {
     private CategoryEntity category;
 
     /**
-     * A list of supplier IDs associated with the product.
-     * Represents a collection of supplier IDs linked to this product. This field cannot be null or empty.
+     * List of suppliers associated with this product.
+     * This field must not be empty and establishes a many-to-many relationship
+     * between products and suppliers.
      */
     @NotEmpty(message = "${validation.not_empty.message}")
-    @NotNull(message = "${validation.not_null.message}")
-    @ElementCollection
-    @CollectionTable(name = "products_suppliers", joinColumns = @JoinColumn(name = "product_id"))
-    @Column(name = "supplier_id")
-    private List<Long> supplierID;
+    @ManyToMany()
+    @JoinTable(
+            name = "product_supplier",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "supplier_id")
+    )
+    private List<SupplierEntity> suppliers;
 
     /**
      * The dimensions associated with the product.
