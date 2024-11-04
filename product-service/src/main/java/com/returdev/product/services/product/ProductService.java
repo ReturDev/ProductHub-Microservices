@@ -1,13 +1,10 @@
 package com.returdev.product.services.product;
 
 import com.returdev.product.entities.DimensionsEntity;
-import com.returdev.product.entities.ModelEntity;
 import com.returdev.product.entities.ProductEntity;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -68,13 +65,16 @@ public interface ProductService {
      */
     Page<ProductEntity> getProductByNameStartingWith(String name, boolean includeHidden, Pageable pageable);
 
+
     /**
-     * Retrieves a list of supplier IDs associated with a given product.
+     * Retrieves a paginated list of products associated with a specific supplier.
      *
-     * @param productId the unique identifier of the product
-     * @return a Page of supplier IDs linked to the specified product
+     * @param supplierId the unique identifier of the supplier whose products are to be retrieved
+     * @param includeHidden a flag indicating whether to include hidden products (true to include, false to exclude)
+     * @param pageable pagination information, including page number and size
+     * @return a Page of ProductEntity containing products associated with the specified supplier
      */
-    Page<Long> getSupplierIdsByProductId(Long productId, Pageable pageable);
+    Page<ProductEntity> getProductsBySupplierId(Long supplierId, boolean includeHidden, Pageable pageable);
 
     /**
      * Retrieves a paginated list of products by category ID.
@@ -106,22 +106,24 @@ public interface ProductService {
     Page<ProductEntity> getAllProducts(boolean includeHidden, Pageable pageable);
 
     /**
-     * Searches for products based on the provided example.
+     * Searches for products based on the attributes of the provided ProductEntity.
      *
-     * @param example an Example containing the search criteria
-     * @param includeHidden whether to show hidden products
-     * @param pageable pagination information
-     * @return a Page of ProductEntity matching the example
+     * @param productEntity an instance of ProductEntity containing the search criteria; fields
+     *                      set to null will be ignored in the search
+     * @param includeHidden a flag indicating whether to include hidden products in the search
+     *                      results (true to include, false to exclude)
+     * @param pageable pagination information, including the requested page number and size
+     * @return a Page of ProductEntity containing products that match the search criteria
      */
-    Page<ProductEntity> searchProducts(Example<ProductEntity> example, boolean includeHidden, Pageable pageable);
+    Page<ProductEntity> searchProducts(ProductEntity productEntity, boolean includeHidden, Pageable pageable);
 
     /**
      * Updates the details of an existing product.
      *
      * @param product the ProductEntity with updated details
-     * @return an Optional containing the updated ProductEntity
+     * @return the updated ProductEntity
      */
-    Optional<ProductEntity> updateProduct(ProductEntity product);
+    ProductEntity updateProduct(ProductEntity product);
 
     /**
      * Updates the name of a product identified by its ID.
@@ -160,13 +162,14 @@ public interface ProductService {
     Optional<ProductEntity> updateProductBarcode(Long productId, String barcode);
 
     /**
-     * Updates the model associated with a product.
+     * Updates the model associated with a product identified by the given product ID.
      *
-     * @param productId the unique identifier of the product
-     * @param model the new ModelEntity to associate with the product
-     * @return an Optional containing the updated ProductEntity
+     * @param productId the unique identifier of the product to be updated
+     * @param modelId the unique identifier of the new model to associate with the product
+     * @return an Optional containing the updated ProductEntity if the update is successful,
+     *         or an empty Optional if the product does not exist or the update fails
      */
-    Optional<ProductEntity> updateProductModel(Long productId, ModelEntity model);
+    Optional<ProductEntity> updateProductModel(Long productId, Long modelId);
 
     /**
      * Updates the dimensions of a product.
