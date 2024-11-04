@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Repository interface for managing ProductEntity persistence operations.
@@ -68,10 +68,11 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      * Retrieves a list of supplier IDs associated with a specific product ID.
      *
      * @param productId the unique identifier of the product
-     * @return a List of supplier IDs related to the specified product
+     * @param pageable pagination information
+     * @return a Page of supplier IDs related to the specified product
      */
-    @Query(value = "SELECT ps.supplier_id FROM products_suppliers ps WHERE ps.product_id = :id", nativeQuery = true)
-    List<Long> findSupplierIdsByProductId(@Param("id") Long productId);
+    @Query("SELECT s FROM ProductEntity p JOIN p.supplierID s WHERE p.id = :id")
+    Page<Long> findSupplierIdsByProductId(@Param("id") Long productId, Pageable pageable);
 
     /**
      * Retrieves a paginated list of products by category ID, with an option to include hidden products.
@@ -109,72 +110,72 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      *
      * @param productId the unique identifier of the product
      * @param newName the new name for the product
-     * @return the updated ProductEntity with the new name
+     * @return an Optional containing the updated ProductEntity with the new name
      */
     @Modifying
     @Transactional
     @Query(value = "CALL update_product_name(:id, :name)", nativeQuery = true)
-    ProductEntity updateProductName(@Param("id") Long productId, @Param("name") String newName);
+    Optional<ProductEntity> updateProductName(@Param("id") Long productId, @Param("name") String newName);
 
     /**
      * Updates the summary of a product using a stored procedure.
      *
      * @param productId the unique identifier of the product
      * @param newSummary the new summary for the product
-     * @return the updated ProductEntity with the new summary
+     * @return an Optional containing the updated ProductEntity with the new summary
      */
     @Modifying
     @Transactional
     @Query(value = "CALL update_product_summary(:id, :summary)", nativeQuery = true)
-    ProductEntity updateProductSummary(@Param("id") Long productId, @Param("summary") String newSummary);
+    Optional<ProductEntity> updateProductSummary(@Param("id") Long productId, @Param("summary") String newSummary);
 
     /**
      * Updates the product code using a stored procedure.
      *
      * @param productId the unique identifier of the product
      * @param newCode the new product code
-     * @return the updated ProductEntity with the new code
+     * @return an Optional containing the updated ProductEntity with the new code
      */
     @Modifying
     @Transactional
     @Query(value = "CALL update_product_code(:id, :code)", nativeQuery = true)
-    ProductEntity updateProductCode(@Param("id") Long productId, @Param("code") String newCode);
+    Optional<ProductEntity> updateProductCode(@Param("id") Long productId, @Param("code") String newCode);
 
     /**
      * Updates the barcode of a product using a stored procedure.
      *
      * @param productId the unique identifier of the product
      * @param newBarcode the new barcode for the product
-     * @return the updated ProductEntity with the new barcode
+     * @return an Optional containing the updated ProductEntity with the new barcode
      */
     @Modifying
     @Transactional
     @Query(value = "CALL update_product_barcode(:id, :barcode)", nativeQuery = true)
-    ProductEntity updateProductBarcode(@Param("id") Long productId, @Param("barcode") String newBarcode);
+    Optional<ProductEntity> updateProductBarcode(@Param("id") Long productId, @Param("barcode") String newBarcode);
 
     /**
      * Updates the model association of a product using a stored procedure.
      *
      * @param productId the unique identifier of the product
      * @param modelId the unique identifier of the new model
-     * @return the updated ProductEntity with the new model association
+     * @return an Optional containing the updated ProductEntity with the new model association
      */
     @Modifying
     @Transactional
     @Query(value = "CALL update_product_model(:productId, :modelId)", nativeQuery = true)
-    ProductEntity updateProductModel(@Param("productId") Long productId, @Param("modelId") Long modelId);
+    Optional<ProductEntity> updateProductModel(@Param("productId") Long productId, @Param("modelId") Long modelId);
 
     /**
      * Updates the dimensions of a product using a stored procedure.
      *
      * @param productId the unique identifier of the product
      * @param dimensionsId the unique identifier of the new dimensions
-     * @return the updated ProductEntity with the new dimensions
+     * @return an Optional containing the updated ProductEntity with the new dimensions
      */
     @Modifying
     @Transactional
     @Query(value = "CALL update_product_dimensions(:productId, :dimensionsId)", nativeQuery = true)
-    ProductEntity updateProductDimensions(@Param("productId") Long productId, @Param("dimensionsId") Long dimensionsId);
+    Optional<ProductEntity> updateProductDimensions(@Param("productId") Long productId, @Param("dimensionsId") Long dimensionsId);
 
     /**
      * Adds a supplier to the product's supplier list using a stored procedure.
