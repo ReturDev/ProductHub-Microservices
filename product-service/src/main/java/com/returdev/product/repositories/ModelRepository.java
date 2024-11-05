@@ -77,24 +77,26 @@ public interface ModelRepository extends JpaRepository<ModelEntity, Long> {
     Optional<ModelEntity> updateModelBrand(@Param("modelId") Long modelId, @Param("brandId") Long brandId);
 
     /**
-     * Activates a model by setting its production status to active.
+     * Activates a model by setting its {@code isProductionActive} status to true.
      *
-     * @param modelId the unique identifier of the model to activate
+     * @param modelId the ID of the model to activate.
+     * @return the number of rows affected by the update operation.
      */
     @Modifying
     @Transactional
-    @Query("UPDATE ModelEntity m SET m.isProductionActive = true WHERE m.id = :id ")
-    void activateModel(@Param("id") Long modelId);
+    @Query("UPDATE ModelEntity m SET m.isProductionActive = true WHERE m.id = :id")
+    int activateModel(@Param("id") Long modelId);
 
     /**
-     * Inactivates a model identified by its ID.
+     * Deactivates a model by setting its {@code isProductionActive} status to false.
      *
-     * @param modelId the unique identifier of the model to inactivate
+     * @param modelId the ID of the model to deactivate.
+     * @return the number of rows affected by the update operation.
      */
     @Modifying
     @Transactional
     @Query("UPDATE ModelEntity m SET m.isProductionActive = false WHERE m.id = :id")
-    void inactivateModel(@Param("id") Long modelId);
+    int inactivateModel(@Param("id") Long modelId);
 
 }
 
