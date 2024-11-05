@@ -178,46 +178,53 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     @Query(value = "CALL update_product_dimensions(:productId, :dimensionsId)", nativeQuery = true)
     Optional<ProductEntity> updateProductDimensions(@Param("productId") Long productId, @Param("dimensionsId") Long dimensionsId);
 
+
     /**
-     * Adds a supplier to the product's supplier list using a stored procedure.
+     * Adds a relationship between a product and a supplier by inserting a new record
+     * into the product_supplier junction table.
      *
-     * @param productId the unique identifier of the product
-     * @param supplierId the unique identifier of the supplier to be added
+     * @param productId the ID of the product to associate with the supplier.
+     * @param supplierId the ID of the supplier to associate with the product.
+     * @return the number of rows affected by the insert operation.
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL add_product_supplier(:productId, :supplierId)", nativeQuery = true)
-    void addProductSupplier(@Param("productId") Long productId, @Param("supplierId") Long supplierId);
+    @Query(value = "INSERT INTO product_supplier (product_id, supplier_id) VALUES (:productId, :supplierId)", nativeQuery = true)
+    int addProductSupplier(@Param("productId") Long productId, @Param("supplierId") Long supplierId);
 
     /**
-     * Removes a supplier from the product's supplier list using a stored procedure.
+     * Deletes the relationship between a product and a supplier by removing the
+     * corresponding record from the product_supplier junction table.
      *
-     * @param productId the unique identifier of the product
-     * @param supplierId the unique identifier of the supplier to be removed
+     * @param productId the ID of the product whose supplier relationship is to be removed.
+     * @param supplierId the ID of the supplier whose relationship with the product is to be removed.
+     * @return the number of rows affected by the delete operation.
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL delete_product_supplier(:productId, :supplierId)", nativeQuery = true)
-    void deleteProductSupplier(@Param("productId") Long productId, @Param("supplierId") Long supplierId);
+    @Query(value = "DELETE FROM product_supplier WHERE product_id = :productId AND supplier_id = :supplierId", nativeQuery = true)
+    int deleteProductSupplier(@Param("productId") Long productId, @Param("supplierId") Long supplierId);
 
     /**
-     * Hides a product by setting its hidden status to true.
+     * Hides a product by setting its {@code isHidden} status to true.
      *
-     * @param productId the unique identifier of the product to hide
+     * @param productId the ID of the product to hide.
+     * @return the number of rows affected by the update operation.
      */
     @Modifying
     @Transactional
     @Query("UPDATE ProductEntity p SET p.isHidden = true WHERE p.id = :id")
-    void hideProduct(@Param("id") Long productId);
+    int hideProduct(@Param("id") Long productId);
 
     /**
-     * Unhides a product by setting its hidden status to false.
+     * Unhides a product by setting its {@code isHidden} status to false.
      *
-     * @param productId the unique identifier of the product to unhide
+     * @param productId the ID of the product to unhide.
+     * @return the number of rows affected by the update operation.
      */
     @Modifying
     @Transactional
     @Query("UPDATE ProductEntity p SET p.isHidden = false WHERE p.id = :id")
-    void unhideProduct(@Param("id") Long productId);
+    int unhideProduct(@Param("id") Long productId);
 
 }
