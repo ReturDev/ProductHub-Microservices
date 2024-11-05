@@ -2,7 +2,6 @@ package com.returdev.product.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -50,18 +49,11 @@ public class SupplierEntity {
     private String observations;
 
     /**
-     * List of contact information associated with the supplier.
-     * Cannot be empty, as each supplier should have at least one contact method.
-     * This is a many-to-many relationship with the ContactInfoEntity table,
-     * linked through the supplier_contact_info join table.
+     * List of contact information entries associated with the supplier.
+     * Uses eager fetching to load contacts immediately with the supplier.
+     * The orphanRemoval attribute removes contact entries when they are removed from this list.
      */
-    @NotEmpty(message = "${validation.not_empty.message}")
-    @ManyToMany
-    @JoinTable(
-            name = "supplier_contact_info",
-            joinColumns = @JoinColumn(name = "supplier_id"),
-            inverseJoinColumns = @JoinColumn(name = "contact_info_id")
-    )
+    @OneToMany(mappedBy = "supplier", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ContactInfoEntity> contacts;
 
     /**
