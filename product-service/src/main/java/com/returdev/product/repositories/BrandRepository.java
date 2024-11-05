@@ -83,27 +83,28 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
     @Query(value = "CALL updateBrandSummary(:id, :summary)", nativeQuery = true)
     Optional<BrandEntity> updateBrandSummary(@Param("id") Long brandId, @Param("summary") String newSummary);
 
+
     /**
-     * Activates a brand by setting its status to active.
-     * This operation modifies the `isActive` field of the specified brand.
+     * Activates a brand by setting its {@code isActive} status to true.
      *
-     * @param brandId the unique identifier of the brand to activate
+     * @param brandId the ID of the brand to activate.
+     * @return the number of rows affected by the update operation.
      */
     @Modifying
     @Transactional
     @Query("UPDATE BrandEntity b SET b.isActive = true WHERE b.id = :id")
-    void activateBrand(@Param("id") Long brandId);
+    int activateBrand(@Param("id") Long brandId);
 
     /**
-     * Deactivates a brand by setting its isActive status to false.
+     * Deactivates a brand by setting its {@code isActive} status to false.
      *
-     * @param brandId the unique identifier of the brand to deactivate
+     * @param brandId the ID of the brand to deactivate.
+     * @return the number of rows affected by the update operation.
      */
     @Modifying
     @Transactional
     @Query("UPDATE BrandEntity b SET b.isActive = false WHERE b.id = :id")
-    void deactivateBrand(@Param("id") Long brandId);
-
+    int deactivateBrand(@Param("id") Long brandId);
 }
 
 
