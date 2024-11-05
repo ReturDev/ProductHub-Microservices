@@ -73,5 +73,13 @@ public class ContactInfoEntity {
     @Column(name = "is_commercial", nullable = false)
     private boolean isCommercial;
 
+    /**
+     * The supplier to which this contact belongs.
+     * This association is required.
+     */
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "supplier_id")
+    private SupplierEntity supplier;
+
 }
 
