@@ -5,8 +5,6 @@ import com.returdev.product.entities.CategoryEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 /**
  * Service interface for managing categories in the system.
  * Provides methods for retrieving categories by ID, name, and for retrieving all categories.
@@ -19,7 +17,7 @@ public interface CategoryService {
      * @param id the unique identifier of the category
      * @return an Optional containing the found CategoryEntity, or empty if not found
      */
-    Optional<CategoryEntity> getCategoryById(Long id);
+    CategoryEntity getCategoryById(Long id);
 
     /**
      * Retrieves a paginated list of categories containing the specified name.
@@ -59,10 +57,10 @@ public interface CategoryService {
      * Updates the name of a category.
      *
      * @param categoryId the unique identifier of the category
-     * @param newName    the new name for the category
+     * @param newName the new name for the category
      * @return an Optional containing the updated CategoryEntity
      */
-    Optional<CategoryEntity> updateCategoryName(Long categoryId, String newName);
+    CategoryEntity updateCategoryName(Long categoryId, String newName);
 
     /**
      * Updates the summary of a category.
@@ -71,7 +69,7 @@ public interface CategoryService {
      * @param newSummary the new summary for the category
      * @return an Optional containing the updated CategoryEntity
      */
-    Optional<CategoryEntity> updateCategorySummary(Long categoryId, String newSummary);
+    CategoryEntity updateCategorySummary(Long categoryId, String newSummary);
 
     /**
      * Saves a new category.
