@@ -5,8 +5,6 @@ import com.returdev.product.entities.BrandEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 /**
  * Service interface for managing brands in the system.
  * Provides methods for retrieving, updating, saving, deleting, and deactivating brand entities.
@@ -19,7 +17,7 @@ public interface BrandService {
      * @param id the unique identifier of the brand
      * @return an Optional containing the found BrandEntity, or empty if not found
      */
-    Optional<BrandEntity> getBrandById(Long id);
+    BrandEntity getBrandById(Long id);
 
     /**
      * Retrieves a paginated list of brands whose names contain the specified string.
@@ -65,16 +63,16 @@ public interface BrandService {
      * @param newName the new name for the brand
      * @return an Optional containing the updated BrandEntity
      */
-    Optional<BrandEntity> updateBrandName(Long brandId, String newName);
+    BrandEntity updateBrandName(Long brandId, String newName);
 
     /**
      * Updates the summary of a brand.
      *
-     * @param brandId the unique identifier of the brand
+     * @param brandId    the unique identifier of the brand
      * @param newSummary the new summary for the brand
      * @return an Optional containing the updated BrandEntity
      */
-    Optional<BrandEntity> updateBrandSummary(Long brandId, String newSummary);
+    BrandEntity updateBrandSummary(Long brandId, String newSummary);
 
     /**
      * Saves a new brand entity.
