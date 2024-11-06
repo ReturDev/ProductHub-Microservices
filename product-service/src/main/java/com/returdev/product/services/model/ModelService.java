@@ -4,8 +4,6 @@ import com.returdev.product.entities.ModelEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 /**
  * Service interface for managing models in the system.
  * Provides methods for retrieving, updating, saving, and deleting model entities.
@@ -18,7 +16,7 @@ public interface ModelService {
      * @param id the unique identifier of the model
      * @return an Optional containing the found ModelEntity, or empty if not found
      */
-    Optional<ModelEntity> getModelById(Long id);
+    ModelEntity getModelById(Long id);
 
     /**
      * Retrieves a paginated list of all models.
@@ -49,20 +47,20 @@ public interface ModelService {
     /**
      * Updates the name of a model identified by its ID.
      *
-     * @param id the unique identifier of the model
+     * @param id      the unique identifier of the model
      * @param newName the new name for the model
      * @return an Optional containing the updated ModelEntity with the new name
      */
-    Optional<ModelEntity> updateModelName(Long id, String newName);
+    ModelEntity updateModelName(Long id, String newName);
 
     /**
      * Updates the summary of a model identified by its ID.
      *
-     * @param id the unique identifier of the model
+     * @param id         the unique identifier of the model
      * @param newSummary the new summary for the model
      * @return an Optional containing the updated ModelEntity with the new summary
      */
-    Optional<ModelEntity> updateModelSummary(Long id, String newSummary);
+    ModelEntity updateModelSummary(Long id, String newSummary);
 
     /**
      * Updates the brand dependency for the specified model.
@@ -71,7 +69,7 @@ public interface ModelService {
      * @param brandId the unique identifier of the brand
      * @return an Optional containing the updated ModelEntity with the new brand association
      */
-    Optional<ModelEntity> updateModelBrand(Long modelId, Long brandId);
+    ModelEntity updateModelBrand(Long modelId, Long brandId);
 
     /**
      * Saves a new model to the system.
