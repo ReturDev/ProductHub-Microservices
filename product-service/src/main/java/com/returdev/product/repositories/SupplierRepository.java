@@ -3,6 +3,7 @@ package com.returdev.product.repositories;
 import com.returdev.product.entities.SupplierEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +17,7 @@ import java.util.Optional;
  * Provides methods for retrieving, updating, and modifying suppliers in the database.
  */
 @Repository
-public interface SupplierRepository {
+public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> {
 
     /**
      * Retrieves a paginated list of suppliers whose names contain the specified substring.
