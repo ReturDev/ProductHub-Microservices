@@ -5,6 +5,7 @@ import com.returdev.product.entities.ProductEntity;
 import com.returdev.product.exceptions.InvalidIdentifierException;
 import com.returdev.product.repositories.DimensionsRepository;
 import com.returdev.product.repositories.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -39,6 +40,11 @@ public class ProductServiceImpl implements ProductService {
     public Optional<ProductEntity> getProductById(
             @NotNull(message = "${validation.not_null.message}") Long id
     ) {
+
+        if (id == null) {
+            throw new InvalidIdentifierException("exception.id_is_null.message");
+        }
+
         return productRepository.findById(id);
     }
 
@@ -249,7 +255,12 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void addProductSupplier(Long productId, Long newSupplierId) {
-        productRepository.addProductSupplier(productId, newSupplierId);
+        int result = productRepository.addProductSupplier(productId, newSupplierId);
+
+        if (result == 0){
+            throw new EntityNotFoundException();
+        }
+
     }
 
     /**
@@ -257,7 +268,12 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void removeProductSupplier(Long productId, Long supplierId) {
-        productRepository.deleteProductSupplier(productId, supplierId);
+        int result = productRepository.deleteProductSupplier(productId, supplierId);
+
+        if (result == 0){
+            throw new EntityNotFoundException();
+        }
+
     }
 
     /**
@@ -265,7 +281,12 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void hideProduct(Long productId) {
-        productRepository.hideProduct(productId);
+        int result = productRepository.hideProduct(productId);
+
+        if (result == 0){
+            throw new EntityNotFoundException();
+        }
+
     }
 
     /**
@@ -273,7 +294,12 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void unhideProduct(Long productId) {
-        productRepository.unhideProduct(productId);
+        int result = productRepository.unhideProduct(productId);
+
+        if (result == 0){
+            throw new EntityNotFoundException();
+        }
+
     }
 
     /**
