@@ -3,6 +3,7 @@ package com.returdev.product.services.model;
 import com.returdev.product.entities.ModelEntity;
 import com.returdev.product.exceptions.InvalidIdentifierException;
 import com.returdev.product.repositories.ModelRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.Optional;
 
 /**
- * Implementation of the ModelService interface for managing models in the system.
+ * Implementation of the {@link ModelService} interface for managing models in the system.
  */
 @Validated
 @Repository
@@ -28,11 +29,16 @@ public class ModelServiceImpl implements ModelService {
 
     /**
      * {@inheritDoc}
+     *
+     * @throws InvalidIdentifierException if the provided {@code id} is {@code null}.
      */
     @Override
     public Optional<ModelEntity> getModelById(
             @NotNull(message = "${validation.not_null.message}") Long id
     ) {
+        if (id == null) {
+            throw new InvalidIdentifierException("exception.id_is_null.message");
+        }
         return modelRepository.findById(id);
     }
 
@@ -62,19 +68,19 @@ public class ModelServiceImpl implements ModelService {
 
     /**
      * {@inheritDoc}
+     *
+     * @throws InvalidIdentifierException if the {@code model} has a {@code null} ID.
+     * @throws EntityNotFoundException if no existing model is found with the provided ID.
      */
-    @Override
     @Transactional
+    @Override
     public ModelEntity updateModel(@Valid ModelEntity model) {
-
         if (model.getId() == null) {
             throw new InvalidIdentifierException("exception.id_is_null.message");
         }
-
         if (!modelRepository.existsById(model.getId())) {
-            throw new InvalidIdentifierException("exception.not_exists_by_id.message");
+            throw new EntityNotFoundException();
         }
-
         return modelRepository.save(model);
     }
 
@@ -117,35 +123,44 @@ public class ModelServiceImpl implements ModelService {
 
     /**
      * {@inheritDoc}
+     *
+     * @throws InvalidIdentifierException if the {@code model} has a non-null ID, as it should be null for a new model.
      */
     @Override
     public ModelEntity saveModel(ModelEntity model) {
-
         if (model.getId() != null) {
             throw new InvalidIdentifierException("exception.id_is_not_null.message");
         }
-
         return modelRepository.save(model);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no model is found with the provided ID to activate.
      */
     @Override
     public void activateModel(
             @NotNull(message = "${validation.not_null.message}") Long modelId
     ) {
-        modelRepository.activateModel(modelId);
+        int result = modelRepository.activateModel(modelId);
+        if (result == 0) {
+            throw new EntityNotFoundException();
+        }
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no model is found with the provided ID to inactivate.
      */
     @Override
     public void inactivateModel(
             @NotNull(message = "${validation.not_null.message}") Long modelId
     ) {
-        modelRepository.inactivateModel(modelId);
+        int result = modelRepository.inactivateModel(modelId);
+        if (result == 0) {
+            throw new EntityNotFoundException();
+        }
     }
-
 }
