@@ -1,8 +1,8 @@
 package com.returdev.product.services.category;
 
 import com.returdev.product.entities.CategoryEntity;
-import com.returdev.product.exceptions.InvalidIdentifierException;
 import com.returdev.product.repositories.CategoryRepository;
+import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
-
 /**
  * Implementation of the {@link CategoryService} interface for managing categories in the system.
  */
@@ -26,20 +24,19 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ExceptionService exceptionService;
 
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidIdentifierException if the provided {@code id} is {@code null}.
+     * @throws EntityNotFoundException if no category is found with the provided {@code id}.
      */
     @Override
-    public Optional<CategoryEntity> getCategoryById(
+    public CategoryEntity getCategoryById(
             @NotNull(message = "${validation.not_null.message}") Long id
     ) {
-        if (id == null) {
-            throw new InvalidIdentifierException("exception.id_is_null.message");
-        }
-        return categoryRepository.findById(id);
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
     }
 
     /**
@@ -75,57 +72,69 @@ public class CategoryServiceImpl implements CategoryService {
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidIdentifierException if the {@code category} has a {@code null} ID.
-     * @throws EntityNotFoundException if no existing category is found with the provided ID.
+     * @throws IllegalArgumentException if the {@code category} has a null ID, as it should be present for updating.
+     * @throws EntityNotFoundException if no category exists with the provided {@code categoryId}.
      */
     @Transactional
     @Override
     public CategoryEntity updateCategory(@Valid CategoryEntity category) {
         if (category.getId() == null) {
-            throw new InvalidIdentifierException("exception.id_is_null.message");
+            throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
         }
-        if (!categoryRepository.existsById(category.getId())) {
-            throw new EntityNotFoundException();
+
+        Long categoryId = category.getId();
+
+        if (!categoryRepository.existsById(categoryId)) {
+            throw exceptionService.createEntityNotFoundException(categoryId);
         }
         return categoryRepository.save(category);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Optional<CategoryEntity> updateCategoryName(
-            @NotNull(message = "${validation.not_null.message}") Long categoryId,
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "${validation.size.message}")
-            String newName
-    ) {
-        return categoryRepository.updateCategoryName(categoryId, newName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Optional<CategoryEntity> updateCategorySummary(
-            @NotNull(message = "${validation.not_null.message}") Long categoryId,
-            @NotNull(message = "${validation.not_null.message}")
-            @Size(max = 150, message = "${validation.size.max.message}")
-            String newSummary
-    ) {
-        return categoryRepository.updateCategorySummary(categoryId, newSummary);
     }
 
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidIdentifierException if the {@code category} has a non-null ID, as it should be null for a new category.
+     * @throws EntityNotFoundException if no category exists with the provided {@code categoryId}.
      */
     @Override
-    public CategoryEntity saveCategory(CategoryEntity category) {
+    public CategoryEntity updateCategoryName(
+            @NotNull(message = "${validation.not_null.message}") Long categoryId,
+            @NotBlank(message = "${validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "${validation.size.message}")
+            String newName
+    ) {
+        return categoryRepository.updateCategoryName(categoryId, newName).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(categoryId)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no category exists with the provided {@code categoryId}.
+     */
+    @Override
+    public CategoryEntity updateCategorySummary(
+            @NotNull(message = "${validation.not_null.message}") Long categoryId,
+            @NotNull(message = "${validation.not_null.message}")
+            @Size(max = 150, message = "${validation.size.max.message}")
+            String newSummary
+    ) {
+        return categoryRepository.updateCategorySummary(categoryId, newSummary).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(categoryId)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException if the {@code category} has a non-null ID, as it should be null for a new category.
+     */
+    @Override
+    public CategoryEntity saveCategory(@Valid CategoryEntity category) {
         if (category.getId() != null) {
-            throw new InvalidIdentifierException("exception.id_is_not_null.message");
+            throw exceptionService.createIllegalArgumentException("exception.id_is_not_null.message");
         }
         return categoryRepository.save(category);
     }
 }
+
