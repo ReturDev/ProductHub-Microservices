@@ -2,7 +2,9 @@ package com.returdev.product.services.brand;
 
 import com.returdev.product.entities.BrandEntity;
 import com.returdev.product.exceptions.InvalidIdentifierException;
+import com.returdev.product.managers.MessageManager;
 import com.returdev.product.repositories.BrandRepository;
+import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -15,8 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
-
 
 /**
  * Implementation of the {@link BrandService} interface for managing brands in the system.
@@ -27,20 +27,18 @@ import java.util.Optional;
 public class BrandServiceImpl implements BrandService {
 
     private final BrandRepository brandRepository;
+    private final ExceptionService exceptionService;
 
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidIdentifierException if the provided {@code id} is {@code null}.
+     * @throws EntityNotFoundException if no brand is found with the given {@code id}.
      */
     @Override
-    public Optional<BrandEntity> getBrandById(
+    public BrandEntity getBrandById(
             @NotNull(message = "${validation.not_null.message}") Long id
     ) {
-        if (id == null) {
-            throw new InvalidIdentifierException("exception.id_is_null.message");
-        }
-        return brandRepository.findById(id);
+        return brandRepository.findById(id).orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
     }
 
     /**
@@ -82,45 +80,56 @@ public class BrandServiceImpl implements BrandService {
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidIdentifierException if the {@code brand} has a {@code null} ID.
-     * @throws EntityNotFoundException if no existing brand is found with the provided ID.
+     * @throws IllegalArgumentException if the {@code brand.id} is {@code null} while updating an existing brand.
+     * @throws EntityNotFoundException if the {@code brand} does not exist in the database.
      */
     @Transactional
     @Override
     public BrandEntity updateBrand(@Valid BrandEntity brand) {
         if (brand.getId() == null) {
-            throw new InvalidIdentifierException("exception.id_is_null.message");
+            throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
         }
-        if (!brandRepository.existsById(brand.getId())) {
-            throw new EntityNotFoundException();
+
+        Long brandId = brand.getId();
+
+        if (!brandRepository.existsById(brandId)) {
+            throw exceptionService.createEntityNotFoundException(brandId);
         }
         return brandRepository.save(brand);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
      */
     @Override
-    public Optional<BrandEntity> updateBrandName(
+    public BrandEntity updateBrandName(
             @NotNull(message = "${validation.not_null.message}") Long brandId,
             @NotBlank(message = "${validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "${validation.size.message}")
             String newName
     ) {
-        return brandRepository.updateBrandName(brandId, newName);
+        return brandRepository.updateBrandName(brandId, newName).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(brandId)
+        );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
      */
     @Override
-    public Optional<BrandEntity> updateBrandSummary(
+    public BrandEntity updateBrandSummary(
             @NotNull(message = "${validation.not_null.message}") Long brandId,
             @NotNull(message = "${validation.not_null.message}")
             @Size(max = 150, message = "${validation.size.max.message}")
             String newSummary
     ) {
-        return brandRepository.updateBrandSummary(brandId, newSummary);
+        return brandRepository.updateBrandSummary(brandId, newSummary).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(brandId)
+        );
     }
 
     /**
@@ -131,7 +140,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandEntity saveBrand(@Valid BrandEntity brand) {
         if (brand.getId() != null) {
-            throw new InvalidIdentifierException("exception.id_is_not_null.message");
+            throw exceptionService.createIllegalArgumentException("exception.id_is_not_null.message");
         }
         return brandRepository.save(brand);
     }
@@ -147,7 +156,7 @@ public class BrandServiceImpl implements BrandService {
     ) {
         int result = brandRepository.activateBrand(brandId);
         if (result == 0) {
-            throw new EntityNotFoundException();
+            throw exceptionService.createEntityNotFoundException(brandId);
         }
     }
 
@@ -162,7 +171,7 @@ public class BrandServiceImpl implements BrandService {
     ) {
         int result = brandRepository.deactivateBrand(brandId);
         if (result == 0) {
-            throw new EntityNotFoundException();
+            throw exceptionService.createEntityNotFoundException(brandId);
         }
     }
 }
