@@ -5,6 +5,7 @@ import com.returdev.product.entities.ProductEntity;
 import com.returdev.product.exceptions.InvalidIdentifierException;
 import com.returdev.product.repositories.DimensionsRepository;
 import com.returdev.product.repositories.ProductRepository;
+import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -20,10 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
 
 /**
- * Implementation of the ProductService interface for managing products in the system.
+ * Implementation of the {@link ProductService} interface for managing products in the system.
  */
 @Validated
 @Service
@@ -32,20 +32,20 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final DimensionsRepository dimensionsRepository;
+    private final ExceptionService exceptionService;
 
     /**
      * {@inheritDoc}
+     *
+     * @throws InvalidIdentifierException if the provided {@code id} is {@code null}.
      */
     @Override
-    public Optional<ProductEntity> getProductById(
+    public ProductEntity getProductById(
             @NotNull(message = "${validation.not_null.message}") Long id
     ) {
-
-        if (id == null) {
-            throw new InvalidIdentifierException("exception.id_is_null.message");
-        }
-
-        return productRepository.findById(id);
+        return productRepository.findById(id).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(id)
+        );
     }
 
     /**
@@ -129,13 +129,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Page<ProductEntity> getAllProducts(boolean includeHidden, Pageable pageable) {
-
-        if (includeHidden) {
-            return productRepository.findAll(pageable);
-        } else {
-            return productRepository.findAllVisibleProducts(pageable);
-        }
-
+        return includeHidden ? productRepository.findAll(pageable) : productRepository.findAllVisibleProducts(pageable);
     }
 
     /**
@@ -143,29 +137,30 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Page<ProductEntity> searchProducts(ProductEntity productEntity, boolean includeHidden, Pageable pageable) {
-        ExampleMatcher matcher = ExampleMatcher.matching();
-        matcher.withIgnoreNullValues();
-
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
         if (includeHidden) {
             matcher.withIgnorePaths("isHidden");
         }
-
         return productRepository.findAll(Example.of(productEntity, matcher), pageable);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException if the {@code product} has a null ID.
+     * @throws EntityNotFoundException if no product is found with the provided ID.
      */
     @Transactional
     @Override
-    public ProductEntity updateProduct(ProductEntity product) {
-
+    public ProductEntity updateProduct(@Valid ProductEntity product) {
         if (product.getId() == null) {
-            throw new InvalidIdentifierException("exception.id_is_null.message");
+            throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
         }
 
-        if (!productRepository.existsById(product.getId())) {
-            throw new InvalidIdentifierException("exception.not_exists_by_id.message");
+        Long productId = product.getId();
+
+        if (!productRepository.existsById(productId)) {
+            throw exceptionService.createEntityNotFoundException(productId);
         }
 
         return productRepository.save(product);
@@ -173,145 +168,168 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public Optional<ProductEntity> updateProductName(
+    public ProductEntity updateProductName(
             @NotNull(message = "${validation.not_null.message}") Long productId,
             @NotBlank(message = "${validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "${validation.size.message}")
             String newName
     ) {
-        return productRepository.updateProductName(productId, newName);
+        return productRepository.updateProductName(productId, newName).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public Optional<ProductEntity> updateProductSummary(
+    public ProductEntity updateProductSummary(
             @NotNull(message = "${validation.not_null.message}") Long productId,
             @NotNull(message = "${validation.not_null.message}")
             @Size(max = 150, message = "${validation.size.max.message}")
             String newSummary
     ) {
-        return productRepository.updateProductSummary(productId, newSummary);
+        return productRepository.updateProductSummary(productId, newSummary).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public Optional<ProductEntity> updateProductCode(
+    public ProductEntity updateProductCode(
             @NotNull(message = "${validation.not_null.message}") Long productId,
             @NotEmpty(message = "${validation.not_empty.message}")
             @Size(min = 3, max = 20, message = "${validation.size.message}")
             String newCode
     ) {
-        return productRepository.updateProductCode(productId, newCode);
+        return productRepository.updateProductCode(productId, newCode).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public Optional<ProductEntity> updateProductBarcode(
+    public ProductEntity updateProductBarcode(
             @NotNull(message = "${validation.not_null.message}") Long productId,
             @NotNull(message = "${validation.not_null.message}")
             @Size(min = 8, max = 30, message = "${validation.size.message}")
             String barcode
     ) {
-        return productRepository.updateProductBarcode(productId, barcode);
+        return productRepository.updateProductBarcode(productId, barcode).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public Optional<ProductEntity> updateProductModel(
+    public ProductEntity updateProductModel(
             @NotNull(message = "${validation.not_null.message}") Long productId,
             @NotNull(message = "${validation.not_null.message}") Long modelId
     ) {
-        return productRepository.updateProductModel(productId, modelId);
+        return productRepository.updateProductModel(productId, modelId).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if updating dimensions fails.
      */
     @Transactional
     @Override
-    public Optional<ProductEntity> updateProductDimensions(
+    public ProductEntity updateProductDimensions(
             @NotNull(message = "${validation.not_null.message}") Long productId,
             @NotNull(message = "${validation.not_null.message}")
             @Valid DimensionsEntity dimensions
     ) {
-
         Long savedDimensionId = dimensionsRepository.save(dimensions).getId();
-
-        return productRepository.updateProductDimensions(productId, savedDimensionId);
+        return productRepository.updateProductDimensions(productId, savedDimensionId).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if adding supplier fails.
      */
     @Override
     public void addProductSupplier(Long productId, Long newSupplierId) {
         int result = productRepository.addProductSupplier(productId, newSupplierId);
-
-        if (result == 0){
-            throw new EntityNotFoundException();
+        if (result == 0) {
+            throw exceptionService.createEntityNotFoundException();
         }
-
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if removing supplier fails.
      */
     @Override
     public void removeProductSupplier(Long productId, Long supplierId) {
         int result = productRepository.deleteProductSupplier(productId, supplierId);
-
-        if (result == 0){
-            throw new EntityNotFoundException();
+        if (result == 0) {
+            throw exceptionService.createEntityNotFoundException();
         }
-
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
     public void hideProduct(Long productId) {
         int result = productRepository.hideProduct(productId);
-
-        if (result == 0){
-            throw new EntityNotFoundException();
+        if (result == 0) {
+            throw exceptionService.createEntityNotFoundException(productId);
         }
-
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
     public void unhideProduct(Long productId) {
         int result = productRepository.unhideProduct(productId);
-
-        if (result == 0){
-            throw new EntityNotFoundException();
+        if (result == 0) {
+            throw exceptionService.createEntityNotFoundException(productId);
         }
-
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException if the {@code product} already has a non-null ID.
      */
     @Override
-    public ProductEntity saveProduct(ProductEntity product) {
-
+    public ProductEntity saveProduct(@Valid ProductEntity product) {
         if (product.getId() != null) {
-            throw new InvalidIdentifierException("exception.id_is_not_null.message");
+            throw exceptionService.createIllegalArgumentException("exception.id_is_not_null.message");
         }
-
         return productRepository.save(product);
     }
 }
+
