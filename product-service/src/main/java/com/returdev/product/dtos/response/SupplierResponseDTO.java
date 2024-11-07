@@ -1,5 +1,7 @@
 package com.returdev.product.dtos.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 /**
@@ -16,7 +18,9 @@ public record SupplierResponseDTO(
         Long id,
         String name,
         String observations,
+        @JsonProperty("concat_infos")
         List<ContactInfoResponseDTO> contactInfos,
+        @JsonProperty("is_active")
         boolean isActive
 ) {
 
@@ -35,8 +39,10 @@ public record SupplierResponseDTO(
             Long id,
             String name,
             String observations,
+            @JsonProperty("phone_number")
             String phoneNumber,
             String email,
+            @JsonProperty("is_commercial")
             boolean isCommercial
     ) {}
 
