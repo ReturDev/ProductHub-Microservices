@@ -30,6 +30,14 @@ public class ExceptionService {
         );
     }
 
+    public EntityNotFoundException createEntityNotFoundException() {
+        return new EntityNotFoundException(
+                messageManager.getMessage(
+                        "exception.some_entity_not_found.message"
+                )
+        );
+    }
+
     /**
      * Creates an {@link IllegalArgumentException} with a localized message based on the provided message key.
      *
