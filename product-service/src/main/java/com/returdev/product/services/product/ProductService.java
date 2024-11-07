@@ -5,8 +5,6 @@ import com.returdev.product.entities.ProductEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 /**
  * Service interface for managing products in the system.
  * Provides methods for retrieving, updating, saving, and deleting product entities.
@@ -23,7 +21,7 @@ public interface ProductService {
      * @param id the unique identifier of the product
      * @return an Optional containing the found ProductEntity, or empty if not found
      */
-    Optional<ProductEntity> getProductById(Long id);
+    ProductEntity getProductById(Long id);
 
     /**
      * Retrieves a paginated list of products by product code.
@@ -129,56 +127,56 @@ public interface ProductService {
      * Updates the name of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param newName the new name for the product
+     * @param newName   the new name for the product
      * @return an Optional containing the updated ProductEntity
      */
-    Optional<ProductEntity> updateProductName(Long productId, String newName);
+    ProductEntity updateProductName(Long productId, String newName);
 
     /**
      * Updates the summary of a product identified by its ID.
      *
-     * @param productId the unique identifier of the product
+     * @param productId  the unique identifier of the product
      * @param newSummary the new summary for the product
      * @return an Optional containing the updated ProductEntity
      */
-    Optional<ProductEntity> updateProductSummary(Long productId, String newSummary);
+    ProductEntity updateProductSummary(Long productId, String newSummary);
 
     /**
      * Updates the product code of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param newCode the new product code for the product
+     * @param newCode   the new product code for the product
      * @return an Optional containing the updated ProductEntity
      */
-    Optional<ProductEntity> updateProductCode(Long productId, String newCode);
+    ProductEntity updateProductCode(Long productId, String newCode);
 
     /**
      * Updates the barcode of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param barcode the new barcode for the product
+     * @param barcode   the new barcode for the product
      * @return an Optional containing the updated ProductEntity
      */
-    Optional<ProductEntity> updateProductBarcode(Long productId, String barcode);
+    ProductEntity updateProductBarcode(Long productId, String barcode);
 
     /**
      * Updates the model associated with a product identified by the given product ID.
      *
      * @param productId the unique identifier of the product to be updated
-     * @param modelId the unique identifier of the new model to associate with the product
+     * @param modelId   the unique identifier of the new model to associate with the product
      * @return an Optional containing the updated ProductEntity if the update is successful,
-     *         or an empty Optional if the product does not exist or the update fails
+     * or an empty Optional if the product does not exist or the update fails
      */
-    Optional<ProductEntity> updateProductModel(Long productId, Long modelId);
+    ProductEntity updateProductModel(Long productId, Long modelId);
 
     /**
      * Updates the dimensions of a product.
      *
-     * @param productId the unique identifier of the product
+     * @param productId  the unique identifier of the product
      * @param dimensions the new dimensions to associate with the product
      * @return an Optional containing the updated ProductEntity
      */
-    Optional<ProductEntity> updateProductDimensions(Long productId, DimensionsEntity dimensions);
+    ProductEntity updateProductDimensions(Long productId, DimensionsEntity dimensions);
 
     /**
      * Adds a new supplier association to a product.
