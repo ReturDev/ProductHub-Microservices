@@ -53,7 +53,7 @@ public class ContactInfoEntity {
     @Size(min = 3, max = 15, message = "${validation.size.message}")
     @Pattern(
             regexp = "^\\+?[0-9. ()-]{8,15}$",
-            message = "{validation.phone_format.message}"
+            message = "${validation.phone_format.message}"
     )
     @Column(name = "phone_number", unique = true, nullable = false)
     private String phoneNumber;
