@@ -1,5 +1,7 @@
 package com.returdev.product.dtos.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Data Transfer Object (DTO) for transferring essential product information.
  *
@@ -17,11 +19,13 @@ public record ProductResponseDTO(
         Long id,
         String name,
         String summary,
+        @JsonProperty("product_code")
         String productCode,
         String barcode,
         ModelResponseDTO model,
         CategoryResponseDTO category,
         DimensionsResponseDTO dimensions,
+        @JsonProperty("is_hidden")
         boolean isHidden
 ) {
 
@@ -36,9 +40,13 @@ public record ProductResponseDTO(
      */
     public record DimensionsResponseDTO(
             Long id,
+            @JsonProperty("weight_kg")
             float weightKg,
+            @JsonProperty("length_cm")
             float lengthCm,
+            @JsonProperty("width_cm")
             float widthCm,
+            @JsonProperty("height_cm")
             float heightCm
     ) {}
 }
