@@ -61,9 +61,9 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      */
     @Override
     public ContactInfoEntity updateContactInfoName(
-            @NotNull(message = "${validation.not_null.message}") Long contactId,
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "${validation.size.message}") String newName
+            @NotNull(message = "{validation.not_null.message}") Long contactId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}") String newName
     ) {
         return contactRepository.updateContactInfoName(contactId, newName)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
@@ -76,9 +76,9 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      */
     @Override
     public ContactInfoEntity updateContactInfoObservations(
-            @NotNull(message = "${validation.not_null.message}") Long contactId,
-            @NotNull(message = "${validation.not_null.message}")
-            @Size(max = 150, message = "${validation.size.max.message}") String newObservations
+            @NotNull(message = "{validation.not_null.message}") Long contactId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(max = 150, message = "{validation.size.max.message}") String newObservations
     ) {
         return contactRepository.updateContactInfoObservations(contactId, newObservations)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
@@ -91,9 +91,9 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      */
     @Override
     public ContactInfoEntity updateContactInfoPhoneNumber(
-            @NotNull(message = "${validation.not_null.message}") Long contactId,
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 3, max = 15, message = "${validation.size.message}")
+            @NotNull(message = "{validation.not_null.message}") Long contactId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 15, message = "{validation.size.message}")
             @Pattern(regexp = "^\\+?[0-9. ()-]{8,15}$", message = "{validation.phone_format.message}") String newPhoneNumber
     ) {
         return contactRepository.updateContactInfoPhoneNumber(contactId, newPhoneNumber)
@@ -107,8 +107,8 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      */
     @Override
     public ContactInfoEntity updateContactInfoEmail(
-            @NotNull(message = "${validation.not_null.message}") Long contactId,
-            @Email(message = "${validation.email.message}") String newEmail
+            @NotNull(message = "{validation.not_null.message}") Long contactId,
+            @Email(message = "{validation.email.message}") String newEmail
     ) {
         return contactRepository.updateContactInfoEmail(contactId, newEmail)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
@@ -121,7 +121,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      */
     @Override
     public ContactInfoEntity updateContactInfoIsCommercial(
-            @NotNull(message = "${validation.not_null.message}") Long contactId,
+            @NotNull(message = "{validation.not_null.message}") Long contactId,
             boolean isCommercial
     ) {
         return contactRepository.updateContactInfoIsCommercial(contactId, isCommercial)

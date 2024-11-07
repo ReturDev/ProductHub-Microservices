@@ -30,8 +30,8 @@ public class ContactInfoEntity {
      * The name of the contact person.
      * This field must not be blank, must be unique, and has a length between 3 and 50 characters.
      */
-    @NotBlank(message = "${validation.not_blank.message}")
-    @Size(min = 3, max = 50, message = "${validation.size.message}")
+    @NotBlank(message = "{validation.not_blank.message}")
+    @Size(min = 3, max = 50, message = "{validation.size.message}")
     @Column(name = "name", unique = true, length = 50, nullable = false)
     private String name;
 
@@ -39,8 +39,8 @@ public class ContactInfoEntity {
      * Additional observations about the contact.
      * This field cannot be null and has a maximum length of 150 characters.
      */
-    @NotNull(message = "${validation.not_null.message}")
-    @Size(max = 150, message = "${validation.size.max.message}")
+    @NotNull(message = "{validation.not_null.message}")
+    @Size(max = 150, message = "{validation.size.max.message}")
     @Column(name = "observations", length = 150, nullable = false)
     private String observations;
 
@@ -49,11 +49,11 @@ public class ContactInfoEntity {
      * Must not be blank, must be unique, and must match the specified regex pattern
      * for phone numbers (8 to 15 digits, allowing optional country code).
      */
-    @NotBlank(message = "${validation.not_blank.message}")
-    @Size(min = 3, max = 15, message = "${validation.size.message}")
+    @NotBlank(message = "{validation.not_blank.message}")
+    @Size(min = 3, max = 15, message = "{validation.size.message}")
     @Pattern(
             regexp = "^\\+?[0-9. ()-]{8,15}$",
-            message = "${validation.phone_format.message}"
+            message = "{validation.phone_format.message}"
     )
     @Column(name = "phone_number", unique = true, nullable = false)
     private String phoneNumber;
@@ -62,7 +62,7 @@ public class ContactInfoEntity {
      * The email address of the contact.
      * This field must follow the standard email format.
      */
-    @Email(message = "${validation.email.message}")
+    @Email(message = "{validation.email.message}")
     @Column(name = "email")
     private String email;
 

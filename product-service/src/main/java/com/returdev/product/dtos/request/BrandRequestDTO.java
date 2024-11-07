@@ -3,7 +3,6 @@ package com.returdev.product.dtos.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 
@@ -19,11 +18,11 @@ import jakarta.validation.constraints.Size;
  */
 public record BrandRequestDTO(
         Long id,
-        @NotBlank(message = "${validation.not_blank.message}")
-        @Size(min = 3, max = 50, message = "${validation.size.message}")
+        @NotBlank(message = "{validation.not_blank.message}")
+        @Size(min = 3, max = 50, message = "{validation.size.message}")
         String name,
-        @NotNull(message = "${validation.not_null.message}")
-        @Size(max = 150, message = "${validation.size.max.message}")
+        @NotNull(message = "{validation.not_null.message}")
+        @Size(max = 150, message = "{validation.size.max.message}")
         String summary,
         @JsonProperty("is_active")
         Boolean isActive

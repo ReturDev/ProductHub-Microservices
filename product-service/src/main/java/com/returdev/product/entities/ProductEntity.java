@@ -44,8 +44,8 @@ public class ProductEntity {
      * The name of the product.
      * Cannot be blank and must have a length between 3 and 50 characters.
      */
-    @NotBlank(message = "${validation.not_blank.message}")
-    @Size(min = 3, max = 50, message = "${validation.size.message}")
+    @NotBlank(message = "{validation.not_blank.message}")
+    @Size(min = 3, max = 50, message = "{validation.size.message}")
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
@@ -53,8 +53,8 @@ public class ProductEntity {
      * A brief summary of the product.
      * Cannot be null and has a maximum length of 150 characters.
      */
-    @NotNull(message = "${validation.not_null.message}")
-    @Size(max = 150, message = "${validation.size.max.message}")
+    @NotNull(message = "{validation.not_null.message}")
+    @Size(max = 150, message = "{validation.size.max.message}")
     @Column(name = "summary", nullable = false, length = 150)
     private String summary;
 
@@ -62,8 +62,8 @@ public class ProductEntity {
      * A unique code representing the product.
      * Cannot be empty and must have a length between 3 and 20 characters.
      */
-    @NotEmpty(message = "${validation.not_empty.message}")
-    @Size(min = 3, max = 20, message = "${validation.size.message}")
+    @NotEmpty(message = "{validation.not_empty.message}")
+    @Size(min = 3, max = 20, message = "{validation.size.message}")
     @Column(name = "product_code", length = 20)
     private String productCode;
 
@@ -71,8 +71,8 @@ public class ProductEntity {
      * The barcode of the product.
      * Cannot be null and must have a length between 8 and 30 characters.
      */
-    @NotNull(message = "${validation.not_null.message}")
-    @Size(min = 8, max = 30, message = "${validation.size.message}")
+    @NotNull(message = "{validation.not_null.message}")
+    @Size(min = 8, max = 30, message = "{validation.size.message}")
     @Column(name = "barcode", nullable = false, length = 30)
     private String barcode;
 
@@ -81,7 +81,7 @@ public class ProductEntity {
      * This field establishes a many-to-one relationship with the {@link ModelEntity}.
      * It cannot be null and is set to cascade persist and remove operations.
      */
-    @NotNull(message = "${validation.not_null.message}")
+    @NotNull(message = "{validation.not_null.message}")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, optional = false)
     @JoinColumn(name = "model_id")
     private ModelEntity model;
@@ -91,7 +91,7 @@ public class ProductEntity {
      * The category associated with the product.
      * This field establishes a many-to-one relationship with the {@link CategoryEntity} and cannot be null.
      */
-    @NotNull(message = "${validation.not_null.message}")
+    @NotNull(message = "{validation.not_null.message}")
     @ManyToOne(optional = false)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
@@ -101,7 +101,7 @@ public class ProductEntity {
      * This field must not be empty and establishes a many-to-many relationship
      * between products and suppliers.
      */
-    @NotEmpty(message = "${validation.not_empty.message}")
+    @NotEmpty(message = "{validation.not_empty.message}")
     @ManyToMany()
     @JoinTable(
             name = "product_supplier",

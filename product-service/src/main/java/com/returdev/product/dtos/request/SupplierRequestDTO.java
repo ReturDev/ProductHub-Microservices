@@ -20,10 +20,10 @@ import jakarta.validation.constraints.Size;
  */
 public record SupplierRequestDTO(
     Long id,
-    @NotBlank(message = "${validation.not_blank.message}")
-    @Size(min = 3, max = 50, message = "${validation.size.message}")
+    @NotBlank(message = "{validation.not_blank.message}")
+    @Size(min = 3, max = 50, message = "{validation.size.message}")
     String name,
-    @NotNull(message = "${validation.not_null.message}")
+    @NotNull(message = "{validation.not_null.message}")
     String observations,
     @JsonProperty("is_active")
     Boolean isActive

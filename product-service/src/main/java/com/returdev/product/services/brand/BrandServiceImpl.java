@@ -1,8 +1,6 @@
 package com.returdev.product.services.brand;
 
 import com.returdev.product.entities.BrandEntity;
-import com.returdev.product.exceptions.InvalidIdentifierException;
-import com.returdev.product.managers.MessageManager;
 import com.returdev.product.repositories.BrandRepository;
 import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
@@ -36,7 +34,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public BrandEntity getBrandById(
-            @NotNull(message = "${validation.not_null.message}") Long id
+            @NotNull(message = "{validation.not_null.message}") Long id
     ) {
         return brandRepository.findById(id).orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
     }
@@ -46,7 +44,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public Page<BrandEntity> getBrandByNameContaining(
-            @NotBlank(message = "${validation.not_blank.message}") String name,
+            @NotBlank(message = "{validation.not_blank.message}") String name,
             boolean includeInactive,
             Pageable pageable
     ) {
@@ -58,7 +56,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public Page<BrandEntity> getBrandByNameStartingWith(
-            @NotBlank(message = "${validation.not_blank.message}") String name,
+            @NotBlank(message = "{validation.not_blank.message}") String name,
             boolean includeInactive,
             Pageable pageable
     ) {
@@ -105,9 +103,9 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public BrandEntity updateBrandName(
-            @NotNull(message = "${validation.not_null.message}") Long brandId,
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "${validation.size.message}")
+            @NotNull(message = "{validation.not_null.message}") Long brandId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}")
             String newName
     ) {
         return brandRepository.updateBrandName(brandId, newName).orElseThrow(() ->
@@ -122,9 +120,9 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public BrandEntity updateBrandSummary(
-            @NotNull(message = "${validation.not_null.message}") Long brandId,
-            @NotNull(message = "${validation.not_null.message}")
-            @Size(max = 150, message = "${validation.size.max.message}")
+            @NotNull(message = "{validation.not_null.message}") Long brandId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(max = 150, message = "{validation.size.max.message}")
             String newSummary
     ) {
         return brandRepository.updateBrandSummary(brandId, newSummary).orElseThrow(() ->
@@ -135,7 +133,7 @@ public class BrandServiceImpl implements BrandService {
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidIdentifierException if the {@code brand} has a non-null ID, as it should be null for a new brand.
+     * @throws IllegalArgumentException if the {@code brand} has a non-null ID, as it should be null for a new brand.
      */
     @Override
     public BrandEntity saveBrand(@Valid BrandEntity brand) {
@@ -152,7 +150,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public void activateBrand(
-            @NotNull(message = "${validation.not_null.message}") Long brandId
+            @NotNull(message = "{validation.not_null.message}") Long brandId
     ) {
         int result = brandRepository.activateBrand(brandId);
         if (result == 0) {
@@ -167,7 +165,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public void deactivateBrand(
-            @NotNull(message = "${validation.not_null.message}") Long brandId
+            @NotNull(message = "{validation.not_null.message}") Long brandId
     ) {
         int result = brandRepository.deactivateBrand(brandId);
         if (result == 0) {

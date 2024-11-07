@@ -35,7 +35,7 @@ public class DimensionsEntity {
      * The weight of the product in kilograms.
      * Must be a positive value and cannot be null.
      */
-    @Positive(message = "${validation.positive_number.message}")
+    @Positive(message = "{validation.positive_number.message}")
     @Column(name = "weight", columnDefinition = "FLOAT(10,3)", nullable = false)
     private float weightKg;
 
@@ -43,7 +43,7 @@ public class DimensionsEntity {
      * The length of the product in centimeters.
      * Must be a positive value and cannot be null.
      */
-    @Positive(message = "${validation.positive_number.message}")
+    @Positive(message = "{validation.positive_number.message}")
     @Column(name = "length", columnDefinition = "FLOAT(10,3)", nullable = false)
     private float lengthCm;
 
@@ -51,7 +51,7 @@ public class DimensionsEntity {
      * The width of the product in centimeters.
      * Must be a positive value and cannot be null.
      */
-    @Positive(message = "${validation.positive_number.message}")
+    @Positive(message = "{validation.positive_number.message}")
     @Column(name = "width", columnDefinition = "FLOAT(10,3)", nullable = false)
     private float widthCm;
 
@@ -59,7 +59,7 @@ public class DimensionsEntity {
      * The height of the product in centimeters.
      * Must be a positive value and cannot be null.
      */
-    @Positive(message = "${validation.positive_number.message}")
+    @Positive(message = "{validation.positive_number.message}")
     @Column(name = "height", columnDefinition = "FLOAT(10,3)", nullable = false)
     private float heightCm;
 

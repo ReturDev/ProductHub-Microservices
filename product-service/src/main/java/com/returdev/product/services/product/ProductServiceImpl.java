@@ -2,7 +2,6 @@ package com.returdev.product.services.product;
 
 import com.returdev.product.entities.DimensionsEntity;
 import com.returdev.product.entities.ProductEntity;
-import com.returdev.product.exceptions.InvalidIdentifierException;
 import com.returdev.product.repositories.DimensionsRepository;
 import com.returdev.product.repositories.ProductRepository;
 import com.returdev.product.services.exception.ExceptionService;
@@ -36,12 +35,10 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws InvalidIdentifierException if the provided {@code id} is {@code null}.
      */
     @Override
     public ProductEntity getProductById(
-            @NotNull(message = "${validation.not_null.message}") Long id
+            @NotNull(message = "{validation.not_null.message}") Long id
     ) {
         return productRepository.findById(id).orElseThrow(
                 () -> exceptionService.createEntityNotFoundException(id)
@@ -53,8 +50,8 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Page<ProductEntity> getProductByCode(
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 3, max = 20, message = "${validation.size.message}")
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 20, message = "{validation.size.message}")
             String code,
             boolean includeHidden,
             Pageable pageable
@@ -67,8 +64,8 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Page<ProductEntity> getProductByBarCode(
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 8, max = 30, message = "${validation.size.message}")
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 8, max = 30, message = "{validation.size.message}")
             String barcode,
             boolean includeHidden,
             Pageable pageable
@@ -81,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Page<ProductEntity> getProductByNameContaining(
-            @NotBlank(message = "${validation.not_blank.message}") String name,
+            @NotBlank(message = "{validation.not_blank.message}") String name,
             boolean includeHidden,
             Pageable pageable
     ) {
@@ -93,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Page<ProductEntity> getProductByNameStartingWith(
-            @NotBlank(message = "${validation.not_blank.message}") String name,
+            @NotBlank(message = "{validation.not_blank.message}") String name,
             boolean includeHidden,
             Pageable pageable
     ) {
@@ -173,9 +170,9 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public ProductEntity updateProductName(
-            @NotNull(message = "${validation.not_null.message}") Long productId,
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "${validation.size.message}")
+            @NotNull(message = "{validation.not_null.message}") Long productId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}")
             String newName
     ) {
         return productRepository.updateProductName(productId, newName).orElseThrow(
@@ -190,9 +187,9 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public ProductEntity updateProductSummary(
-            @NotNull(message = "${validation.not_null.message}") Long productId,
-            @NotNull(message = "${validation.not_null.message}")
-            @Size(max = 150, message = "${validation.size.max.message}")
+            @NotNull(message = "{validation.not_null.message}") Long productId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(max = 150, message = "{validation.size.max.message}")
             String newSummary
     ) {
         return productRepository.updateProductSummary(productId, newSummary).orElseThrow(
@@ -207,9 +204,9 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public ProductEntity updateProductCode(
-            @NotNull(message = "${validation.not_null.message}") Long productId,
-            @NotEmpty(message = "${validation.not_empty.message}")
-            @Size(min = 3, max = 20, message = "${validation.size.message}")
+            @NotNull(message = "{validation.not_null.message}") Long productId,
+            @NotEmpty(message = "{validation.not_empty.message}")
+            @Size(min = 3, max = 20, message = "{validation.size.message}")
             String newCode
     ) {
         return productRepository.updateProductCode(productId, newCode).orElseThrow(
@@ -224,9 +221,9 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public ProductEntity updateProductBarcode(
-            @NotNull(message = "${validation.not_null.message}") Long productId,
-            @NotNull(message = "${validation.not_null.message}")
-            @Size(min = 8, max = 30, message = "${validation.size.message}")
+            @NotNull(message = "{validation.not_null.message}") Long productId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(min = 8, max = 30, message = "{validation.size.message}")
             String barcode
     ) {
         return productRepository.updateProductBarcode(productId, barcode).orElseThrow(
@@ -241,8 +238,8 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public ProductEntity updateProductModel(
-            @NotNull(message = "${validation.not_null.message}") Long productId,
-            @NotNull(message = "${validation.not_null.message}") Long modelId
+            @NotNull(message = "{validation.not_null.message}") Long productId,
+            @NotNull(message = "{validation.not_null.message}") Long modelId
     ) {
         return productRepository.updateProductModel(productId, modelId).orElseThrow(
                 () -> exceptionService.createEntityNotFoundException(productId)
@@ -257,8 +254,8 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public ProductEntity updateProductDimensions(
-            @NotNull(message = "${validation.not_null.message}") Long productId,
-            @NotNull(message = "${validation.not_null.message}")
+            @NotNull(message = "{validation.not_null.message}") Long productId,
+            @NotNull(message = "{validation.not_null.message}")
             @Valid DimensionsEntity dimensions
     ) {
         Long savedDimensionId = dimensionsRepository.save(dimensions).getId();

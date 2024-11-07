@@ -33,7 +33,7 @@ public class SupplierServiceImpl implements SupplierService {
      */
     @Override
     public SupplierEntity getSupplierById(
-            @NotNull(message = "${validation.not_null.message}") Long id
+            @NotNull(message = "{validation.not_null.message}") Long id
     ) {
         return supplierRepository.findById(id).orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
     }
@@ -43,7 +43,7 @@ public class SupplierServiceImpl implements SupplierService {
      */
     @Override
     public Page<SupplierEntity> getSupplierByNameContaining(
-            @NotBlank(message = "${validation.not_blank.message}") String name,
+            @NotBlank(message = "{validation.not_blank.message}") String name,
             boolean includeInactive,
             Pageable pageable
     ) {
@@ -55,7 +55,7 @@ public class SupplierServiceImpl implements SupplierService {
      */
     @Override
     public Page<SupplierEntity> getSupplierByNameStartingWith(
-            @NotBlank(message = "${validation.not_blank.message}") String name,
+            @NotBlank(message = "{validation.not_blank.message}") String name,
             boolean includeInactive,
             Pageable pageable
     ) {
@@ -90,9 +90,9 @@ public class SupplierServiceImpl implements SupplierService {
      */
     @Override
     public SupplierEntity updateSupplierName(
-            @NotNull(message = "${validation.not_null.message}") Long supplierId,
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "${validation.size.message}")
+            @NotNull(message = "{validation.not_null.message}") Long supplierId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}")
             String newName
     ) {
         return supplierRepository.updateSupplierName(supplierId, newName).orElseThrow(() ->
@@ -107,9 +107,9 @@ public class SupplierServiceImpl implements SupplierService {
      */
     @Override
     public SupplierEntity updateSupplierObservations(
-            @NotNull(message = "${validation.not_null.message}") Long supplierId,
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(max = 150, message = "${validation.size.max.message}")
+            @NotNull(message = "{validation.not_null.message}") Long supplierId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(max = 150, message = "{validation.size.max.message}")
             String newObservations
     ) {
         return supplierRepository.updateSupplierObservations(supplierId, newObservations).orElseThrow(() ->
@@ -124,7 +124,7 @@ public class SupplierServiceImpl implements SupplierService {
      */
     @Override
     public void activateSupplier(
-            @NotNull(message = "${validation.not_null.message}") Long supplierId
+            @NotNull(message = "{validation.not_null.message}") Long supplierId
     ) {
         int result = supplierRepository.activateSupplier(supplierId);
 
@@ -140,7 +140,7 @@ public class SupplierServiceImpl implements SupplierService {
      */
     @Override
     public void inactivateSupplier(
-            @NotNull(message = "${validation.not_null.message}") Long supplierId
+            @NotNull(message = "{validation.not_null.message}") Long supplierId
     ) {
         int result = supplierRepository.deactivateSupplier(supplierId);
 

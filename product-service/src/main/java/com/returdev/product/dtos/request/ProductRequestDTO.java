@@ -25,24 +25,24 @@ import java.util.List;
  */
 public record ProductRequestDTO(
         Long id,
-        @NotBlank(message = "${validation.not_blank.message}")
-        @Size(min = 3, max = 50, message = "${validation.size.message}")
+        @NotBlank(message = "{validation.not_blank.message}")
+        @Size(min = 3, max = 50, message = "{validation.size.message}")
         String name,
-        @NotNull(message = "${validation.not_null.message}")
-        @Size(max = 150, message = "${validation.size.max.message}")
+        @NotNull(message = "{validation.not_null.message}")
+        @Size(max = 150, message = "{validation.size.max.message}")
         String summary,
-        @NotEmpty(message = "${validation.not_empty.message}")
-        @Size(min = 3, max = 20, message = "${validation.size.message}")
+        @NotEmpty(message = "{validation.not_empty.message}")
+        @Size(min = 3, max = 20, message = "{validation.size.message}")
         @JsonProperty("product_code")
         String productCode,
-        @NotNull(message = "${validation.not_null.message}")
-        @Size(min = 8, max = 30, message = "${validation.size.message}")
+        @NotNull(message = "{validation.not_null.message}")
+        @Size(min = 8, max = 30, message = "{validation.size.message}")
         String barcode,
         @JsonProperty("model_id")
         Long modelId,
         @JsonProperty("category_id")
         Long categoryId,
-        @NotEmpty(message = "${validation.not_empty.message}")
+        @NotEmpty(message = "{validation.not_empty.message}")
         @JsonProperty("supplier_ids")
         List<Long> supplierIds,
         DimensionsRequestDTO dimensions,
@@ -60,12 +60,16 @@ public record ProductRequestDTO(
      * @param heightCm The height of the product in centimeters.
      */
     public record DimensionsRequestDTO(
+            @Positive(message = "{validation.positive_number.message}")
             @JsonProperty("weight_kg")
             float weightKg,
+            @Positive(message = "{validation.positive_number.message}")
             @JsonProperty("length_cm")
             float lengthCm,
+            @Positive(message = "{validation.positive_number.message}")
             @JsonProperty("width_cm")
             float widthCm,
+            @Positive(message = "{validation.positive_number.message}")
             @JsonProperty("height_cm")
             float heightCm
     ) {}

@@ -34,7 +34,7 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public ModelEntity getModelById(
-            @NotNull(message = "${validation.not_null.message}") Long id
+            @NotNull(message = "{validation.not_null.message}") Long id
     ) {
         return modelRepository.findById(id)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
@@ -62,7 +62,7 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Page<ModelEntity> getModelsByBrandId(
-            @NotNull(message = "${validation.not_null.message}") Long brandId,
+            @NotNull(message = "{validation.not_null.message}") Long brandId,
             boolean includeInactive,
             Pageable pageable
     ) {
@@ -98,9 +98,9 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public ModelEntity updateModelName(
-            @NotNull(message = "${validation.not_null.message}") Long modelId,
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "${validation.size.message}")
+            @NotNull(message = "{validation.not_null.message}") Long modelId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}")
             String newName
     ) {
         return modelRepository.updateModelName(modelId, newName).orElseThrow(() ->
@@ -115,9 +115,9 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public ModelEntity updateModelSummary(
-            @NotNull(message = "${validation.not_null.message}") Long modelId,
-            @NotNull(message = "${validation.not_null.message}")
-            @Size(max = 150, message = "${validation.size.max.message}")
+            @NotNull(message = "{validation.not_null.message}") Long modelId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(max = 150, message = "{validation.size.max.message}")
             String newSummary
     ) {
         return modelRepository.updateModelSummary(modelId, newSummary).orElseThrow(() ->
@@ -132,8 +132,8 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public ModelEntity updateModelBrand(
-            @NotNull(message = "${validation.not_null.message}") Long modelId,
-            @NotNull(message = "${validation.not_null.message}") Long brandId
+            @NotNull(message = "{validation.not_null.message}") Long modelId,
+            @NotNull(message = "{validation.not_null.message}") Long brandId
     ) {
         return modelRepository.updateModelBrand(modelId, brandId).orElseThrow(() ->
                 exceptionService.createEntityNotFoundException(modelId)
@@ -160,7 +160,7 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public void activateModel(
-            @NotNull(message = "${validation.not_null.message}") Long modelId
+            @NotNull(message = "{validation.not_null.message}") Long modelId
     ) {
         int result = modelRepository.activateModel(modelId);
         if (result == 0) {
@@ -175,7 +175,7 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public void inactivateModel(
-            @NotNull(message = "${validation.not_null.message}") Long modelId
+            @NotNull(message = "{validation.not_null.message}") Long modelId
     ) {
         int result = modelRepository.inactivateModel(modelId);
         if (result == 0) {

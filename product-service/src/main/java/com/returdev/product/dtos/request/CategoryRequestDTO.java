@@ -2,7 +2,6 @@ package com.returdev.product.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -16,10 +15,10 @@ import jakarta.validation.constraints.Size;
  */
 public record CategoryRequestDTO(
         Long id,
-        @NotBlank(message = "${validation.not_blank.message}")
-        @Size(min = 3, max = 50, message = "${validation.size.message}")
+        @NotBlank(message = "{validation.not_blank.message}")
+        @Size(min = 3, max = 50, message = "{validation.size.message}")
         String name,
-        @NotNull(message = "${validation.not_null.message}")
-        @Size(max = 150, message = "${validation.size.max.message}")
+        @NotNull(message = "{validation.not_null.message}")
+        @Size(max = 150, message = "{validation.size.max.message}")
         String summary
 ) {}

@@ -36,8 +36,8 @@ public class ModelEntity {
      * The name of the model.
      * Cannot be blank and must have a length between 3 and 50 characters.
      */
-    @NotBlank(message = "${validation.not_blank.message}")
-    @Size(min = 3, max = 50, message = "${validation.size.message}")
+    @NotBlank(message = "{validation.not_blank.message}")
+    @Size(min = 3, max = 50, message = "{validation.size.message}")
     @Column(name = "name", nullable = false, length = 50, unique = true)
     private String name;
 
@@ -45,8 +45,8 @@ public class ModelEntity {
      * A brief summary of the model.
      * Cannot be null and has a maximum length of 150 characters.
      */
-    @NotNull(message = "${validation.not_null.message}")
-    @Size(max = 150, message = "${validation.size.max.message}")
+    @NotNull(message = "{validation.not_null.message}")
+    @Size(max = 150, message = "{validation.size.max.message}")
     @Column(name = "summary", nullable = false, length = 150)
     private String summary;
 
@@ -54,7 +54,7 @@ public class ModelEntity {
      * The brand associated with the model.
      * This field establishes a many-to-one relationship with the {@link BrandEntity} and cannot be null.
      */
-    @NotNull(message = "${validation.not_null.message}")
+    @NotNull(message = "{validation.not_null.message}")
     @ManyToOne(optional = false)
     @JoinColumn(name = "brand_id")
     private BrandEntity brand;

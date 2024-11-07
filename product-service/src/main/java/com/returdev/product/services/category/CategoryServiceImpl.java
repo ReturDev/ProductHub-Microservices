@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public CategoryEntity getCategoryById(
-            @NotNull(message = "${validation.not_null.message}") Long id
+            @NotNull(message = "{validation.not_null.message}") Long id
     ) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public Page<CategoryEntity> getCategoryByNameContaining(
-            @NotBlank(message = "${validation.not_blank.message}") String name,
+            @NotBlank(message = "{validation.not_blank.message}") String name,
             Pageable pageable
     ) {
         return categoryRepository.findByNameContaining(name, pageable);
@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public Page<CategoryEntity> getCategoryByNameStartingWith(
-            @NotBlank(message = "${validation.not_blank.message}") String name,
+            @NotBlank(message = "{validation.not_blank.message}") String name,
             Pageable pageable
     ) {
         return categoryRepository.findByNameStartingWith(name, pageable);
@@ -97,9 +97,9 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public CategoryEntity updateCategoryName(
-            @NotNull(message = "${validation.not_null.message}") Long categoryId,
-            @NotBlank(message = "${validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "${validation.size.message}")
+            @NotNull(message = "{validation.not_null.message}") Long categoryId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}")
             String newName
     ) {
         return categoryRepository.updateCategoryName(categoryId, newName).orElseThrow(() ->
@@ -114,9 +114,9 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public CategoryEntity updateCategorySummary(
-            @NotNull(message = "${validation.not_null.message}") Long categoryId,
-            @NotNull(message = "${validation.not_null.message}")
-            @Size(max = 150, message = "${validation.size.max.message}")
+            @NotNull(message = "{validation.not_null.message}") Long categoryId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(max = 150, message = "{validation.size.max.message}")
             String newSummary
     ) {
         return categoryRepository.updateCategorySummary(categoryId, newSummary).orElseThrow(() ->

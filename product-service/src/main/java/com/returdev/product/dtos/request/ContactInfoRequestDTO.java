@@ -21,25 +21,25 @@ import jakarta.validation.constraints.*;
  */
 public record ContactInfoRequestDTO(
         Long id,
-        @NotBlank(message = "${validation.not_blank.message}")
-        @Size(min = 3, max = 50, message = "${validation.size.message}")
+        @NotBlank(message = "{validation.not_blank.message}")
+        @Size(min = 3, max = 50, message = "{validation.size.message}")
         String name,
-        @NotNull(message = "${validation.not_null.message}")
-        @Size(max = 150, message = "${validation.size.max.message}")
+        @NotNull(message = "{validation.not_null.message}")
+        @Size(max = 150, message = "{validation.size.max.message}")
         String observations,
-        @NotBlank(message = "${validation.not_blank.message}")
-        @Size(min = 3, max = 15, message = "${validation.size.message}")
+        @NotBlank(message = "{validation.not_blank.message}")
+        @Size(min = 3, max = 15, message = "{validation.size.message}")
         @Pattern(
                 regexp = "^\\+?[0-9. ()-]{8,15}$",
-                message = "${validation.phone_format.message}"
+                message = "{validation.phone_format.message}"
         )
         @JsonProperty("phone_number")
         String phoneNumber,
-        @Email(message = "${validation.email.message}")
+        @Email(message = "{validation.email.message}")
         String email,
         @JsonProperty("is_commercial")
         boolean isCommercial,
-        @NotNull(message = "${validation.not_null.message}")
+        @NotNull(message = "{validation.not_null.message}")
         @JsonProperty("supplier_id")
         Long supplierId
 ) {}

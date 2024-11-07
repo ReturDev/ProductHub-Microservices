@@ -34,8 +34,8 @@ public class SupplierEntity {
      * The name of the supplier, which must be unique and cannot be blank.
      * This field has a minimum length of 3 and a maximum length of 50 characters.
      */
-    @NotBlank(message = "${validation.not_blank.message}")
-    @Size(min = 3, max = 50, message = "${validation.size.message}")
+    @NotBlank(message = "{validation.not_blank.message}")
+    @Size(min = 3, max = 50, message = "{validation.size.message}")
     @Column(name = "name", unique = true, length = 50, nullable = false)
     private String name;
 
@@ -43,7 +43,7 @@ public class SupplierEntity {
      * Observations or notes about the supplier.
      * This field cannot be null and uses a large object (LOB) type in the database for extended text.
      */
-    @NotNull(message = "${validation.not_null.message}")
+    @NotNull(message = "{validation.not_null.message}")
     @Lob
     @Column(name = "observations", nullable = false)
     private String observations;
