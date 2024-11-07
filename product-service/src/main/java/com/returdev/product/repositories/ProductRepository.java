@@ -115,7 +115,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL update_product_name(:id, :name)", nativeQuery = true)
+    @Query(value = "CALL updateProductName(:id, :name)", nativeQuery = true)
     Optional<ProductEntity> updateProductName(@Param("id") Long productId, @Param("name") String newName);
 
     /**
@@ -127,7 +127,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL update_product_summary(:id, :summary)", nativeQuery = true)
+    @Query(value = "CALL updateProductSummary(:id, :summary)", nativeQuery = true)
     Optional<ProductEntity> updateProductSummary(@Param("id") Long productId, @Param("summary") String newSummary);
 
     /**
@@ -139,7 +139,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL update_product_code(:id, :code)", nativeQuery = true)
+    @Query(value = "CALL updateProductCode(:id, :code)", nativeQuery = true)
     Optional<ProductEntity> updateProductCode(@Param("id") Long productId, @Param("code") String newCode);
 
     /**
@@ -151,7 +151,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL update_product_barcode(:id, :barcode)", nativeQuery = true)
+    @Query(value = "CALL updateProductBarcode(:id, :barcode)", nativeQuery = true)
     Optional<ProductEntity> updateProductBarcode(@Param("id") Long productId, @Param("barcode") String newBarcode);
 
     /**
@@ -163,7 +163,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL update_product_model(:productId, :modelId)", nativeQuery = true)
+    @Query(value = "CALL updateProductModel(:productId, :modelId)", nativeQuery = true)
     Optional<ProductEntity> updateProductModel(@Param("productId") Long productId, @Param("modelId") Long modelId);
 
     /**
@@ -175,7 +175,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL update_product_dimensions(:productId, :dimensionsId)", nativeQuery = true)
+    @Query(value = "CALL updateProductDimensions(:productId, :dimensionsId)", nativeQuery = true)
     Optional<ProductEntity> updateProductDimensions(@Param("productId") Long productId, @Param("dimensionsId") Long dimensionsId);
 
 
