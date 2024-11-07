@@ -1,5 +1,7 @@
 package com.returdev.product.dtos.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Data Transfer Object (DTO) for transferring essential brand information.
  *
@@ -12,5 +14,6 @@ public record BrandResponseDTO(
         Long id,
         String name,
         String summary,
+        @JsonProperty("is_active")
         boolean isActive
 ) {}
