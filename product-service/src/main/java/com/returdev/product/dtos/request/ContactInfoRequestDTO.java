@@ -23,7 +23,6 @@ public record ContactInfoRequestDTO(
         Long id,
         @NotBlank(message = "${validation.not_blank.message}")
         @Size(min = 3, max = 50, message = "${validation.size.message}")
-        @Pattern(regexp = "^[A-Z].*", message = "${validation.regex.name.message}")
         String name,
         @NotNull(message = "${validation.not_null.message}")
         @Size(max = 150, message = "${validation.size.max.message}")

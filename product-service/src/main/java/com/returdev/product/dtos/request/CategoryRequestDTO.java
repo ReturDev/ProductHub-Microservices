@@ -16,7 +16,6 @@ import jakarta.validation.constraints.Size;
  */
 public record CategoryRequestDTO(
         Long id,
-        @Pattern(regexp = "^[A-Z].*", message = "${validation.regex.name.message}")
         @NotBlank(message = "${validation.not_blank.message}")
         @Size(min = 3, max = 50, message = "${validation.size.message}")
         String name,
