@@ -1,8 +1,8 @@
 package com.returdev.product.services.model;
 
 import com.returdev.product.entities.ModelEntity;
-import com.returdev.product.exceptions.InvalidIdentifierException;
 import com.returdev.product.repositories.ModelRepository;
+import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
 
 /**
  * Implementation of the {@link ModelService} interface for managing models in the system.
@@ -26,24 +25,26 @@ import java.util.Optional;
 public class ModelServiceImpl implements ModelService {
 
     private final ModelRepository modelRepository;
+    private final ExceptionService exceptionService;
 
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidIdentifierException if the provided {@code id} is {@code null}.
+     * @throws EntityNotFoundException if no model is found with the provided {@code id}.
      */
     @Override
-    public Optional<ModelEntity> getModelById(
+    public ModelEntity getModelById(
             @NotNull(message = "${validation.not_null.message}") Long id
     ) {
-        if (id == null) {
-            throw new InvalidIdentifierException("exception.id_is_null.message");
-        }
-        return modelRepository.findById(id);
+        return modelRepository.findById(id)
+                .orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @param includeInactive boolean flag to include inactive models or not.
+     * @return a page of {@link ModelEntity}.
      */
     @Override
     public Page<ModelEntity> getAllModels(Pageable pageable, boolean includeInactive) {
@@ -56,6 +57,8 @@ public class ModelServiceImpl implements ModelService {
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no models are found with the provided {@code brandId}.
      */
     @Override
     public Page<ModelEntity> getModelsByBrandId(
@@ -69,67 +72,83 @@ public class ModelServiceImpl implements ModelService {
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidIdentifierException if the {@code model} has a {@code null} ID.
-     * @throws EntityNotFoundException if no existing model is found with the provided ID.
+     * @throws IllegalArgumentException if the {@code model} has a null ID, as it should be present for updating.
+     * @throws EntityNotFoundException if no model exists with the provided {@code modelId}.
      */
     @Transactional
     @Override
     public ModelEntity updateModel(@Valid ModelEntity model) {
         if (model.getId() == null) {
-            throw new InvalidIdentifierException("exception.id_is_null.message");
+            throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
         }
-        if (!modelRepository.existsById(model.getId())) {
-            throw new EntityNotFoundException();
+
+        Long modelId = model.getId();
+
+        if (!modelRepository.existsById(modelId)) {
+            throw exceptionService.createEntityNotFoundException(modelId);
         }
+
         return modelRepository.save(model);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no model is found with the provided {@code modelId}.
      */
     @Override
-    public Optional<ModelEntity> updateModelName(
+    public ModelEntity updateModelName(
             @NotNull(message = "${validation.not_null.message}") Long modelId,
             @NotBlank(message = "${validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "${validation.size.message}")
             String newName
     ) {
-        return modelRepository.updateModelName(modelId, newName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Optional<ModelEntity> updateModelSummary(
-            @NotNull(message = "${validation.not_null.message}") Long modelId,
-            @NotNull(message = "${validation.not_null.message}")
-            @Size(max = 150, message = "${validation.size.max.message}")
-            String newSummary
-    ) {
-        return modelRepository.updateModelSummary(modelId, newSummary);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Optional<ModelEntity> updateModelBrand(
-            @NotNull(message = "${validation.not_null.message}") Long modelId,
-            @NotNull(message = "${validation.not_null.message}") Long brandId
-    ) {
-        return modelRepository.updateModelBrand(modelId, brandId);
+        return modelRepository.updateModelName(modelId, newName).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(modelId)
+        );
     }
 
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidIdentifierException if the {@code model} has a non-null ID, as it should be null for a new model.
+     * @throws EntityNotFoundException if no model is found with the provided {@code modelId}.
      */
     @Override
-    public ModelEntity saveModel(ModelEntity model) {
+    public ModelEntity updateModelSummary(
+            @NotNull(message = "${validation.not_null.message}") Long modelId,
+            @NotNull(message = "${validation.not_null.message}")
+            @Size(max = 150, message = "${validation.size.max.message}")
+            String newSummary
+    ) {
+        return modelRepository.updateModelSummary(modelId, newSummary).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(modelId)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if no model is found with the provided {@code modelId}.
+     */
+    @Override
+    public ModelEntity updateModelBrand(
+            @NotNull(message = "${validation.not_null.message}") Long modelId,
+            @NotNull(message = "${validation.not_null.message}") Long brandId
+    ) {
+        return modelRepository.updateModelBrand(modelId, brandId).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(modelId)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException if the {@code model} has a non-null ID, as it should be null for a new model.
+     */
+    @Override
+    public ModelEntity saveModel(@Valid ModelEntity model) {
         if (model.getId() != null) {
-            throw new InvalidIdentifierException("exception.id_is_not_null.message");
+            throw exceptionService.createIllegalArgumentException("exception.id_is_not_null.message");
         }
         return modelRepository.save(model);
     }
@@ -137,7 +156,7 @@ public class ModelServiceImpl implements ModelService {
     /**
      * {@inheritDoc}
      *
-     * @throws EntityNotFoundException if no model is found with the provided ID to activate.
+     * @throws EntityNotFoundException if no model is found with the provided {@code modelId}.
      */
     @Override
     public void activateModel(
@@ -145,14 +164,14 @@ public class ModelServiceImpl implements ModelService {
     ) {
         int result = modelRepository.activateModel(modelId);
         if (result == 0) {
-            throw new EntityNotFoundException();
+            throw exceptionService.createEntityNotFoundException(modelId);
         }
     }
 
     /**
      * {@inheritDoc}
      *
-     * @throws EntityNotFoundException if no model is found with the provided ID to inactivate.
+     * @throws EntityNotFoundException if no model is found with the provided {@code modelId}.
      */
     @Override
     public void inactivateModel(
@@ -160,7 +179,8 @@ public class ModelServiceImpl implements ModelService {
     ) {
         int result = modelRepository.inactivateModel(modelId);
         if (result == 0) {
-            throw new EntityNotFoundException();
+            throw exceptionService.createEntityNotFoundException(modelId);
         }
     }
 }
+
