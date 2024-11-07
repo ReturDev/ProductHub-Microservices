@@ -52,7 +52,7 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL update_supplier_name(:id, :name)", nativeQuery = true)
+    @Query(value = "CALL updateSupplierName(:id, :name)", nativeQuery = true)
     Optional<SupplierEntity> updateSupplierName(@Param("id") Long supplierId, @Param("name") String newName);
 
     /**
@@ -64,7 +64,7 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
      */
     @Modifying
     @Transactional
-    @Query(value = "CALL update_supplier_observations(:id, :observations)", nativeQuery = true)
+    @Query(value = "CALL updateSupplierObservations(:id, :observations)", nativeQuery = true)
     Optional<SupplierEntity> updateSupplierObservations(@Param("id") Long supplierId, @Param("observations") String newObservations);
 
     /**
