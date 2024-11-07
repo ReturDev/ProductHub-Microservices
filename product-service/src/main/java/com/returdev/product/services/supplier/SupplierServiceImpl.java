@@ -1,8 +1,8 @@
 package com.returdev.product.services.supplier;
 
 import com.returdev.product.entities.SupplierEntity;
-import com.returdev.product.managers.MessageManager;
 import com.returdev.product.repositories.SupplierRepository;
+import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +24,7 @@ import org.springframework.validation.annotation.Validated;
 public class SupplierServiceImpl implements SupplierService {
 
     private final SupplierRepository supplierRepository;
-    private final MessageManager messageManager;
+    private final ExceptionService exceptionService;
 
     /**
      * {@inheritDoc}
@@ -35,13 +35,7 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierEntity getSupplierById(
             @NotNull(message = "${validation.not_null.message}") Long id
     ) {
-        return supplierRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-                        messageManager.getMessage(
-                                "exception.entity_not_found.message",
-                                new Long[]{id}
-                        )
-                )
-        );
+        return supplierRepository.findById(id).orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
     }
 
     /**
@@ -72,24 +66,18 @@ public class SupplierServiceImpl implements SupplierService {
      * {@inheritDoc}
      *
      * @throws EntityNotFoundException if no existing supplier is found with the provided {@code supplierId}.
+     * @throws IllegalArgumentException if the provided {@code supplier} has a {@code null} ID.
      */
     @Override
     public SupplierEntity updateSupplier(@Valid SupplierEntity supplier) {
         if (supplier.getId() == null) {
-            throw new IllegalArgumentException(
-                    messageManager.getMessage("exception.id_is_null.message")
-            );
+            throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
         }
 
         Long supplierId = supplier.getId();
 
         if (!supplierRepository.existsById(supplierId)) {
-            throw new EntityNotFoundException(
-                    messageManager.getMessage(
-                            "exception.entity_not_found.message",
-                            new Long[]{supplierId}
-                    )
-            );
+            throw exceptionService.createEntityNotFoundException(supplierId);
         }
 
         return supplierRepository.save(supplier);
@@ -108,12 +96,7 @@ public class SupplierServiceImpl implements SupplierService {
             String newName
     ) {
         return supplierRepository.updateSupplierName(supplierId, newName).orElseThrow(() ->
-                new EntityNotFoundException(
-                        messageManager.getMessage(
-                                "exception.entity_not_found.message",
-                                new Long[]{supplierId}
-                        )
-                )
+                exceptionService.createEntityNotFoundException(supplierId)
         );
     }
 
@@ -130,12 +113,7 @@ public class SupplierServiceImpl implements SupplierService {
             String newObservations
     ) {
         return supplierRepository.updateSupplierObservations(supplierId, newObservations).orElseThrow(() ->
-                new EntityNotFoundException(
-                        messageManager.getMessage(
-                                "exception.entity_not_found.message",
-                                new Long[]{supplierId}
-                        )
-                )
+                exceptionService.createEntityNotFoundException(supplierId)
         );
     }
 
@@ -151,12 +129,7 @@ public class SupplierServiceImpl implements SupplierService {
         int result = supplierRepository.activateSupplier(supplierId);
 
         if (result == 0) {
-            throw new EntityNotFoundException(
-                    messageManager.getMessage(
-                            "exception.entity_not_found.message",
-                            new Long[]{supplierId}
-                    )
-            );
+            throw exceptionService.createEntityNotFoundException(supplierId);
         }
     }
 
@@ -169,15 +142,10 @@ public class SupplierServiceImpl implements SupplierService {
     public void inactivateSupplier(
             @NotNull(message = "${validation.not_null.message}") Long supplierId
     ) {
-        int result = supplierRepository.activateSupplier(supplierId);
+        int result = supplierRepository.deactivateSupplier(supplierId);
 
         if (result == 0) {
-            throw new EntityNotFoundException(
-                    messageManager.getMessage(
-                            "exception.entity_not_found.message",
-                            new Long[]{supplierId}
-                    )
-            );
+            throw exceptionService.createEntityNotFoundException(supplierId);
         }
     }
 
@@ -190,11 +158,12 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierEntity saveSupplier(@Valid SupplierEntity supplier) {
 
         if (supplier.getId() != null){
-            throw new IllegalArgumentException("exception.id_is_not_null.message");
+            throw exceptionService.createIllegalArgumentException("exception.id_is_not_null.message");
         }
 
         return supplierRepository.save(supplier);
     }
 }
+
 
 
