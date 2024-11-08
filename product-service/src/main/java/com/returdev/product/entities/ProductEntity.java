@@ -117,7 +117,7 @@ public class ProductEntity {
      */
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "dimensions_id")
-    private DimensionsEntity dimensionsID;
+    private DimensionsEntity dimensions;
 
     /**
      * Indicates if the product is hidden in the system.
