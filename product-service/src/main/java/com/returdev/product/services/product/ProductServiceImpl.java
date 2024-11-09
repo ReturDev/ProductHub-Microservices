@@ -6,11 +6,6 @@ import com.returdev.product.repositories.DimensionsRepository;
 import com.returdev.product.repositories.ProductRepository;
 import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -37,9 +32,7 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public ProductEntity getProductById(
-            @NotNull(message = "{validation.not_null.message}") Long id
-    ) {
+    public ProductEntity getProductById(Long id) {
         return productRepository.findById(id).orElseThrow(
                 () -> exceptionService.createEntityNotFoundException(id)
         );
@@ -49,13 +42,7 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public Page<ProductEntity> getProductByCode(
-            @NotBlank(message = "{validation.not_blank.message}")
-            @Size(min = 3, max = 20, message = "{validation.size.message}")
-            String code,
-            boolean includeHidden,
-            Pageable pageable
-    ) {
+    public Page<ProductEntity> getProductByCode(String code, boolean includeHidden, Pageable pageable) {
         return productRepository.findProductsByCode(code, includeHidden, pageable);
     }
 
@@ -63,13 +50,7 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public Page<ProductEntity> getProductByBarCode(
-            @NotBlank(message = "{validation.not_blank.message}")
-            @Size(min = 8, max = 30, message = "{validation.size.message}")
-            String barcode,
-            boolean includeHidden,
-            Pageable pageable
-    ) {
+    public Page<ProductEntity> getProductByBarCode(String barcode, boolean includeHidden, Pageable pageable) {
         return productRepository.findProductsByBarcode(barcode, includeHidden, pageable);
     }
 
@@ -77,11 +58,7 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public Page<ProductEntity> getProductByNameContaining(
-            @NotBlank(message = "{validation.not_blank.message}") String name,
-            boolean includeHidden,
-            Pageable pageable
-    ) {
+    public Page<ProductEntity> getProductByNameContaining(String name, boolean includeHidden, Pageable pageable) {
         return productRepository.findProductsByNameContaining(name, includeHidden, pageable);
     }
 
@@ -89,11 +66,7 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public Page<ProductEntity> getProductByNameStartingWith(
-            @NotBlank(message = "{validation.not_blank.message}") String name,
-            boolean includeHidden,
-            Pageable pageable
-    ) {
+    public Page<ProductEntity> getProductByNameStartingWith(String name, boolean includeHidden, Pageable pageable) {
         return productRepository.findProductsByNameStartingWith(name, includeHidden, pageable);
     }
 
@@ -145,11 +118,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      *
      * @throws IllegalArgumentException if the {@code product} has a null ID.
-     * @throws EntityNotFoundException if no product is found with the provided ID.
+     * @throws EntityNotFoundException  if no product is found with the provided ID.
      */
     @Transactional
     @Override
-    public ProductEntity updateProduct(@Valid ProductEntity product) {
+    public ProductEntity updateProduct(ProductEntity product) {
         if (product.getId() == null) {
             throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
         }
@@ -169,12 +142,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public ProductEntity updateProductName(
-            @NotNull(message = "{validation.not_null.message}") Long productId,
-            @NotBlank(message = "{validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "{validation.size.message}")
-            String newName
-    ) {
+    public ProductEntity updateProductName(Long productId, String newName) {
         return productRepository.updateProductName(productId, newName).orElseThrow(
                 () -> exceptionService.createEntityNotFoundException(productId)
         );
@@ -186,12 +154,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public ProductEntity updateProductSummary(
-            @NotNull(message = "{validation.not_null.message}") Long productId,
-            @NotNull(message = "{validation.not_null.message}")
-            @Size(max = 150, message = "{validation.size.max.message}")
-            String newSummary
-    ) {
+    public ProductEntity updateProductSummary(Long productId, String newSummary) {
         return productRepository.updateProductSummary(productId, newSummary).orElseThrow(
                 () -> exceptionService.createEntityNotFoundException(productId)
         );
@@ -203,12 +166,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public ProductEntity updateProductCode(
-            @NotNull(message = "{validation.not_null.message}") Long productId,
-            @NotEmpty(message = "{validation.not_empty.message}")
-            @Size(min = 3, max = 20, message = "{validation.size.message}")
-            String newCode
-    ) {
+    public ProductEntity updateProductCode(Long productId, String newCode) {
         return productRepository.updateProductCode(productId, newCode).orElseThrow(
                 () -> exceptionService.createEntityNotFoundException(productId)
         );
@@ -220,12 +178,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public ProductEntity updateProductBarcode(
-            @NotNull(message = "{validation.not_null.message}") Long productId,
-            @NotNull(message = "{validation.not_null.message}")
-            @Size(min = 8, max = 30, message = "{validation.size.message}")
-            String barcode
-    ) {
+    public ProductEntity updateProductBarcode(Long productId, String barcode) {
         return productRepository.updateProductBarcode(productId, barcode).orElseThrow(
                 () -> exceptionService.createEntityNotFoundException(productId)
         );
@@ -237,10 +190,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
      */
     @Override
-    public ProductEntity updateProductModel(
-            @NotNull(message = "{validation.not_null.message}") Long productId,
-            @NotNull(message = "{validation.not_null.message}") Long modelId
-    ) {
+    public ProductEntity updateProductModel(Long productId, Long modelId) {
         return productRepository.updateProductModel(productId, modelId).orElseThrow(
                 () -> exceptionService.createEntityNotFoundException(productId)
         );
@@ -253,11 +203,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Transactional
     @Override
-    public ProductEntity updateProductDimensions(
-            @NotNull(message = "{validation.not_null.message}") Long productId,
-            @NotNull(message = "{validation.not_null.message}")
-            @Valid DimensionsEntity dimensions
-    ) {
+    public ProductEntity updateProductDimensions(Long productId, DimensionsEntity dimensions) {
         Long savedDimensionId = dimensionsRepository.save(dimensions).getId();
         return productRepository.updateProductDimensions(productId, savedDimensionId).orElseThrow(
                 () -> exceptionService.createEntityNotFoundException(productId)
@@ -322,7 +268,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws IllegalArgumentException if the {@code product} already has a non-null ID.
      */
     @Override
-    public ProductEntity saveProduct(@Valid ProductEntity product) {
+    public ProductEntity saveProduct(ProductEntity product) {
         if (product.getId() != null) {
             throw exceptionService.createIllegalArgumentException("exception.id_is_not_null.message");
         }

@@ -2,6 +2,11 @@ package com.returdev.product.services.product;
 
 import com.returdev.product.entities.DimensionsEntity;
 import com.returdev.product.entities.ProductEntity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,7 +26,7 @@ public interface ProductService {
      * @param id the unique identifier of the product
      * @return an Optional containing the found ProductEntity, or empty if not found
      */
-    ProductEntity getProductById(Long id);
+    ProductEntity getProductById(@NotNull(message = "{validation.not_null.message}") Long id);
 
     /**
      * Retrieves a paginated list of products by product code.
@@ -31,7 +36,13 @@ public interface ProductService {
      * @param pageable pagination information
      * @return a Page of ProductEntity matching the specified code
      */
-    Page<ProductEntity> getProductByCode(String code, boolean includeHidden, Pageable pageable);
+    Page<ProductEntity> getProductByCode(
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 20, message = "{validation.size.message}")
+            String code,
+            boolean includeHidden,
+            Pageable pageable
+    );
 
     /**
      * Retrieves a paginated list of products by barcode.
@@ -41,7 +52,13 @@ public interface ProductService {
      * @param pageable pagination information
      * @return a Page of ProductEntity matching the specified barcode
      */
-    Page<ProductEntity> getProductByBarCode(String barcode, boolean includeHidden, Pageable pageable);
+    Page<ProductEntity> getProductByBarCode(
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 8, max = 30, message = "{validation.size.message}")
+            String barcode,
+            boolean includeHidden,
+            Pageable pageable
+    );
 
     /**
      * Retrieves a paginated list of products whose names contain a specified string.
@@ -51,7 +68,12 @@ public interface ProductService {
      * @param pageable pagination information
      * @return a Page of ProductEntity whose names contain the specified string
      */
-    Page<ProductEntity> getProductByNameContaining(String name, boolean includeHidden, Pageable pageable);
+    Page<ProductEntity> getProductByNameContaining(
+            @NotBlank(message = "{validation.not_blank.message}")
+            String name,
+            boolean includeHidden,
+            Pageable pageable
+    );
 
     /**
      * Retrieves a paginated list of products whose names start with a specified string.
@@ -61,7 +83,11 @@ public interface ProductService {
      * @param pageable pagination information
      * @return a Page of ProductEntity whose names start with the specified string
      */
-    Page<ProductEntity> getProductByNameStartingWith(String name, boolean includeHidden, Pageable pageable);
+    Page<ProductEntity> getProductByNameStartingWith(
+            @NotBlank(message = "{validation.not_blank.message}") String name,
+            boolean includeHidden,
+            Pageable pageable
+    );
 
 
     /**
@@ -72,7 +98,11 @@ public interface ProductService {
      * @param pageable pagination information, including page number and size
      * @return a Page of ProductEntity containing products associated with the specified supplier
      */
-    Page<ProductEntity> getProductsBySupplierId(Long supplierId, boolean includeHidden, Pageable pageable);
+    Page<ProductEntity> getProductsBySupplierId(
+            @NotNull(message = "{validation.not_null.message}") Long supplierId,
+            boolean includeHidden,
+            Pageable pageable
+    );
 
     /**
      * Retrieves a paginated list of products by category ID.
@@ -82,7 +112,11 @@ public interface ProductService {
      * @param pageable pagination information
      * @return a Page of ProductEntity belonging to the specified category
      */
-    Page<ProductEntity> getProductsByCategoryId(Long categoryId, boolean includeHidden, Pageable pageable);
+    Page<ProductEntity> getProductsByCategoryId(
+            @NotNull(message = "{validation.not_null.message}") Long categoryId,
+            boolean includeHidden,
+            Pageable pageable
+    );
 
     /**
      * Retrieves a paginated list of products by model ID.
@@ -92,7 +126,11 @@ public interface ProductService {
      * @param pageable pagination information
      * @return a Page of ProductEntity associated with the specified model
      */
-    Page<ProductEntity> getProductsByModelId(Long modelId, boolean includeHidden, Pageable pageable);
+    Page<ProductEntity> getProductsByModelId(
+            @NotNull(message = "{validation.not_null.message}") Long modelId,
+            boolean includeHidden,
+            Pageable pageable
+    );
 
     /**
      * Retrieves a paginated list of all products.
@@ -113,7 +151,11 @@ public interface ProductService {
      * @param pageable pagination information, including the requested page number and size
      * @return a Page of ProductEntity containing products that match the search criteria
      */
-    Page<ProductEntity> searchProducts(ProductEntity productEntity, boolean includeHidden, Pageable pageable);
+    Page<ProductEntity> searchProducts(
+            @Valid ProductEntity productEntity,
+            boolean includeHidden,
+            Pageable pageable
+    );
 
     /**
      * Updates the details of an existing product.
@@ -121,16 +163,22 @@ public interface ProductService {
      * @param product the ProductEntity with updated details
      * @return the updated ProductEntity
      */
-    ProductEntity updateProduct(ProductEntity product);
+    ProductEntity updateProduct(@Valid ProductEntity product);
 
     /**
      * Updates the name of a product identified by its ID.
      *
      * @param productId the unique identifier of the product
-     * @param newName   the new name for the product
+     * @param newName the new name for the product
      * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductName(Long productId, String newName);
+    ProductEntity updateProductName(
+            @NotNull(message = "{validation.not_null.message}")
+            Long productId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}")
+            String newName
+    );
 
     /**
      * Updates the summary of a product identified by its ID.
@@ -139,7 +187,13 @@ public interface ProductService {
      * @param newSummary the new summary for the product
      * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductSummary(Long productId, String newSummary);
+    ProductEntity updateProductSummary(
+            @NotNull(message = "{validation.not_null.message}")
+            Long productId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(max = 150, message = "{validation.size.max.message}")
+            String newSummary
+    );
 
     /**
      * Updates the product code of a product identified by its ID.
@@ -148,7 +202,12 @@ public interface ProductService {
      * @param newCode   the new product code for the product
      * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductCode(Long productId, String newCode);
+    ProductEntity updateProductCode(
+            @NotNull(message = "{validation.not_null.message}")
+            Long productId,
+            @NotEmpty(message = "{validation.not_empty.message}")
+            @Size(min = 3, max = 20, message = "{validation.size.message}")
+            String newCode);
 
     /**
      * Updates the barcode of a product identified by its ID.
@@ -157,7 +216,13 @@ public interface ProductService {
      * @param barcode   the new barcode for the product
      * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductBarcode(Long productId, String barcode);
+    ProductEntity updateProductBarcode(
+            @NotNull(message = "{validation.not_null.message}")
+            Long productId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(min = 8, max = 30, message = "{validation.size.message}")
+            String barcode
+    );
 
     /**
      * Updates the model associated with a product identified by the given product ID.
@@ -167,7 +232,9 @@ public interface ProductService {
      * @return an Optional containing the updated ProductEntity if the update is successful,
      * or an empty Optional if the product does not exist or the update fails
      */
-    ProductEntity updateProductModel(Long productId, Long modelId);
+    ProductEntity updateProductModel(
+            @NotNull(message = "{validation.not_null.message}") Long productId,
+            @NotNull(message = "{validation.not_null.message}") Long modelId);
 
     /**
      * Updates the dimensions of a product.
@@ -176,7 +243,13 @@ public interface ProductService {
      * @param dimensions the new dimensions to associate with the product
      * @return an Optional containing the updated ProductEntity
      */
-    ProductEntity updateProductDimensions(Long productId, DimensionsEntity dimensions);
+    ProductEntity updateProductDimensions(
+            @NotNull(message = "{validation.not_null.message}")
+            Long productId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Valid
+            DimensionsEntity dimensions
+    );
 
     /**
      * Adds a new supplier association to a product.
@@ -184,7 +257,10 @@ public interface ProductService {
      * @param productId the unique identifier of the product
      * @param newSupplierId the unique identifier of the new supplier to add
      */
-    void addProductSupplier(Long productId, Long newSupplierId);
+    void addProductSupplier(
+            @NotNull(message = "{validation.not_null.message}") Long productId,
+            @NotNull(message = "{validation.not_null.message}") Long newSupplierId
+    );
 
     /**
      * Removes an existing supplier association from a product.
@@ -192,21 +268,24 @@ public interface ProductService {
      * @param productId the unique identifier of the product
      * @param supplierId the unique identifier of the supplier to remove
      */
-    void removeProductSupplier(Long productId, Long supplierId);
+    void removeProductSupplier(
+            @NotNull(message = "{validation.not_null.message}") Long productId,
+            @NotNull(message = "{validation.not_null.message}") Long supplierId
+    );
 
     /**
      * Marks a product as hidden.
      *
      * @param productId the unique identifier of the product
      */
-    void hideProduct(Long productId);
+    void hideProduct(@NotNull(message = "{validation.not_null.message}") Long productId);
 
     /**
      * Marks a product as visible.
      *
      * @param productId the unique identifier of the product
      */
-    void unhideProduct(Long productId);
+    void unhideProduct(@NotNull(message = "{validation.not_null.message}") Long productId);
 
     /**
      * Saves a new product to the system.
@@ -214,7 +293,7 @@ public interface ProductService {
      * @param product the ProductEntity to be saved
      * @return the saved ProductEntity
      */
-    ProductEntity saveProduct(ProductEntity product);
+    ProductEntity saveProduct(@Valid ProductEntity product);
 
 }
 
