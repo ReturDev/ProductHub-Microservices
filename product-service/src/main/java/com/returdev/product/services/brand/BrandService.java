@@ -2,6 +2,10 @@ package com.returdev.product.services.brand;
 
 
 import com.returdev.product.entities.BrandEntity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +21,9 @@ public interface BrandService {
      * @param id the unique identifier of the brand
      * @return an Optional containing the found BrandEntity, or empty if not found
      */
-    BrandEntity getBrandById(Long id);
+    BrandEntity getBrandById(
+            @NotNull(message = "{validation.not_null.message}") Long id
+    );
 
     /**
      * Retrieves a paginated list of brands whose names contain the specified string.
@@ -27,7 +33,11 @@ public interface BrandService {
      * @param pageable pagination information
      * @return a Page of BrandEntity containing brands that match the search criteria
      */
-    Page<BrandEntity> getBrandByNameContaining(String name, boolean includeInactive, Pageable pageable);
+    Page<BrandEntity> getBrandByNameContaining(
+            @NotBlank(message = "{validation.not_blank.message}") String name,
+            boolean includeInactive,
+            Pageable pageable
+    );
 
     /**
      * Retrieves a paginated list of brands that start with the specified name.
@@ -37,7 +47,11 @@ public interface BrandService {
      * @param pageable pagination information
      * @return a Page of BrandEntity containing brands that start with the specified name
      */
-    Page<BrandEntity> getBrandByNameStartingWith(String name, boolean includeInactive, Pageable pageable);
+    Page<BrandEntity> getBrandByNameStartingWith(
+            @NotBlank(message = "{validation.not_blank.message}") String name,
+            boolean includeInactive,
+            Pageable pageable
+    );
 
     /**
      * Retrieves a paginated list of all brands.
@@ -46,7 +60,10 @@ public interface BrandService {
      * @param includeInactive whether to include inactive brands in the result
      * @return a Page of BrandEntity containing all brands
      */
-    Page<BrandEntity> getAllBrands(Pageable pageable, boolean includeInactive);
+    Page<BrandEntity> getAllBrands(
+            Pageable pageable,
+            boolean includeInactive
+    );
 
     /**
      * Updates the details of an existing brand.
@@ -54,7 +71,7 @@ public interface BrandService {
      * @param brand the BrandEntity containing updated details
      * @return the updated BrandEntity
      */
-    BrandEntity updateBrand(BrandEntity brand);
+    BrandEntity updateBrand(@Valid BrandEntity brand);
 
     /**
      * Updates the name of a brand.
@@ -63,7 +80,13 @@ public interface BrandService {
      * @param newName the new name for the brand
      * @return an Optional containing the updated BrandEntity
      */
-    BrandEntity updateBrandName(Long brandId, String newName);
+    BrandEntity updateBrandName(
+            @NotNull(message = "{validation.not_null.message}")
+            Long brandId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}")
+            String newName
+    );
 
     /**
      * Updates the summary of a brand.
@@ -72,7 +95,13 @@ public interface BrandService {
      * @param newSummary the new summary for the brand
      * @return an Optional containing the updated BrandEntity
      */
-    BrandEntity updateBrandSummary(Long brandId, String newSummary);
+    BrandEntity updateBrandSummary(
+            @NotNull(message = "{validation.not_null.message}")
+            Long brandId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(max = 150, message = "{validation.size.max.message}")
+            String newSummary
+    );
 
     /**
      * Saves a new brand entity.
@@ -80,21 +109,21 @@ public interface BrandService {
      * @param brand the brand entity to save
      * @return the saved BrandEntity
      */
-    BrandEntity saveBrand(BrandEntity brand);
+    BrandEntity saveBrand(@Valid BrandEntity brand);
 
     /**
      * Activates a brand by its ID.
      *
      * @param brandId the unique identifier of the brand
      */
-    void activateBrand(Long brandId);
+    void activateBrand(@NotNull(message = "{validation.not_null.message}") Long brandId);
 
     /**
      * Deactivates a brand, making it inactive in the system.
      *
      * @param brandId the unique identifier of the brand to deactivate
      */
-    void deactivateBrand(Long brandId);
+    void deactivateBrand(@NotNull(message = "{validation.not_null.message}") Long brandId);
 
 }
 

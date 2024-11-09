@@ -4,10 +4,6 @@ import com.returdev.product.entities.BrandEntity;
 import com.returdev.product.repositories.BrandRepository;
 import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +30,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public BrandEntity getBrandById(
-            @NotNull(message = "{validation.not_null.message}") Long id
+            Long id
     ) {
         return brandRepository.findById(id).orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
     }
@@ -44,7 +40,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public Page<BrandEntity> getBrandByNameContaining(
-            @NotBlank(message = "{validation.not_blank.message}") String name,
+            String name,
             boolean includeInactive,
             Pageable pageable
     ) {
@@ -56,7 +52,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public Page<BrandEntity> getBrandByNameStartingWith(
-            @NotBlank(message = "{validation.not_blank.message}") String name,
+            String name,
             boolean includeInactive,
             Pageable pageable
     ) {
@@ -83,7 +79,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Transactional
     @Override
-    public BrandEntity updateBrand(@Valid BrandEntity brand) {
+    public BrandEntity updateBrand(BrandEntity brand) {
         if (brand.getId() == null) {
             throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
         }
@@ -102,12 +98,7 @@ public class BrandServiceImpl implements BrandService {
      * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
      */
     @Override
-    public BrandEntity updateBrandName(
-            @NotNull(message = "{validation.not_null.message}") Long brandId,
-            @NotBlank(message = "{validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "{validation.size.message}")
-            String newName
-    ) {
+    public BrandEntity updateBrandName(Long brandId, String newName) {
         return brandRepository.updateBrandName(brandId, newName).orElseThrow(() ->
                 exceptionService.createEntityNotFoundException(brandId)
         );
@@ -119,12 +110,7 @@ public class BrandServiceImpl implements BrandService {
      * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
      */
     @Override
-    public BrandEntity updateBrandSummary(
-            @NotNull(message = "{validation.not_null.message}") Long brandId,
-            @NotNull(message = "{validation.not_null.message}")
-            @Size(max = 150, message = "{validation.size.max.message}")
-            String newSummary
-    ) {
+    public BrandEntity updateBrandSummary(Long brandId, String newSummary) {
         return brandRepository.updateBrandSummary(brandId, newSummary).orElseThrow(() ->
                 exceptionService.createEntityNotFoundException(brandId)
         );
@@ -136,7 +122,7 @@ public class BrandServiceImpl implements BrandService {
      * @throws IllegalArgumentException if the {@code brand} has a non-null ID, as it should be null for a new brand.
      */
     @Override
-    public BrandEntity saveBrand(@Valid BrandEntity brand) {
+    public BrandEntity saveBrand(BrandEntity brand) {
         if (brand.getId() != null) {
             throw exceptionService.createIllegalArgumentException("exception.id_is_not_null.message");
         }
@@ -149,9 +135,7 @@ public class BrandServiceImpl implements BrandService {
      * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
      */
     @Override
-    public void activateBrand(
-            @NotNull(message = "{validation.not_null.message}") Long brandId
-    ) {
+    public void activateBrand(Long brandId) {
         int result = brandRepository.activateBrand(brandId);
         if (result == 0) {
             throw exceptionService.createEntityNotFoundException(brandId);
@@ -164,9 +148,7 @@ public class BrandServiceImpl implements BrandService {
      * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
      */
     @Override
-    public void deactivateBrand(
-            @NotNull(message = "{validation.not_null.message}") Long brandId
-    ) {
+    public void deactivateBrand(Long brandId) {
         int result = brandRepository.deactivateBrand(brandId);
         if (result == 0) {
             throw exceptionService.createEntityNotFoundException(brandId);
