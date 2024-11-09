@@ -4,9 +4,7 @@ import com.returdev.product.entities.CategoryEntity;
 import com.returdev.product.repositories.CategoryRepository;
 import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,9 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @throws EntityNotFoundException if no category is found with the provided {@code id}.
      */
     @Override
-    public CategoryEntity getCategoryById(
-            @NotNull(message = "{validation.not_null.message}") Long id
-    ) {
+    public CategoryEntity getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(id));
     }
@@ -43,10 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Override
-    public Page<CategoryEntity> getCategoryByNameContaining(
-            @NotBlank(message = "{validation.not_blank.message}") String name,
-            Pageable pageable
-    ) {
+    public Page<CategoryEntity> getCategoryByNameContaining(String name, Pageable pageable) {
         return categoryRepository.findByNameContaining(name, pageable);
     }
 
@@ -54,10 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Override
-    public Page<CategoryEntity> getCategoryByNameStartingWith(
-            @NotBlank(message = "{validation.not_blank.message}") String name,
-            Pageable pageable
-    ) {
+    public Page<CategoryEntity> getCategoryByNameStartingWith(String name, Pageable pageable) {
         return categoryRepository.findByNameStartingWith(name, pageable);
     }
 
@@ -77,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Transactional
     @Override
-    public CategoryEntity updateCategory(@Valid CategoryEntity category) {
+    public CategoryEntity updateCategory(CategoryEntity category) {
         if (category.getId() == null) {
             throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
         }
@@ -97,7 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public CategoryEntity updateCategoryName(
-            @NotNull(message = "{validation.not_null.message}") Long categoryId,
+            Long categoryId,
             @NotBlank(message = "{validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "{validation.size.message}")
             String newName
@@ -113,12 +103,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @throws EntityNotFoundException if no category exists with the provided {@code categoryId}.
      */
     @Override
-    public CategoryEntity updateCategorySummary(
-            @NotNull(message = "{validation.not_null.message}") Long categoryId,
-            @NotNull(message = "{validation.not_null.message}")
-            @Size(max = 150, message = "{validation.size.max.message}")
-            String newSummary
-    ) {
+    public CategoryEntity updateCategorySummary(Long categoryId, String newSummary) {
         return categoryRepository.updateCategorySummary(categoryId, newSummary).orElseThrow(() ->
                 exceptionService.createEntityNotFoundException(categoryId)
         );
@@ -130,7 +115,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @throws IllegalArgumentException if the {@code category} has a non-null ID, as it should be null for a new category.
      */
     @Override
-    public CategoryEntity saveCategory(@Valid CategoryEntity category) {
+    public CategoryEntity saveCategory(CategoryEntity category) {
         if (category.getId() != null) {
             throw exceptionService.createIllegalArgumentException("exception.id_is_not_null.message");
         }

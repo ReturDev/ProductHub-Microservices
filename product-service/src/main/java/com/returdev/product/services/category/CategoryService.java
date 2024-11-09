@@ -2,6 +2,10 @@ package com.returdev.product.services.category;
 
 
 import com.returdev.product.entities.CategoryEntity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +21,7 @@ public interface CategoryService {
      * @param id the unique identifier of the category
      * @return an Optional containing the found CategoryEntity, or empty if not found
      */
-    CategoryEntity getCategoryById(Long id);
+    CategoryEntity getCategoryById(@NotNull(message = "{validation.not_null.message}") Long id);
 
     /**
      * Retrieves a paginated list of categories containing the specified name.
@@ -26,7 +30,10 @@ public interface CategoryService {
      * @param pageable pagination information
      * @return a Page of CategoryEntity containing categories whose names include the specified string
      */
-    Page<CategoryEntity> getCategoryByNameContaining(String name, Pageable pageable);
+    Page<CategoryEntity> getCategoryByNameContaining(
+            @NotBlank(message = "{validation.not_blank.message}") String name,
+            Pageable pageable
+    );
 
     /**
      * Retrieves a paginated list of categories that start with the specified name.
@@ -35,7 +42,7 @@ public interface CategoryService {
      * @param pageable pagination information
      * @return a Page of CategoryEntity containing categories that start with the specified string
      */
-    Page<CategoryEntity> getCategoryByNameStartingWith(String name, Pageable pageable);
+    Page<CategoryEntity> getCategoryByNameStartingWith(@NotBlank(message = "{validation.not_blank.message}") String name, Pageable pageable);
 
     /**
      * Retrieves a paginated list of all categories in the system.
@@ -51,7 +58,7 @@ public interface CategoryService {
      * @param category the updated category entity
      * @return the updated CategoryEntity
      */
-    CategoryEntity updateCategory(CategoryEntity category);
+    CategoryEntity updateCategory(@Valid CategoryEntity category);
 
     /**
      * Updates the name of a category.
@@ -60,7 +67,13 @@ public interface CategoryService {
      * @param newName the new name for the category
      * @return an Optional containing the updated CategoryEntity
      */
-    CategoryEntity updateCategoryName(Long categoryId, String newName);
+    CategoryEntity updateCategoryName(
+            @NotNull(message = "{validation.not_null.message}")
+            Long categoryId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}")
+            String newName
+    );
 
     /**
      * Updates the summary of a category.
@@ -69,7 +82,13 @@ public interface CategoryService {
      * @param newSummary the new summary for the category
      * @return an Optional containing the updated CategoryEntity
      */
-    CategoryEntity updateCategorySummary(Long categoryId, String newSummary);
+    CategoryEntity updateCategorySummary(
+            @NotNull(message = "{validation.not_null.message}")
+            Long categoryId,
+            @NotNull(message = "{validation.not_null.message}")
+            @Size(max = 150, message = "{validation.size.max.message}")
+            String newSummary
+    );
 
     /**
      * Saves a new category.
@@ -77,7 +96,7 @@ public interface CategoryService {
      * @param category the category to save
      * @return the saved CategoryEntity
      */
-    CategoryEntity saveCategory(CategoryEntity category);
+    CategoryEntity saveCategory(@Valid CategoryEntity category);
 
 }
 
