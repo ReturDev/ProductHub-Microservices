@@ -4,8 +4,6 @@ import com.returdev.product.entities.ContactInfoEntity;
 import com.returdev.product.repositories.ContactInfoRepository;
 import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +39,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      */
     @Transactional
     @Override
-    public ContactInfoEntity updateContactInfo(@Valid ContactInfoEntity contactInfo) {
+    public ContactInfoEntity updateContactInfo(ContactInfoEntity contactInfo) {
         if (contactInfo.getId() == null) {
             throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
         }
@@ -60,11 +58,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
      */
     @Override
-    public ContactInfoEntity updateContactInfoName(
-            @NotNull(message = "{validation.not_null.message}") Long contactId,
-            @NotBlank(message = "{validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "{validation.size.message}") String newName
-    ) {
+    public ContactInfoEntity updateContactInfoName(Long contactId, String newName) {
         return contactRepository.updateContactInfoName(contactId, newName)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
@@ -75,11 +69,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
      */
     @Override
-    public ContactInfoEntity updateContactInfoObservations(
-            @NotNull(message = "{validation.not_null.message}") Long contactId,
-            @NotNull(message = "{validation.not_null.message}")
-            @Size(max = 150, message = "{validation.size.max.message}") String newObservations
-    ) {
+    public ContactInfoEntity updateContactInfoObservations(Long contactId, String newObservations) {
         return contactRepository.updateContactInfoObservations(contactId, newObservations)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
@@ -90,12 +80,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
      */
     @Override
-    public ContactInfoEntity updateContactInfoPhoneNumber(
-            @NotNull(message = "{validation.not_null.message}") Long contactId,
-            @NotBlank(message = "{validation.not_blank.message}")
-            @Size(min = 3, max = 15, message = "{validation.size.message}")
-            @Pattern(regexp = "^\\+?[0-9. ()-]{8,15}$", message = "{validation.phone_format.message}") String newPhoneNumber
-    ) {
+    public ContactInfoEntity updateContactInfoPhoneNumber(Long contactId, String newPhoneNumber) {
         return contactRepository.updateContactInfoPhoneNumber(contactId, newPhoneNumber)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
@@ -106,10 +91,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
      */
     @Override
-    public ContactInfoEntity updateContactInfoEmail(
-            @NotNull(message = "{validation.not_null.message}") Long contactId,
-            @Email(message = "{validation.email.message}") String newEmail
-    ) {
+    public ContactInfoEntity updateContactInfoEmail(Long contactId, String newEmail) {
         return contactRepository.updateContactInfoEmail(contactId, newEmail)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
@@ -120,10 +102,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
      */
     @Override
-    public ContactInfoEntity updateContactInfoIsCommercial(
-            @NotNull(message = "{validation.not_null.message}") Long contactId,
-            boolean isCommercial
-    ) {
+    public ContactInfoEntity updateContactInfoIsCommercial(Long contactId, boolean isCommercial) {
         return contactRepository.updateContactInfoIsCommercial(contactId, isCommercial)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
@@ -148,10 +127,11 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      */
     @Override
     public void delete(Long contactId) {
-        if (contactId == null) {
-            throw exceptionService.createIllegalArgumentException("exception.id_is_null.message");
+        try {
+            contactRepository.deleteById(contactId);
+        } catch (IllegalArgumentException ex){
+            throw exceptionService.createEntityNotFoundException(contactId);
         }
-        contactRepository.deleteById(contactId);
     }
 }
 
