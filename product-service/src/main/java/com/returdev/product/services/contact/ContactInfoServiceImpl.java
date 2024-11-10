@@ -52,57 +52,112 @@ public class ContactInfoServiceImpl implements ContactInfoService {
         return contactRepository.save(contactInfo);
     }
 
+
     /**
      * {@inheritDoc}
      *
-     * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
+     * @throws IllegalArgumentException if no fields are provided for update
      */
     @Override
-    public ContactInfoEntity updateContactInfoName(Long contactId, String newName) {
+    public ContactInfoEntity updateContactInfo(
+            Long contactId,
+            String newName,
+            String newObservations,
+            String newPhoneNumber,
+            String newEmail,
+            Boolean isCommercial
+    ) {
+
+        ContactInfoEntity contactInfoResult = null;
+
+        if (newName != null){
+            contactInfoResult = updateContactInfoName(contactId, newName);
+        }
+
+        if (newObservations != null) {
+            contactInfoResult = updateContactInfoObservations(contactId, newObservations);
+        }
+
+        if (newPhoneNumber != null) {
+            contactInfoResult = updateContactInfoPhoneNumber(contactId, newPhoneNumber);
+        }
+
+        if (newEmail != null) {
+            contactInfoResult = updateContactInfoEmail(contactId, newEmail);
+        }
+
+        if (isCommercial != null) {
+            contactInfoResult = updateContactInfoIsCommercial(contactId, isCommercial);
+        }
+
+        if (contactInfoResult == null) {
+            throw exceptionService.createIllegalArgumentException("exception.null_update_values.message");
+        }
+
+        return contactInfoResult;
+    }
+
+    /**
+     * Updates the name of the contact information for the given contact ID.
+     *
+     * @param contactId the ID of the contact to update
+     * @param newName the new name to set for the contact
+     * @return the updated {@link ContactInfoEntity} with the new name
+     * @throws EntityNotFoundException if no contact with the specified ID exists
+     */
+    private ContactInfoEntity updateContactInfoName(Long contactId, String newName) {
         return contactRepository.updateContactInfoName(contactId, newName)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
 
     /**
-     * {@inheritDoc}
+     * Updates the observations of the contact information for the given contact ID.
      *
-     * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
+     * @param contactId the ID of the contact to update
+     * @param newObservations the new observations to set for the contact
+     * @return the updated {@link ContactInfoEntity} with the new observations
+     * @throws EntityNotFoundException if no contact with the specified ID exists
      */
-    @Override
-    public ContactInfoEntity updateContactInfoObservations(Long contactId, String newObservations) {
+    private ContactInfoEntity updateContactInfoObservations(Long contactId, String newObservations) {
         return contactRepository.updateContactInfoObservations(contactId, newObservations)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
 
     /**
-     * {@inheritDoc}
+     * Updates the phone number of the contact information for the given contact ID.
      *
-     * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
+     * @param contactId the ID of the contact to update
+     * @param newPhoneNumber the new phone number to set for the contact
+     * @return the updated {@link ContactInfoEntity} with the new phone number
+     * @throws EntityNotFoundException if no contact with the specified ID exists
      */
-    @Override
-    public ContactInfoEntity updateContactInfoPhoneNumber(Long contactId, String newPhoneNumber) {
+    private ContactInfoEntity updateContactInfoPhoneNumber(Long contactId, String newPhoneNumber) {
         return contactRepository.updateContactInfoPhoneNumber(contactId, newPhoneNumber)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
 
     /**
-     * {@inheritDoc}
+     * Updates the email of the contact information for the given contact ID.
      *
-     * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
+     * @param contactId the ID of the contact to update
+     * @param newEmail the new email address to set for the contact
+     * @return the updated {@link ContactInfoEntity} with the new email
+     * @throws EntityNotFoundException if no contact with the specified ID exists
      */
-    @Override
-    public ContactInfoEntity updateContactInfoEmail(Long contactId, String newEmail) {
+    private ContactInfoEntity updateContactInfoEmail(Long contactId, String newEmail) {
         return contactRepository.updateContactInfoEmail(contactId, newEmail)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
 
     /**
-     * {@inheritDoc}
+     * Updates the commercial status of the contact information for the given contact ID.
      *
-     * @throws EntityNotFoundException if no contact is found with the provided {@code contactId}.
+     * @param contactId the ID of the contact to update
+     * @param isCommercial the new commercial status to set for the contact
+     * @return the updated {@link ContactInfoEntity} with the new commercial status
+     * @throws EntityNotFoundException if no contact with the specified ID exists
      */
-    @Override
-    public ContactInfoEntity updateContactInfoIsCommercial(Long contactId, boolean isCommercial) {
+    private ContactInfoEntity updateContactInfoIsCommercial(Long contactId, boolean isCommercial) {
         return contactRepository.updateContactInfoIsCommercial(contactId, isCommercial)
                 .orElseThrow(() -> exceptionService.createEntityNotFoundException(contactId));
     }
