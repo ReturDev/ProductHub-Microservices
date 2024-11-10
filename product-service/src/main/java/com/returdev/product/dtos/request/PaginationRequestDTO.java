@@ -30,8 +30,8 @@ public record PaginationRequestDTO(
         String orderBy
 ) {
 
-    private static final Integer DEFAULT_PAGE = 1;
-    private static final Integer DEFAULT_PAGE_SIZE = 20;
+    private static final int DEFAULT_PAGE = 1;
+    private static final int DEFAULT_PAGE_SIZE = 20;
     private static final String DEFAULT_SORT_DIRECTION = Sort.Direction.ASC.name();
     private static final String DEFAULT_ORDER_BY = "ID";
 
