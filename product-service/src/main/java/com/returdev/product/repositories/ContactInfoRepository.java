@@ -2,11 +2,9 @@ package com.returdev.product.repositories;
 
 import com.returdev.product.entities.ContactInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -24,8 +22,6 @@ public interface ContactInfoRepository extends JpaRepository<ContactInfoEntity, 
      * @param newName the new name to set.
      * @return an Optional containing the updated {@link ContactInfoEntity}, or empty if not found.
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateContactInfoName(:id, :name)", nativeQuery = true)
     Optional<ContactInfoEntity> updateContactInfoName(@Param("id") Long contactId, @Param("name") String newName);
 
@@ -36,8 +32,6 @@ public interface ContactInfoRepository extends JpaRepository<ContactInfoEntity, 
      * @param newObservations the new observations to set.
      * @return an Optional containing the updated {@link ContactInfoEntity}, or empty if not found.
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateContactInfoObservations(:id, :observations)", nativeQuery = true)
     Optional<ContactInfoEntity> updateContactInfoObservations(@Param("id") Long contactId, @Param("observations") String newObservations);
 
@@ -48,8 +42,6 @@ public interface ContactInfoRepository extends JpaRepository<ContactInfoEntity, 
      * @param newPhoneNumber the new phone number to set.
      * @return an Optional containing the updated {@link ContactInfoEntity}, or empty if not found.
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateContactInfoPhoneNumber(:id, :phoneNumber)", nativeQuery = true)
     Optional<ContactInfoEntity> updateContactInfoPhoneNumber(@Param("id") Long contactId, @Param("phoneNumber") String newPhoneNumber);
 
@@ -60,8 +52,6 @@ public interface ContactInfoRepository extends JpaRepository<ContactInfoEntity, 
      * @param newEmail the new email address to set.
      * @return an Optional containing the updated {@link ContactInfoEntity}, or empty if not found.
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateContactInfoEmail(:id, :email)", nativeQuery = true)
     Optional<ContactInfoEntity> updateContactInfoEmail(@Param("id") Long contactId, @Param("email") String newEmail);
 
@@ -72,8 +62,6 @@ public interface ContactInfoRepository extends JpaRepository<ContactInfoEntity, 
      * @param isCommercial the new commercial status to set.
      * @return an Optional containing the updated {@link ContactInfoEntity}, or empty if not found.
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateContactInfoIsCommercial(:id, :isCommercial)", nativeQuery = true)
     Optional<ContactInfoEntity> updateContactInfoIsCommercial(@Param("id") Long contactId, @Param("isCommercial") boolean isCommercial);
 }
