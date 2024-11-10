@@ -38,7 +38,8 @@ public record ContactInfoRequestDTO(
         @Email(message = "{validation.email.message}")
         String email,
         @JsonProperty("is_commercial")
-        boolean isCommercial,
+        @NotNull(message = "{validation.not_null.message}")
+        Boolean isCommercial,
         @NotNull(message = "{validation.not_null.message}")
         @JsonProperty("supplier_id")
         Long supplierId
