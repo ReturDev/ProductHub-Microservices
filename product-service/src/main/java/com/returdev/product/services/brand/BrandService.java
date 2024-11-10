@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service interface for managing brands in the system.
@@ -71,33 +72,24 @@ public interface BrandService {
      * @param brand the BrandEntity containing updated details
      * @return the updated BrandEntity
      */
+    @Transactional
     BrandEntity updateBrand(@Valid BrandEntity brand);
 
     /**
-     * Updates the name of a brand.
+     * Updates an existing {@link BrandEntity} with a new name and summary.
      *
-     * @param brandId the unique identifier of the brand
-     * @param newName the new name for the brand
-     * @return an Optional containing the updated BrandEntity
+     * @param brandId the ID of the brand to update; must not be null
+     * @param newName the new name for the brand; must not be blank and must have a length between 3 and 50 characters
+     * @param newSummary the new summary for the brand; must not be null and must not exceed 150 characters in length
+     * @return the updated {@link BrandEntity} with the modified name and summary
      */
-    BrandEntity updateBrandName(
+    @Transactional
+    BrandEntity updateBrand(
             @NotNull(message = "{validation.not_null.message}")
             Long brandId,
             @NotBlank(message = "{validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "{validation.size.message}")
-            String newName
-    );
-
-    /**
-     * Updates the summary of a brand.
-     *
-     * @param brandId    the unique identifier of the brand
-     * @param newSummary the new summary for the brand
-     * @return an Optional containing the updated BrandEntity
-     */
-    BrandEntity updateBrandSummary(
-            @NotNull(message = "{validation.not_null.message}")
-            Long brandId,
+            String newName,
             @NotNull(message = "{validation.not_null.message}")
             @Size(max = 150, message = "{validation.size.max.message}")
             String newSummary
