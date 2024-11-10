@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -63,9 +62,8 @@ public class CategoryServiceImpl implements CategoryService {
      * {@inheritDoc}
      *
      * @throws IllegalArgumentException if the {@code category} has a null ID, as it should be present for updating.
-     * @throws EntityNotFoundException if no category exists with the provided {@code categoryId}.
+     * @throws EntityNotFoundException  if no category exists with the provided {@code categoryId}.
      */
-    @Transactional
     @Override
     public CategoryEntity updateCategory(CategoryEntity category) {
         if (category.getId() == null) {
@@ -80,33 +78,30 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if no category exists with the provided {@code categoryId}.
-     */
-    @Override
-    public CategoryEntity updateCategoryName(
-            Long categoryId,
-            @NotBlank(message = "{validation.not_blank.message}")
-            @Size(min = 3, max = 50, message = "{validation.size.message}")
-            String newName
-    ) {
-        return categoryRepository.updateCategoryName(categoryId, newName).orElseThrow(() ->
-                exceptionService.createEntityNotFoundException(categoryId)
-        );
-    }
 
     /**
      * {@inheritDoc}
      *
-     * @throws EntityNotFoundException if no category exists with the provided {@code categoryId}.
+     * @throws IllegalArgumentException if neither the new name nor the new summary is provided
      */
     @Override
-    public CategoryEntity updateCategorySummary(Long categoryId, String newSummary) {
-        return categoryRepository.updateCategorySummary(categoryId, newSummary).orElseThrow(() ->
-                exceptionService.createEntityNotFoundException(categoryId)
-        );
+    public CategoryEntity updateCategory(Long categoryId, String newName, String newSummary) {
+
+        CategoryEntity categoryResponse = null;
+
+        if (newName != null) {
+            categoryResponse = updateCategoryName(categoryId, newName);
+        }
+
+        if (newSummary != null) {
+            categoryResponse = updateCategorySummary(categoryId, newSummary);
+        }
+
+        if (categoryResponse == null) {
+            throw exceptionService.createIllegalArgumentException("exception.null_update_values.message");
+        }
+
+        return categoryResponse;
     }
 
     /**
@@ -121,5 +116,42 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return categoryRepository.save(category);
     }
+
+    /**
+     * Updates the name of the category identified by the given category ID.
+     * If the category does not exist, an exception is thrown.
+     *
+     * @param categoryId the ID of the category to update
+     * @param newName the new name for the category
+     * @return the updated {@link CategoryEntity} with the new name
+     * @throws EntityNotFoundException if no category with the specified ID is found
+     */
+    private CategoryEntity updateCategoryName(
+            Long categoryId,
+            @NotBlank(message = "{validation.not_blank.message}")
+            @Size(min = 3, max = 50, message = "{validation.size.message}")
+            String newName
+    ) {
+        return categoryRepository.updateCategoryName(categoryId, newName).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(categoryId)
+        );
+    }
+
+    /**
+     * Updates the summary of the category identified by the given category ID.
+     * If the category does not exist, an exception is thrown.
+     *
+     * @param categoryId the ID of the category to update
+     * @param newSummary the new summary for the category
+     * @return the updated {@link CategoryEntity} with the new summary
+     * @throws EntityNotFoundException if no category with the specified ID is found
+     */
+    private CategoryEntity updateCategorySummary(Long categoryId, String newSummary) {
+        return categoryRepository.updateCategorySummary(categoryId, newSummary).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(categoryId)
+        );
+    }
+
+
 }
 
