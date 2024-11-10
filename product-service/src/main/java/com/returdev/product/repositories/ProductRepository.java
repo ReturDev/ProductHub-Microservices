@@ -113,8 +113,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      * @param newName the new name for the product
      * @return an Optional containing the updated ProductEntity with the new name
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateProductName(:id, :name)", nativeQuery = true)
     Optional<ProductEntity> updateProductName(@Param("id") Long productId, @Param("name") String newName);
 
@@ -125,8 +123,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      * @param newSummary the new summary for the product
      * @return an Optional containing the updated ProductEntity with the new summary
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateProductSummary(:id, :summary)", nativeQuery = true)
     Optional<ProductEntity> updateProductSummary(@Param("id") Long productId, @Param("summary") String newSummary);
 
@@ -137,8 +133,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      * @param newCode the new product code
      * @return an Optional containing the updated ProductEntity with the new code
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateProductCode(:id, :code)", nativeQuery = true)
     Optional<ProductEntity> updateProductCode(@Param("id") Long productId, @Param("code") String newCode);
 
@@ -149,8 +143,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      * @param newBarcode the new barcode for the product
      * @return an Optional containing the updated ProductEntity with the new barcode
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateProductBarcode(:id, :barcode)", nativeQuery = true)
     Optional<ProductEntity> updateProductBarcode(@Param("id") Long productId, @Param("barcode") String newBarcode);
 
@@ -161,8 +153,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      * @param modelId the unique identifier of the new model
      * @return an Optional containing the updated ProductEntity with the new model association
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateProductModel(:productId, :modelId)", nativeQuery = true)
     Optional<ProductEntity> updateProductModel(@Param("productId") Long productId, @Param("modelId") Long modelId);
 
@@ -173,8 +163,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
      * @param dimensionsId the unique identifier of the new dimensions
      * @return an Optional containing the updated ProductEntity with the new dimensions
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateProductDimensions(:productId, :dimensionsId)", nativeQuery = true)
     Optional<ProductEntity> updateProductDimensions(@Param("productId") Long productId, @Param("dimensionsId") Long dimensionsId);
 
