@@ -50,8 +50,6 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
      * @param newName the new name to set for the supplier.
      * @return an Optional containing the updated SupplierEntity if found and updated successfully.
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateSupplierName(:id, :name)", nativeQuery = true)
     Optional<SupplierEntity> updateSupplierName(@Param("id") Long supplierId, @Param("name") String newName);
 
@@ -62,8 +60,6 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
      * @param newObservations the new observations to set for the supplier.
      * @return an Optional containing the updated SupplierEntity if found and updated successfully.
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateSupplierObservations(:id, :observations)", nativeQuery = true)
     Optional<SupplierEntity> updateSupplierObservations(@Param("id") Long supplierId, @Param("observations") String newObservations);
 
