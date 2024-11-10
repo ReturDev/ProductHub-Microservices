@@ -66,8 +66,6 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
      * @param newName the new name for the brand
      * @return an Optional containing the updated BrandEntity with the new name
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateBrandName(:id, :name)", nativeQuery = true)
     Optional<BrandEntity> updateBrandName(@Param("id") Long brandId, @Param("name") String newName);
 
@@ -78,8 +76,6 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
      * @param newSummary the new summary for the brand
      * @return an Optional containing the updated BrandEntity with the new summary
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateBrandSummary(:id, :summary)", nativeQuery = true)
     Optional<BrandEntity> updateBrandSummary(@Param("id") Long brandId, @Param("summary") String newSummary);
 
