@@ -72,7 +72,7 @@ public class BrandController {
      * @param showInactives flag indicating whether inactive brands should be included in the response
      * @return a wrapper containing a paginated list of {@link BrandResponseDTO} objects matching the search criteria
      */
-    @GetMapping("/name")
+    @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public PaginationResponseWrapper<BrandResponseDTO> getBrandsByName(
             @RequestParam() String name,
@@ -85,7 +85,7 @@ public class BrandController {
         Page<BrandEntity> brandPage;
 
         if (name.startsWith("*")){
-            brandPage = brandService.getBrandByNameContaining(name, showInactives, pageable);
+            brandPage = brandService.getBrandByNameContaining(name.replace("*",""), showInactives, pageable);
         } else {
             brandPage = brandService.getBrandByNameStartingWith(name, showInactives, pageable);
         }
@@ -162,7 +162,7 @@ public class BrandController {
      * @return a wrapper containing the newly created {@link BrandResponseDTO}
      */
     @PostMapping()
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public ContentResponseWrapper<BrandResponseDTO> saveBrand(
             @RequestBody @Valid BrandRequestDTO brandRequestDTO
     ) {
