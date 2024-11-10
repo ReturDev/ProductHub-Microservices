@@ -25,78 +25,43 @@ public interface ContactInfoService {
      */
     ContactInfoEntity updateContactInfo(@Valid ContactInfoEntity contactInfo);
 
+
     /**
-     * Updates the name of an existing {@link ContactInfoEntity}.
+     * Updates the contact information of an existing contact based on the provided details.
+     * If any field is provided, it will be updated. Fields that are not provided remain unchanged.
      *
-     * @param contactId the ID of the contact info to update.
-     * @param newName the new name to set.
-     * @return the updated {@link ContactInfoEntity}.
+     * @param contactId the ID of the contact to update
+     * @param newName the new name for the contact (must not be blank, with a length between 3 and 50 characters)
+     * @param newObservations the new observations for the contact (must not be null, with a maximum length of 150 characters)
+     * @param newPhoneNumber the new phone number for the contact (must match the valid phone number pattern)
+     * @param newEmail the new email address for the contact (must be a valid email format)
+     * @param isCommercial a flag indicating if the contact is commercial (can be null if not updating)
+     * @return the updated {@link ContactInfoEntity} with the new contact information
      */
-    ContactInfoEntity updateContactInfoName(
+    ContactInfoEntity updateContactInfo(
             @NotNull(message = "{validation.not_null.message}")
             Long contactId,
+
             @NotBlank(message = "{validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "{validation.size.message}")
-            String newName
-    );
+            String newName,
 
-    /**
-     * Updates the observations of an existing {@link ContactInfoEntity}.
-     *
-     * @param contactId the ID of the contact info to update.
-     * @param newObservations the new observations to set.
-     * @return the updated {@link ContactInfoEntity}.
-     */
-    ContactInfoEntity updateContactInfoObservations(
-            @NotNull(message = "{validation.not_null.message}")
-            Long contactId,
             @NotNull(message = "{validation.not_null.message}")
             @Size(max = 150, message = "{validation.size.max.message}")
-            String newObservations
-    );
+            String newObservations,
 
-    /**
-     * Updates the phone number of an existing {@link ContactInfoEntity}.
-     *
-     * @param contactId the ID of the contact info to update.
-     * @param newPhoneNumber the new phone number to set.
-     * @return the updated {@link ContactInfoEntity}.
-     */
-    ContactInfoEntity updateContactInfoPhoneNumber(
-            @NotNull(message = "{validation.not_null.message}")
-            Long contactId,
             @NotBlank(message = "{validation.not_blank.message}")
             @Size(min = 3, max = 15, message = "{validation.size.message}")
             @Pattern(regexp = "^\\+?[0-9. ()-]{8,15}$", message = "{validation.phone_format.message}")
-            String newPhoneNumber
-    );
+            String newPhoneNumber,
 
-    /**
-     * Updates the email address of an existing {@link ContactInfoEntity}.
-     *
-     * @param contactId the ID of the contact info to update.
-     * @param newEmail the new email address to set.
-     * @return the updated {@link ContactInfoEntity}.
-     */
-    ContactInfoEntity updateContactInfoEmail(
-            @NotNull(message = "{validation.not_null.message}")
-            Long contactId,
             @Email(message = "{validation.email.message}")
-            String newEmail
+            String newEmail,
+
+            Boolean isCommercial
     );
 
-    /**
-     * Updates the commercial status of an existing {@link ContactInfoEntity}.
-     *
-     * @param contactId the ID of the contact info to update.
-     * @param isCommercial the new commercial status to set.
-     * @return the updated {@link ContactInfoEntity}.
-     */
-    ContactInfoEntity updateContactInfoIsCommercial(
-            @NotNull(message = "{validation.not_null.message}")
-            Long contactId,
-            boolean isCommercial
-    );
+
 
     /**
      * Saves a new {@link ContactInfoEntity}.
