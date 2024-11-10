@@ -47,8 +47,6 @@ public interface ModelRepository extends JpaRepository<ModelEntity, Long> {
      * @param newName the new name for the model
      * @return an Optional containing the updated ModelEntity
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateModelName(:id, :name)", nativeQuery = true)
     Optional<ModelEntity> updateModelName(@Param("id") Long modelId, @Param("name") String newName);
 
@@ -59,8 +57,6 @@ public interface ModelRepository extends JpaRepository<ModelEntity, Long> {
      * @param newSummary the new summary for the model
      * @return an Optional containing  the updated ModelEntity
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateModelSummary(:id, :summary)", nativeQuery = true)
     Optional<ModelEntity> updateModelSummary(@Param("id") Long modelId, @Param("summary") String newSummary);
 
@@ -71,8 +67,6 @@ public interface ModelRepository extends JpaRepository<ModelEntity, Long> {
      * @param brandId the unique identifier of the brand
      * @return an Optional containing the updated ModelEntity
      */
-    @Modifying
-    @Transactional
     @Query(value = "CALL updateModelBrand(:modelId, :brandId)", nativeQuery = true)
     Optional<ModelEntity> updateModelBrand(@Param("modelId") Long modelId, @Param("brandId") Long brandId);
 
