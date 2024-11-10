@@ -4,12 +4,17 @@ import com.returdev.product.entities.BrandEntity;
 import com.returdev.product.repositories.BrandRepository;
 import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.Optional;
 
 
 /**
@@ -77,7 +82,6 @@ public class BrandServiceImpl implements BrandService {
      * @throws IllegalArgumentException if the {@code brand.id} is {@code null} while updating an existing brand.
      * @throws EntityNotFoundException if the {@code brand} does not exist in the database.
      */
-    @Transactional
     @Override
     public BrandEntity updateBrand(BrandEntity brand) {
         if (brand.getId() == null) {
@@ -94,27 +98,26 @@ public class BrandServiceImpl implements BrandService {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
-     */
+     **/
     @Override
-    public BrandEntity updateBrandName(Long brandId, String newName) {
-        return brandRepository.updateBrandName(brandId, newName).orElseThrow(() ->
-                exceptionService.createEntityNotFoundException(brandId)
-        );
+    public BrandEntity updateBrand(Long brandId, String newName, String newSummary) {
+        BrandEntity brandResponse = null;
+
+        if (newName != null) {
+            brandResponse = updateBrandName(brandId, newName);
+        }
+
+        if (newSummary != null) {
+            brandResponse = updateBrandSummary(brandId, newSummary);
+        }
+
+        if (brandResponse == null){
+            throw exceptionService.createIllegalArgumentException("exception.null_update_values.message");
+        }
+
+        return brandResponse;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
-     */
-    @Override
-    public BrandEntity updateBrandSummary(Long brandId, String newSummary) {
-        return brandRepository.updateBrandSummary(brandId, newSummary).orElseThrow(() ->
-                exceptionService.createEntityNotFoundException(brandId)
-        );
-    }
 
     /**
      * {@inheritDoc}
@@ -154,4 +157,33 @@ public class BrandServiceImpl implements BrandService {
             throw exceptionService.createEntityNotFoundException(brandId);
         }
     }
+
+    /**
+     * Updates the name of a brand.
+     *
+     * @param brandId the unique identifier of the brand
+     * @param newName the new name for the brand
+     * @return an Optional containing the updated BrandEntity
+     * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
+     */
+    private BrandEntity updateBrandName(Long brandId, String newName) {
+        return brandRepository.updateBrandName(brandId, newName).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(brandId)
+        );
+    }
+
+    /**
+     * Updates the summary of a brand.
+     *
+     * @param brandId    the unique identifier of the brand
+     * @param newSummary the new summary for the brand
+     * @return an Optional containing the updated BrandEntity
+     * @throws EntityNotFoundException if no existing brand is found with the provided {@code brandId}.
+     */
+    private BrandEntity updateBrandSummary(Long brandId, String newSummary) {
+        return brandRepository.updateBrandSummary(brandId, newSummary).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(brandId)
+        );
+    }
+
 }
