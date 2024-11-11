@@ -54,30 +54,19 @@ public interface ModelService {
     ModelEntity updateModel(@Valid ModelEntity model);
 
     /**
-     * Updates the name of a model identified by its ID.
+     * Updates an existing model entry with the specified ID, name, and summary.
      *
-     * @param id the unique identifier of the model
-     * @param newName the new name for the model
-     * @return an Optional containing the updated ModelEntity with the new name
+     * @param modelId   the ID of the model to update; must not be {@code null}
+     * @param newName   the new name for the model; must not be blank and must be between 3 and 50 characters
+     * @param newSummary the new summary for the model; must not be {@code null} and must not exceed 150 characters
+     * @return the updated {@link ModelEntity} object representing the model
      */
-    ModelEntity updateModelName(
+    ModelEntity updateModel(
             @NotNull(message = "{validation.not_null.message}")
-            Long id,
+            Long modelId,
             @NotBlank(message = "{validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "{validation.size.message}")
-            String newName
-    );
-
-    /**
-     * Updates the summary of a model identified by its ID.
-     *
-     * @param id the unique identifier of the model
-     * @param newSummary the new summary for the model
-     * @return an Optional containing the updated ModelEntity with the new summary
-     */
-    ModelEntity updateModelSummary(
-            @NotNull(message = "{validation.not_null.message}")
-            Long id,
+            String newName,
             @NotNull(message = "{validation.not_null.message}")
             @Size(max = 150, message = "{validation.size.max.message}")
             String newSummary
