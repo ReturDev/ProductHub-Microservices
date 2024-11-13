@@ -3,6 +3,7 @@ package com.returdev.product.services.contact;
 import com.returdev.product.entities.ContactInfoEntity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Interface for managing {@link ContactInfoEntity} instances.
@@ -23,6 +24,7 @@ public interface ContactInfoService {
      * @param contactInfo the {@link ContactInfoEntity} with updated details.
      * @return the updated {@link ContactInfoEntity}.
      */
+    @Transactional
     ContactInfoEntity updateContactInfo(@Valid ContactInfoEntity contactInfo);
 
 
@@ -38,6 +40,7 @@ public interface ContactInfoService {
      * @param isCommercial a flag indicating if the contact is commercial (can be null if not updating)
      * @return the updated {@link ContactInfoEntity} with the new contact information
      */
+    @Transactional
     ContactInfoEntity updateContactInfo(
             @NotNull(message = "{validation.not_null.message}")
             Long contactId,
