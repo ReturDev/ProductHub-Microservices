@@ -36,8 +36,17 @@ public class SupplierServiceImpl implements SupplierService {
      * {@inheritDoc}
      */
     @Override
+    public Page<SupplierEntity> getAllSuppliers(boolean includeInactive, Pageable pageable) {
+        return includeInactive ? supplierRepository.findAll(pageable) : supplierRepository.findAllActiveSuppliers(pageable);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Page<SupplierEntity> getSupplierByNameContaining(String name, boolean includeInactive, Pageable pageable) {
-        return supplierRepository.getSupplierByNameContaining(name, includeInactive, pageable);
+        return supplierRepository.findSupplierByNameContaining(name, includeInactive, pageable);
     }
 
     /**
@@ -45,7 +54,7 @@ public class SupplierServiceImpl implements SupplierService {
      */
     @Override
     public Page<SupplierEntity> getSupplierByNameStartingWith(String name, boolean includeInactive, Pageable pageable) {
-        return supplierRepository.getSupplierByNameStartingWith(name, includeInactive, pageable);
+        return supplierRepository.findSupplierByNameStartingWith(name, includeInactive, pageable);
     }
 
     /**
@@ -69,28 +78,29 @@ public class SupplierServiceImpl implements SupplierService {
         return supplierRepository.save(supplier);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if no existing supplier is found with the provided {@code supplierId}.
-     */
     @Override
-    public SupplierEntity updateSupplierName(Long supplierId, String newName) {
-        return supplierRepository.updateSupplierName(supplierId, newName).orElseThrow(() ->
-                exceptionService.createEntityNotFoundException(supplierId)
-        );
-    }
+    public SupplierEntity updateSupplier(Long supplierId, String newName, String newObservations) {
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if no existing supplier is found with the provided {@code supplierId}.
-     */
-    @Override
-    public SupplierEntity updateSupplierObservations(Long supplierId, String newObservations) {
-        return supplierRepository.updateSupplierObservations(supplierId, newObservations).orElseThrow(() ->
-                exceptionService.createEntityNotFoundException(supplierId)
-        );
+        if (!supplierRepository.existsById(supplierId)) {
+            throw exceptionService.createEntityNotFoundException(supplierId);
+        }
+
+        SupplierEntity supplierResponse = null;
+
+        if (newName != null) {
+            supplierResponse = updateSupplierName(supplierId, newName);
+        }
+
+        if (newObservations != null) {
+            supplierResponse = updateSupplierObservations(supplierId, newObservations);
+        }
+
+        if (supplierResponse == null){
+            throw exceptionService.createIllegalArgumentException("exception.null_update_values.message");
+        }
+
+        return supplierResponse;
+
     }
 
     /**
@@ -135,6 +145,35 @@ public class SupplierServiceImpl implements SupplierService {
 
         return supplierRepository.save(supplier);
     }
+
+    /**
+     * Updates the name of a supplier with the specified ID.
+     *
+     * @param supplierId the ID of the supplier to update.
+     * @param newName the new name to set for the supplier.
+     * @return the updated {@link SupplierEntity} with the new name.
+     * @throws EntityNotFoundException if no supplier is found with the specified ID.
+     */
+    private SupplierEntity updateSupplierName(Long supplierId, String newName) {
+        return supplierRepository.updateSupplierName(supplierId, newName).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(supplierId)
+        );
+    }
+
+    /**
+     * Updates the observations field of a supplier with the specified ID.
+     *
+     * @param supplierId the ID of the supplier to update.
+     * @param newObservations the new observations to set for the supplier.
+     * @return the updated {@link SupplierEntity} with the new observations.
+     * @throws EntityNotFoundException if no supplier is found with the specified ID.
+     */
+    private SupplierEntity updateSupplierObservations(Long supplierId, String newObservations) {
+        return supplierRepository.updateSupplierObservations(supplierId, newObservations).orElseThrow(() ->
+                exceptionService.createEntityNotFoundException(supplierId)
+        );
+    }
+
 }
 
 
