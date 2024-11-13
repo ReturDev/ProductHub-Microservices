@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service interface for managing products in the system.
@@ -163,66 +164,47 @@ public interface ProductService {
      * @param product the ProductEntity with updated details
      * @return the updated ProductEntity
      */
+    @Transactional
     ProductEntity updateProduct(@Valid ProductEntity product);
 
     /**
-     * Updates the name of a product identified by its ID.
+     * Updates an existing product with new values for its properties.
+     * This method is transactional and will ensure that all updates are committed atomically.
      *
-     * @param productId the unique identifier of the product
-     * @param newName the new name for the product
-     * @return an Optional containing the updated ProductEntity
+     * @param productId the ID of the product to update (must not be null)
+     * @param newName the new name of the product (must not be blank and must have a length between 3 and 50 characters)
+     * @param newSummary the new summary or description of the product (must not be null and must not exceed 150 characters)
+     * @param newCode the new code for the product (must not be empty and must have a length between 3 and 20 characters)
+     * @param newBarcode the new barcode for the product (must not be null and must have a length between 8 and 30 characters)
+     * @param newDimensions the new dimensions of the product (must not be null and must be a valid DimensionsEntity)
+     * @return the updated {@link ProductEntity} after applying the changes
      */
-    ProductEntity updateProductName(
+    @Transactional
+    public ProductEntity updateProduct(
             @NotNull(message = "{validation.not_null.message}")
             Long productId,
+
             @NotBlank(message = "{validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "{validation.size.message}")
-            String newName
-    );
+            String newName,
 
-    /**
-     * Updates the summary of a product identified by its ID.
-     *
-     * @param productId  the unique identifier of the product
-     * @param newSummary the new summary for the product
-     * @return an Optional containing the updated ProductEntity
-     */
-    ProductEntity updateProductSummary(
-            @NotNull(message = "{validation.not_null.message}")
-            Long productId,
             @NotNull(message = "{validation.not_null.message}")
             @Size(max = 150, message = "{validation.size.max.message}")
-            String newSummary
-    );
+            String newSummary,
 
-    /**
-     * Updates the product code of a product identified by its ID.
-     *
-     * @param productId the unique identifier of the product
-     * @param newCode   the new product code for the product
-     * @return an Optional containing the updated ProductEntity
-     */
-    ProductEntity updateProductCode(
-            @NotNull(message = "{validation.not_null.message}")
-            Long productId,
             @NotEmpty(message = "{validation.not_empty.message}")
             @Size(min = 3, max = 20, message = "{validation.size.message}")
-            String newCode);
+            String newCode,
 
-    /**
-     * Updates the barcode of a product identified by its ID.
-     *
-     * @param productId the unique identifier of the product
-     * @param barcode   the new barcode for the product
-     * @return an Optional containing the updated ProductEntity
-     */
-    ProductEntity updateProductBarcode(
-            @NotNull(message = "{validation.not_null.message}")
-            Long productId,
             @NotNull(message = "{validation.not_null.message}")
             @Size(min = 8, max = 30, message = "{validation.size.message}")
-            String barcode
+            String newBarcode,
+
+            @NotNull(message = "{validation.not_null.message}")
+            @Valid
+            DimensionsEntity newDimensions
     );
+
 
     /**
      * Updates the model associated with a product identified by the given product ID.
@@ -235,21 +217,6 @@ public interface ProductService {
     ProductEntity updateProductModel(
             @NotNull(message = "{validation.not_null.message}") Long productId,
             @NotNull(message = "{validation.not_null.message}") Long modelId);
-
-    /**
-     * Updates the dimensions of a product.
-     *
-     * @param productId  the unique identifier of the product
-     * @param dimensions the new dimensions to associate with the product
-     * @return an Optional containing the updated ProductEntity
-     */
-    ProductEntity updateProductDimensions(
-            @NotNull(message = "{validation.not_null.message}")
-            Long productId,
-            @NotNull(message = "{validation.not_null.message}")
-            @Valid
-            DimensionsEntity dimensions
-    );
 
     /**
      * Adds a new supplier association to a product.
