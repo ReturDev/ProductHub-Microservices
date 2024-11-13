@@ -84,26 +84,57 @@ public class ModelServiceImpl implements ModelService {
     /**
      * {@inheritDoc}
      *
-     * @throws EntityNotFoundException if no model is found with the provided {@code modelId}.
+     * @throws IllegalArgumentException if both {@code newName} and {@code newSummary} are {@code null}
+     * @throws EntityNotFoundException if the model with the specified {@code modelId} is not found
      */
     @Override
-    public ModelEntity updateModelName(Long modelId, String newName) {
+    public ModelEntity updateModel(Long modelId, String newName, String newSummary) {
+
+        ModelEntity modelResponse = null;
+
+        if (newName != null) {
+            modelResponse = updateModelName(modelId, newName);
+        }
+
+        if (newSummary != null) {
+            modelResponse = updateModelSummary(modelId, newSummary);
+        }
+
+        if (modelResponse == null) {
+            throw exceptionService.createIllegalArgumentException("exception.null_update_values.message");
+        }
+
+        return modelResponse;
+    }
+
+    /**
+     * Updates the name of a model entity with the specified ID.
+     *
+     * @param modelId  the ID of the model to update
+     * @param newName  the new name for the model
+     * @return the updated {@link ModelEntity} with the new name
+     * @throws EntityNotFoundException if no model with the specified {@code modelId} is found
+     */
+    private ModelEntity updateModelName(Long modelId, String newName) {
         return modelRepository.updateModelName(modelId, newName).orElseThrow(() ->
                 exceptionService.createEntityNotFoundException(modelId)
         );
     }
 
     /**
-     * {@inheritDoc}
+     * Updates the summary of a model entity with the specified ID.
      *
-     * @throws EntityNotFoundException if no model is found with the provided {@code modelId}.
+     * @param modelId     the ID of the model to update
+     * @param newSummary  the new summary for the model
+     * @return the updated {@link ModelEntity} with the new summary
+     * @throws EntityNotFoundException if no model with the specified {@code modelId} is found
      */
-    @Override
-    public ModelEntity updateModelSummary(Long modelId, String newSummary) {
+    private ModelEntity updateModelSummary(Long modelId, String newSummary) {
         return modelRepository.updateModelSummary(modelId, newSummary).orElseThrow(() ->
                 exceptionService.createEntityNotFoundException(modelId)
         );
     }
+
 
     /**
      * {@inheritDoc}
