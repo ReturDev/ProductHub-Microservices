@@ -4,17 +4,11 @@ import com.returdev.product.entities.BrandEntity;
 import com.returdev.product.repositories.BrandRepository;
 import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-
-import java.util.Optional;
 
 
 /**
@@ -98,9 +92,17 @@ public class BrandServiceImpl implements BrandService {
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException if neither the new name nor the new summary is provided.
+     * @throws EntityNotFoundException if the {@code brand} does not exist in the database.
      **/
     @Override
     public BrandEntity updateBrand(Long brandId, String newName, String newSummary) {
+
+        if (!brandRepository.existsById(brandId)) {
+            throw exceptionService.createEntityNotFoundException(brandId);
+        }
+
         BrandEntity brandResponse = null;
 
         if (newName != null) {
