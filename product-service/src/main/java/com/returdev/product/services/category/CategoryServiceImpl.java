@@ -83,9 +83,14 @@ public class CategoryServiceImpl implements CategoryService {
      * {@inheritDoc}
      *
      * @throws IllegalArgumentException if neither the new name nor the new summary is provided
+     * @throws EntityNotFoundException if the contact to update does not exist.
      */
     @Override
     public CategoryEntity updateCategory(Long categoryId, String newName, String newSummary) {
+
+        if (!categoryRepository.existsById(categoryId)) {
+            throw exceptionService.createEntityNotFoundException(categoryId);
+        }
 
         CategoryEntity categoryResponse = null;
 
