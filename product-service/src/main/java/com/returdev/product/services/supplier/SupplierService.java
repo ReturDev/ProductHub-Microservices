@@ -24,6 +24,16 @@ public interface SupplierService {
     SupplierEntity getSupplierById(@NotNull(message = "{validation.not_null.message}") Long id);
 
     /**
+     * Retrieves a paginated list of all suppliers, with an option to include or exclude inactive suppliers.
+     *
+     * @param includeInactive flag indicating whether inactive suppliers should be included in the result.
+     *                        If true, inactive suppliers are included; if false, only active suppliers are returned.
+     * @param pageable pagination information such as page number, page size, and sorting order.
+     * @return a {@link Page} containing a paginated list of {@link SupplierEntity} objects.
+     */
+    Page<SupplierEntity> getAllSuppliers(boolean includeInactive, Pageable pageable);
+
+    /**
      * Finds suppliers with names containing the specified text.
      *
      * @param name the text to search within supplier names.
@@ -61,31 +71,21 @@ public interface SupplierService {
      */
     SupplierEntity updateSupplier(@Valid SupplierEntity supplier);
 
+
     /**
-     * Updates the name of a supplier.
+     * Updates the specified fields of a supplier with a given ID.
      *
-     * @param supplierId the ID of the supplier to update.
-     * @param newName the new name to set for the supplier.
-     * @return the {@link SupplierEntity} updated.
+     * @param supplierId the ID of the supplier to update, must not be null.
+     * @param newName the new name for the supplier, must be a non-blank string with a length between 3 and 50 characters.
+     * @param newObservations new observation notes for the supplier, must be a non-blank string with a maximum length of 150 characters.
+     * @return the updated {@link SupplierEntity} with the specified changes applied.
      */
-    SupplierEntity updateSupplierName(
+    SupplierEntity updateSupplier(
             @NotNull(message = "{validation.not_null.message}")
             Long supplierId,
             @NotBlank(message = "{validation.not_blank.message}")
             @Size(min = 3, max = 50, message = "{validation.size.message}")
-            String newName
-    );
-
-    /**
-     * Updates the observations/notes for a supplier.
-     *
-     * @param supplierId the ID of the supplier to update.
-     * @param newObservations the new observations to set for the supplier.
-     * @return the {@link SupplierEntity} updated.
-     */
-    SupplierEntity updateSupplierObservations(
-            @NotNull(message = "{validation.not_null.message}")
-            Long supplierId,
+            String newName,
             @NotBlank(message = "{validation.not_blank.message}")
             @Size(max = 150, message = "{validation.size.max.message}")
             String newObservations
