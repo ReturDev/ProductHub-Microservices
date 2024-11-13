@@ -180,7 +180,7 @@ public interface ProductService {
      * @return the updated {@link ProductEntity} after applying the changes
      */
     @Transactional
-    public ProductEntity updateProduct(
+    ProductEntity updateProduct(
             @NotNull(message = "{validation.not_null.message}")
             Long productId,
 
