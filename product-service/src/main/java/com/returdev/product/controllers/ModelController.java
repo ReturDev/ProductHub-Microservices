@@ -93,7 +93,9 @@ public class ModelController {
             @RequestBody @Valid ModelRequestDTO modelRequestDTO
     ) {
         return entityDtoMapper.modelEntityToContentResponse(
-                entityDtoMapper.modelRequestToEntity(modelRequestDTO)
+                modelService.updateModel(
+                        entityDtoMapper.modelRequestToEntity(modelRequestDTO)
+                )
         );
     }
 
