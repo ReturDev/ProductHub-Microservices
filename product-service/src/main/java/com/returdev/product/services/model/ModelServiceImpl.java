@@ -90,6 +90,10 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public ModelEntity updateModel(Long modelId, String newName, String newSummary) {
 
+        if (!modelRepository.existsById(modelId)) {
+            throw exceptionService.createEntityNotFoundException(modelId);
+        }
+
         ModelEntity modelResponse = null;
 
         if (newName != null) {
