@@ -139,49 +139,52 @@ public class ProductServiceImpl implements ProductService {
     /**
      * {@inheritDoc}
      *
-     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
+     * @throws EntityNotFoundException if no product is found with the specified {@code productId}
+     * @throws IllegalArgumentException if no updates were provided (all fields were null)
      */
     @Override
-    public ProductEntity updateProductName(Long productId, String newName) {
-        return productRepository.updateProductName(productId, newName).orElseThrow(
-                () -> exceptionService.createEntityNotFoundException(productId)
-        );
-    }
+    public ProductEntity updateProduct(
+            Long productId,
+            String newName,
+            String newSummary,
+            String newCode,
+            String newBarcode,
+            DimensionsEntity newDimensions
+    ) {
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
-     */
-    @Override
-    public ProductEntity updateProductSummary(Long productId, String newSummary) {
-        return productRepository.updateProductSummary(productId, newSummary).orElseThrow(
-                () -> exceptionService.createEntityNotFoundException(productId)
-        );
-    }
+        if (!productRepository.existsById(productId)) {
+            throw exceptionService.createEntityNotFoundException(productId);
+        }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
-     */
-    @Override
-    public ProductEntity updateProductCode(Long productId, String newCode) {
-        return productRepository.updateProductCode(productId, newCode).orElseThrow(
-                () -> exceptionService.createEntityNotFoundException(productId)
-        );
-    }
+        ProductEntity productResponse = null;
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if no product is found with the provided {@code productId}.
-     */
-    @Override
-    public ProductEntity updateProductBarcode(Long productId, String barcode) {
-        return productRepository.updateProductBarcode(productId, barcode).orElseThrow(
-                () -> exceptionService.createEntityNotFoundException(productId)
-        );
+        if (newName != null) {
+            productResponse = updateProductName(productId, newName);
+        }
+
+        if (newSummary != null) {
+            productResponse = updateProductSummary(productId, newSummary);
+        }
+
+        if (newCode != null) {
+            productResponse = updateProductCode(productId, newCode);
+        }
+
+        if (newBarcode != null) {
+            productResponse = updateProductBarcode(productId, newBarcode);
+        }
+
+        if (newDimensions != null) {
+            productResponse = updateProductDimensions(productId, newDimensions);
+        }
+
+
+        if (productResponse == null) {
+            throw exceptionService.createIllegalArgumentException("exception.null_update_values.message");
+        }
+
+        return productResponse;
+
     }
 
     /**
@@ -196,19 +199,7 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if updating dimensions fails.
-     */
-    @Transactional
-    @Override
-    public ProductEntity updateProductDimensions(Long productId, DimensionsEntity dimensions) {
-        Long savedDimensionId = dimensionsRepository.save(dimensions).getId();
-        return productRepository.updateProductDimensions(productId, savedDimensionId).orElseThrow(
-                () -> exceptionService.createEntityNotFoundException(productId)
-        );
-    }
+
 
     /**
      * {@inheritDoc}
@@ -274,5 +265,80 @@ public class ProductServiceImpl implements ProductService {
         }
         return productRepository.save(product);
     }
+
+    /**
+     * Updates the dimensions of the product with the specified ID.
+     * This method saves the new dimensions and then updates the product's dimensions reference.
+     *
+     * @param productId the ID of the product to update (must not be null)
+     * @param dimensions the new dimensions to associate with the product (must not be null)
+     * @return the updated {@link ProductEntity} after applying the new dimensions
+     * @throws EntityNotFoundException if no product is found with the specified {@code productId}
+     */
+    @Transactional
+    private ProductEntity updateProductDimensions(Long productId, DimensionsEntity dimensions) {
+        Long savedDimensionId = dimensionsRepository.save(dimensions).getId();
+        return productRepository.updateProductDimensions(productId, savedDimensionId).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
+    }
+
+    /**
+     * Updates the name of the product with the specified ID.
+     *
+     * @param productId the ID of the product to update (must not be null)
+     * @param newName the new name to set for the product (must not be blank)
+     * @return the updated {@link ProductEntity} after applying the new name
+     * @throws EntityNotFoundException if no product is found with the specified {@code productId}
+     */
+    private ProductEntity updateProductName(Long productId, String newName) {
+        return productRepository.updateProductName(productId, newName).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
+    }
+
+    /**
+     * Updates the summary (description) of the product with the specified ID.
+     *
+     * @param productId the ID of the product to update (must not be null)
+     * @param newSummary the new summary to set for the product (must not be blank)
+     * @return the updated {@link ProductEntity} after applying the new summary
+     * @throws EntityNotFoundException if no product is found with the specified {@code productId}
+     */
+    private ProductEntity updateProductSummary(Long productId, String newSummary) {
+        return productRepository.updateProductSummary(productId, newSummary).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
+    }
+
+    /**
+     * Updates the code of the product with the specified ID.
+     *
+     * @param productId the ID of the product to update (must not be null)
+     * @param newCode the new code to set for the product (must not be blank)
+     * @return the updated {@link ProductEntity} after applying the new code
+     * @throws EntityNotFoundException if no product is found with the specified {@code productId}
+     */
+    private ProductEntity updateProductCode(Long productId, String newCode) {
+        return productRepository.updateProductCode(productId, newCode).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
+    }
+
+    /**
+     * Updates the barcode of the product with the specified ID.
+     *
+     * @param productId the ID of the product to update (must not be null)
+     * @param barcode the new barcode to set for the product (must not be blank)
+     * @return the updated {@link ProductEntity} after applying the new barcode
+     * @throws EntityNotFoundException if no product is found with the specified {@code productId}
+     */
+    private ProductEntity updateProductBarcode(Long productId, String barcode) {
+        return productRepository.updateProductBarcode(productId, barcode).orElseThrow(
+                () -> exceptionService.createEntityNotFoundException(productId)
+        );
+    }
+
+
 }
 
