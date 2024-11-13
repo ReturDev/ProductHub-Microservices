@@ -48,8 +48,10 @@ public class ContactInfoController {
             @RequestBody @Valid ContactInfoRequestDTO contactInfoRequestDTO
     ) {
         return entityDtoMapper.contactInfoEntityToContentResponse(
-                entityDtoMapper.contactInfoRequestToEntity(
-                        contactInfoRequestDTO
+                contactService.updateContactInfo(
+                        entityDtoMapper.contactInfoRequestToEntity(
+                                contactInfoRequestDTO
+                        )
                 )
         );
     }
