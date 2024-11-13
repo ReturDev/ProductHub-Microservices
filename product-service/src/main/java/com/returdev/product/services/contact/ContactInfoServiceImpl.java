@@ -6,7 +6,6 @@ import com.returdev.product.services.exception.ExceptionService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -37,7 +36,6 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      * @throws IllegalArgumentException if the provided {@code contactInfo} has a null ID.
      * @throws EntityNotFoundException if the contact to update does not exist.
      */
-    @Transactional
     @Override
     public ContactInfoEntity updateContactInfo(ContactInfoEntity contactInfo) {
         if (contactInfo.getId() == null) {
@@ -45,6 +43,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
         }
 
         Long contactId = contactInfo.getId();
+
         if (!contactRepository.existsById(contactId)) {
             throw exceptionService.createEntityNotFoundException(contactId);
         }
@@ -57,6 +56,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
      * {@inheritDoc}
      *
      * @throws IllegalArgumentException if no fields are provided for update
+     * @throws EntityNotFoundException if the contact to update does not exist.
      */
     @Override
     public ContactInfoEntity updateContactInfo(
@@ -67,6 +67,10 @@ public class ContactInfoServiceImpl implements ContactInfoService {
             String newEmail,
             Boolean isCommercial
     ) {
+
+        if (!contactRepository.existsById(contactId)) {
+            throw exceptionService.createEntityNotFoundException(contactId);
+        }
 
         ContactInfoEntity contactInfoResult = null;
 
