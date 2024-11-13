@@ -157,6 +157,14 @@ public interface EntityDtoMapper {
     SupplierEntity supplierRequestToEntity(SupplierRequestDTO supplierRequestDTO);
 
     /**
+     * Maps a {@link ProductRequestDTO.DimensionsRequestDTO} to a {@link DimensionsEntity}.
+     *
+     * @param dimensionsRequestDTO the DTO containing the product dimensions to be converted (must not be null)
+     * @return return the mapped dimension
+     */
+    DimensionsEntity dimensionRequestToEntity(ProductRequestDTO.DimensionsRequestDTO dimensionsRequestDTO);
+
+    /**
      * Maps a {@link PaginationRequestDTO} to a {@link Pageable}.
      *
      * @param paginationRequestDTO the pagination request DTO to map
