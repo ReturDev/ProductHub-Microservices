@@ -29,7 +29,7 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
      * @return a page of matching suppliers.
      */
     @Query("SELECT s FROM SupplierEntity s WHERE (:includeInactive = true OR s.isActive = true) AND s.name LIKE CONCAT('%', :name, '%')")
-    Page<SupplierEntity> getSupplierByNameContaining(@Param("name") String name, @Param("includeInactive") boolean includeInactive, Pageable pageable);
+    Page<SupplierEntity> findSupplierByNameContaining(@Param("name") String name, @Param("includeInactive") boolean includeInactive, Pageable pageable);
 
     /**
      * Retrieves a paginated list of suppliers whose names start with the specified prefix.
@@ -41,7 +41,17 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
      * @return a page of matching suppliers.
      */
     @Query("SELECT s FROM SupplierEntity s WHERE (:includeInactive = true OR s.isActive = true) AND s.name LIKE CONCAT(:name, '%')")
-    Page<SupplierEntity> getSupplierByNameStartingWith(@Param("name") String name, @Param("includeInactive") boolean includeInactive, Pageable pageable);
+    Page<SupplierEntity> findSupplierByNameStartingWith(@Param("name") String name, @Param("includeInactive") boolean includeInactive, Pageable pageable);
+
+
+    /**
+     * Retrieves a paginated list of all active suppliers.
+     *
+     * @param pageable the pagination information, defining page number, size, and sorting criteria.
+     * @return a {@link Page} of active {@link SupplierEntity} instances.
+     */
+    @Query("SELECT p FROM SupplierEntity p WHERE p.isActive = true")
+    Page<SupplierEntity> findAllActiveSuppliers(Pageable pageable);
 
     /**
      * Updates the name of a supplier using a stored procedure.
