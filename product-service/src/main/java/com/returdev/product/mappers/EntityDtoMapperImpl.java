@@ -164,12 +164,6 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
                 }
         ).toList();
 
-        ProductRequestDTO.DimensionsRequestDTO dimensions = productRequestDTO.dimensions();
-        DimensionsEntity dimensionsEntity = new DimensionsEntity();
-        dimensionsEntity.setHeightCm(dimensions.heightCm());
-        dimensionsEntity.setLengthCm(dimensions.lengthCm());
-        dimensionsEntity.setWeightKg(dimensions.weightKg());
-        dimensionsEntity.setWidthCm(dimensions.widthCm());
 
         return new ProductEntity(
                 productRequestDTO.id(),
@@ -180,7 +174,7 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
                 modelEntity,
                 categoryEntity,
                 supplierEntities,
-                dimensionsEntity,
+                dimensionRequestToEntity(productRequestDTO.dimensions()),
                 productRequestDTO.isHidden()
         );
     }
@@ -212,6 +206,19 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
                 null,
                 supplierRequestDTO.isActive()
         );
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public DimensionsEntity dimensionRequestToEntity(ProductRequestDTO.DimensionsRequestDTO dimensionsRequestDTO) {
+
+        DimensionsEntity dimensionsEntity = new DimensionsEntity();
+        dimensionsEntity.setHeightCm(dimensionsRequestDTO.heightCm());
+        dimensionsEntity.setLengthCm(dimensionsRequestDTO.lengthCm());
+        dimensionsEntity.setWeightKg(dimensionsRequestDTO.weightKg());
+        dimensionsEntity.setWidthCm(dimensionsRequestDTO.widthCm());
+
+        return dimensionsEntity;
     }
 
     /** {@inheritDoc} */
