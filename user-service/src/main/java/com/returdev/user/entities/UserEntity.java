@@ -1,6 +1,6 @@
 package com.returdev.user.entities;
 
-import com.returdev.user.util.UUIDBinaryConverter;
+import com.returdev.user.util.converter.UUIDBinaryConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
