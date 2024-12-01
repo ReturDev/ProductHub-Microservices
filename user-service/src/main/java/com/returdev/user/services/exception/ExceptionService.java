@@ -1,6 +1,6 @@
 package com.returdev.user.services.exception;
 
-import com.returdev.user.managers.MessageManager;
+import com.returdev.user.util.managers.MessageManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

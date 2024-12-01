@@ -1,4 +1,4 @@
-package com.returdev.user.managers;
+package com.returdev.user.util.managers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
