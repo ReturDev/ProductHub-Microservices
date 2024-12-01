@@ -2,19 +2,20 @@ package com.returdev.user.entities;
 
 import com.returdev.user.enums.AuthProvider;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 /**
  * Entity class representing an authentication provider associated with a user.
  * This class maps to the "auth_providers" table in the database and stores
  * information about the provider's name, provider ID, and the associated user.
- *<p>
- * It also enforces a unique constraint on the combination of the "name" and "provider_id" columns.
+ * <p>
+ * It enforces a unique constraint on the combination of the "name" and "provider_id" columns
+ * to ensure no duplicate entries exist for a specific authentication provider for a user.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,29 +39,34 @@ public class AuthProviderEntity {
     private Long id;
 
     /**
-     * The name of the authentication provider (e.g., "Google", "Facebook").
-     * This field is required and cannot be updated once set.
-     * The value is stored as a string representation of the enum.
+     * The name of the authentication provider (e.g., Google, Facebook).
+     * This field is mandatory and cannot be updated after creation.
+     * It is stored as an enumerated type.
      */
+    @NotNull(message = "{validation.not_null.message}")
     @Column(name = "name", nullable = false, updatable = false)
     @Enumerated(value = EnumType.STRING)
     private AuthProvider name;
 
     /**
-     * The unique identifier assigned by the authentication provider to the user.
-     * This field is required and cannot be updated once set.
+     * The unique provider ID for the authentication provider.
+     * This ID uniquely identifies the user within the specific provider's system.
+     * This field is mandatory and cannot be updated after creation.
      */
+    @NotBlank(message = "{validation.not_blank.message}")
     @Column(name = "provider_id", nullable = false, updatable = false)
     private String providerId;
 
     /**
      * The user associated with this authentication provider.
-     * This field is required and establishes a many-to-one relationship with the {@link UserEntity}.
-     * It is stored in the database as a foreign key referencing the "users" table.
+     * This field establishes a many-to-one relationship with the {@link UserEntity}.
+     * The user entity cannot be null and cannot be updated after creation.
      */
+    @NotNull(message = "{validation.not_null.message}")
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private UserEntity userId;
 
 }
+
 
