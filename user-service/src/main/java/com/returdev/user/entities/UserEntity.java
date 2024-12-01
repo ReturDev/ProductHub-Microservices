@@ -1,13 +1,14 @@
 package com.returdev.user.entities;
 
+import com.returdev.user.enums.UserRole;
 import com.returdev.user.util.converter.UUIDBinaryConverter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.management.relation.Role;
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
@@ -41,27 +42,34 @@ public class UserEntity {
 
     /**
      * The name of the user.
-     * This field is required and can have a maximum length of 50 characters.
+     * Must be between 3 and 50 characters.
      */
+    @NotBlank(message = "{validation.not_blank.message}")
+    @Size(min = 3, max = 50, message = "{validation.size.message}")
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
     /**
-     * The surname(s) of the user.
-     * This field is required and can have a maximum length of 150 characters.
+     * The surnames (last names) of the user.
+     * Cannot be null and must not exceed 150 characters.
      */
+    @NotNull(message = "{validation.not_null.message}")
+    @Size(max = 150, message = "{validation.size.max.message}")
     @Column(name = "surnames", nullable = false, length = 150)
     private String surnames;
 
     /**
      * The email address of the user.
-     * This field is required, must be unique, and is used for user identification.
+     * Must be a valid email format, unique, and cannot be updated after creation.
      */
+    @NotNull(message = "{validation.not_null.message}")
+    @Email(message = "{validation.email.message}")
     @Column(name = "email", nullable = false, unique = true, updatable = false)
     private String email;
 
     /**
      * The hashed password of the user.
+     * This is used for authentication.
      */
     @Column(name = "password")
     private String hashPassword;
@@ -82,14 +90,21 @@ public class UserEntity {
 
     /**
      * A set of roles associated with the user.
-     * The roles are stored in the "user_roles" table and fetched eagerly.
-     * Each role is an enumerated value.
+     * Each role represents a specific permission or group the user belongs to.
+     * Cannot be empty and is stored in the "user_roles" table with a unique constraint on the user-role combination.
      */
+    @NotEmpty(message = "{validation.not_empty.message}")
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
+    @CollectionTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            uniqueConstraints = @UniqueConstraint(
+                    columnNames = {"user_id", "role"}
+            )
+    )
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Set<UserRole> roles;
 
     /**
      * A set of authentication providers associated with the user.
@@ -118,9 +133,10 @@ public class UserEntity {
      * Sets the last update timestamp to the current time.
      */
     @PreUpdate
-    private void preUpdate(){
+    private void preUpdate() {
         this.updatedAt = Instant.now();
     }
 }
+
 
 
