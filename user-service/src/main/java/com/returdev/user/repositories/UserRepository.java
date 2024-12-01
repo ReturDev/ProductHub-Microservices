@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -30,27 +32,24 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
      * @param email the email of the user
      * @return the {@link UserEntity} associated with the given email, or null if no user is found
      */
-    UserEntity findUserEntityByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
+
 
     /**
-     * Updates the name of a user with the specified ID.
+     * Updates the name and surnames of a user in the database.
+     * <p>
+     * This query updates the {@link UserEntity} with the specified {@code id} by setting the new values for
+     * the {@code name} and {@code surnames} fields.
+     * </p>
      *
-     * @param id the ID of the user
-     * @param newName the new name to set for the user
-     * @return the number of rows affected (should be 1 if the update is successful)
+     * @param id The unique identifier of the user whose name and surnames are being updated.
+     * @param newName The new value for the user's name.
+     * @param newSurnames The new value for the user's surnames.
+     * @return The number of rows affected by the update (should be 1 if the user exists and the update is successful).
      */
-    @Query("UPDATE UserEntity e SET e.name = :name WHERE e.id = :id")
-    int updateUserName(@Param("id") UUID id, @Param("name") String newName);
+    @Query("UPDATE UserEntity e SET e.name = :name, e.surnames = :surnames WHERE e.id = :id")
+    int updateUserFullName(@Param("id") UUID id, @Param("name") String newName, @Param("surnames") String newSurnames);
 
-    /**
-     * Updates the surnames of a user with the specified ID.
-     *
-     * @param id the ID of the user
-     * @param newSurnames the new surnames to set for the user
-     * @return the number of rows affected (should be 1 if the update is successful)
-     */
-    @Query("UPDATE UserEntity e SET e.surnames = :surnames WHERE e.id = :id")
-    int updateUserSurnames(@Param("id") UUID id, @Param("surnames") String newSurnames);
 
     /**
      * Updates the hashed password of a user with the specified ID.
@@ -63,27 +62,35 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     int updateUserHashPassword(@Param("id") UUID id, @Param("password") String newHashPassword);
 
     /**
-     * Deletes the roles associated with the user having the specified ID.
+     * Deletes specific roles associated with a user in the database.
+     * <p>
+     * This query removes entries from the `user_roles` table where the `user_id` matches the provided {@code userId},
+     * and the roles are present in the provided {@code roles} set.
+     * </p>
      *
-     * @param id the ID of the user whose roles are to be deleted
-     * @return the number of rows affected (should be > 0 if roles are deleted)
+     * <p>
+     * This operation is transactional and modifies the database directly using a native SQL query.
+     * </p>
+     *
+     * @param userId The unique identifier of the user whose roles are to be deleted.
+     * @param roles A set of role names to be removed from the user.
      */
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM user_roles WHERE id = :id", nativeQuery = true)
-    int deleteUserRoles(@Param("id") UUID id);
+    @Query(value = "DELETE FROM user_roles WHERE user_id = :userId AND role IN :roles", nativeQuery = true)
+    void deleteUserRoles(@Param("userId") UUID userId, @Param("roles") Set<String> roles);
+
 
     /**
      * Adds a new role for the user with the specified ID.
      *
      * @param id the ID of the user to whom the role is to be assigned
      * @param newRole the role to assign to the user
-     * @return the number of rows affected (should be 1 if the role is added successfully)
      */
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO user_roles(user_id, role) VALUES (:id, :role)", nativeQuery = true)
-    int saveUserRole(@Param("id") UUID id, @Param("role") String newRole);
+    void saveUserRole(@Param("id") UUID id, @Param("role") String newRole);
 
 }
 
