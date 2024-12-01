@@ -54,11 +54,13 @@ public class AuthProviderEntity {
     private String providerId;
 
     /**
-     * The unique identifier of the user to whom the authentication provider is linked.
-     * This field is required and cannot be updated once set.
+     * The user associated with this authentication provider.
+     * This field is required and establishes a many-to-one relationship with the {@link UserEntity}.
+     * It is stored in the database as a foreign key referencing the "users" table.
      */
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    private UUID userId;
+    private UserEntity userId;
+
 }
 
