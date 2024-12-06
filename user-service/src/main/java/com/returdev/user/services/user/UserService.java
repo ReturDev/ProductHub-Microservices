@@ -4,6 +4,7 @@ import com.returdev.user.entities.UserEntity;
 import com.returdev.user.enums.UserRole;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Set;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import java.util.UUID;
  * as well as modifying user roles and updating specific user properties like full name or password.
  * </p>
  */
+@Validated
 public interface UserService {
 
     /**
