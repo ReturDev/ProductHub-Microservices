@@ -55,11 +55,11 @@ public interface UserService {
     void updateUserFullName(
             @NotNull(message = "{validation.not_null.message}") UUID id,
             @NotBlank(message = "{validation.not_blank.message}")
-            @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{3,}$")
+            @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{3,}$", message = "{validation.pattern.name.message}")
             @Size(min = 3, max = 50, message = "{validation.size.message}") String newName,
             @NotNull(message = "{validation.not_null.message}")
             @Size(max = 150, message = "{validation.size.max.message}")
-            @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s']*$") String newSurnames
+            @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s']*$", message = "{validation.pattern.surname.message}") String newSurnames
     );
 
     /**
