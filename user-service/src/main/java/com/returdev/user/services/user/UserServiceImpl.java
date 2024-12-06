@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * {@inheritDoc}
-     * @throws IllegalArgumentException If the user's ID is not null or if the user credentials are invalid.
+     * @throws IllegalArgumentException @throws IllegalArgumentException If the user has an ID already, or has invalid credentials or multiple authentication providers.
      */
     @Override
     public UserEntity saveUser(UserEntity user) {
@@ -66,6 +66,8 @@ public class UserServiceImpl implements UserService {
         if (user.getHashPassword().isBlank() &&
                 (user.getAuthProviders() == null || user.getAuthProviders().isEmpty())) {
             throw exceptionService.createIllegalArgumentException("exception.user_creation.bad_credentials.message");
+        } else if (user.getAuthProviders().size() > 1){
+            throw exceptionService.createIllegalArgumentException("exception.user_creation.multiple_providers.message");
         }
 
         return userRepository.save(user);
