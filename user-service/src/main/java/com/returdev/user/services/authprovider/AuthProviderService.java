@@ -3,6 +3,7 @@ package com.returdev.user.services.authprovider;
 import com.returdev.user.entities.AuthProviderEntity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 
 
 /**
@@ -13,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
  * (e.g., Google, Facebook, etc.).
  * </p>
  */
+@Validated
 public interface AuthProviderService {
 
     /**
