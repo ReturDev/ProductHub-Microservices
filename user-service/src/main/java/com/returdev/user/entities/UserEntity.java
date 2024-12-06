@@ -112,7 +112,7 @@ public class UserEntity {
      * The set of providers will be removed if the user entity is deleted.
      */
     @OneToMany(
-            cascade = {CascadeType.REMOVE},
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
     private Set<AuthProviderEntity> authProviders;
