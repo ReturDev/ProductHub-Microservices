@@ -65,7 +65,7 @@ public class AuthProviderEntity {
     @NotNull(message = "{validation.not_null.message}")
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    private UserEntity userId;
+    private UserEntity user;
 
 }
 
