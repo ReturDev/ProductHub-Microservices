@@ -63,10 +63,14 @@ public class UserServiceImpl implements UserService {
             throw exceptionService.createIllegalArgumentException("exception.id_is_not_null.message");
         }
 
-        if (user.getHashPassword().isBlank() &&
-                (user.getAuthProviders() == null || user.getAuthProviders().isEmpty())) {
+        if (
+                (user.getAuthProviders() == null || user.getAuthProviders().isEmpty()) &&
+                        (user.getHashPassword() == null || user.getHashPassword().isBlank())
+        ) {
             throw exceptionService.createIllegalArgumentException("exception.user_creation.bad_credentials.message");
-        } else if (user.getAuthProviders().size() > 1){
+        }
+
+        if (user.getAuthProviders() != null && user.getAuthProviders().size() > 1) {
             throw exceptionService.createIllegalArgumentException("exception.user_creation.multiple_providers.message");
         }
 
