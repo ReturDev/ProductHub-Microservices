@@ -7,6 +7,8 @@ import com.returdev.user.dtos.response.AuthProviderResponseDTO;
 import com.returdev.user.entities.AuthProviderEntity;
 import com.returdev.user.entities.UserEntity;
 
+import java.util.UUID;
+
 /**
  * Interface for mapping between entity objects and Data Transfer Objects (DTOs).
  * <p>
@@ -31,6 +33,15 @@ public interface EntityDtoMapper {
      * @return An {@link AuthProviderEntity} containing the mapped data.
      */
     AuthProviderEntity authProviderRequestDtoToEntity(AuthProviderRequestDTO authProvider);
+
+    /**
+     * Maps an {@link AuthProviderRequestDTO} to an {@link AuthProviderEntity} and associates it with a user.
+     *
+     * @param authProvider The {@link AuthProviderRequestDTO} to be mapped.
+     * @param userId The UUID of the user to associate with the {@link AuthProviderEntity}.
+     * @return An {@link AuthProviderEntity} containing the mapped data with an associated user ID.
+     */
+    AuthProviderEntity authProviderRequestDtoToEntity(AuthProviderRequestDTO authProvider, UUID userId);
 
     /**
      * Maps a {@link UserEntity} to an {@link AccountResponseDTO}.
