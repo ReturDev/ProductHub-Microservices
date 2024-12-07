@@ -47,6 +47,8 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
      * @param newSurnames The new value for the user's surnames.
      * @return The number of rows affected by the update (should be 1 if the user exists and the update is successful).
      */
+    @Modifying
+    @Transactional
     @Query("UPDATE UserEntity e SET e.name = :name, e.surnames = :surnames WHERE e.id = :id")
     int updateUserFullName(@Param("id") UUID id, @Param("name") String newName, @Param("surnames") String newSurnames);
 
@@ -58,6 +60,8 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
      * @param newHashPassword the new hashed password to set for the user
      * @return the number of rows affected (should be 1 if the update is successful)
      */
+    @Modifying
+    @Transactional
     @Query("UPDATE UserEntity e SET e.hashPassword = :password WHERE e.id = :id")
     int updateUserHashPassword(@Param("id") UUID id, @Param("password") String newHashPassword);
 
