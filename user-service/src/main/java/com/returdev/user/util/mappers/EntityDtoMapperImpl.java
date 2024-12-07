@@ -9,6 +9,7 @@ import com.returdev.user.entities.UserEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -24,7 +25,6 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
     @Override
     public AuthProviderResponseDTO authProviderEntityToResponseDto(AuthProviderEntity authProvider) {
         return new AuthProviderResponseDTO(
-                authProvider.getId(),
                 authProvider.getName(),
                 authProvider.getProviderId()
         );
@@ -40,6 +40,23 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
                 authProvider.providerName(),
                 authProvider.providerId(),
                 null
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AuthProviderEntity authProviderRequestDtoToEntity(AuthProviderRequestDTO authProvider, UUID userId) {
+
+        UserEntity user = new UserEntity();
+        user.setId(userId);
+
+        return new AuthProviderEntity(
+                null,
+                authProvider.providerName(),
+                authProvider.providerId(),
+                user
         );
     }
 
