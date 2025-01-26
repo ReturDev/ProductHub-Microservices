@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -87,21 +88,21 @@ public class SecurityConfig {
     }
 
 
-/**
- * Configures the default security filter chain with form-based login and OAuth2 login.
- *
- * @param http the {@link HttpSecurity} object used to configure the security filter chain.
- * @return the configured {@link SecurityFilterChain}.
- * @throws Exception if an error occurs during configuration.
- */
-@Bean
-@Order(2)
-public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    return http
-            .formLogin(Customizer.withDefaults())
-            .oauth2Login( oauth -> oauth.successHandler(authenticationSuccessHandler))
-            .build();
-}
+    /**
+     * Configures the default security filter chain with form-based login and OAuth2 login.
+     *
+     * @param http the {@link HttpSecurity} object used to configure the security filter chain.
+     * @return the configured {@link SecurityFilterChain}.
+     * @throws Exception if an error occurs during configuration.
+     */
+    @Bean
+    @Order(2)
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .formLogin(Customizer.withDefaults())
+                .oauth2Login(oauth -> oauth.successHandler(authenticationSuccessHandler))
+                .build();
+    }
 
     /**
      * Configures the authentication provider with a user details service and password encoder.
@@ -209,4 +210,5 @@ public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws 
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder().build();
     }
+
 }
