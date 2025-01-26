@@ -9,8 +9,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 593475890221-59ii7ul68sk94jq1mv3momval1lai1iu.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
@@ -18,8 +18,8 @@ spring:
         client:
           product-hub-client:
             registration:
-              client-id: product-hub-client-consumer
-              client-secret: "{noop}1234"
+              client-id: ${PRODUCT_HUB_CLIENT_ID}
+              client-secret: ${PRODUCT_HUB_CLIENT_SECRET}
               client-authentication-methods:
                 - client_secret_basic
               authorization-grant-types:
@@ -39,4 +39,5 @@ eureka:
 
 feign:
   client:
-    name: product-hub-client
+    name: users-service
+    url: url
