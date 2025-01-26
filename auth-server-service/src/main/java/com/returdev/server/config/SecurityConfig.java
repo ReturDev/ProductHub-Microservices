@@ -48,6 +48,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final FederatedIdentityAuthenticationSuccessHandler authenticationSuccessHandler;
+
     /**
      * Configures the security filter chain for the OAuth2 authorization server.
      * <p>
@@ -97,7 +99,7 @@ public class SecurityConfig {
 public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     return http
             .formLogin(Customizer.withDefaults())
-            .oauth2Login(Customizer.withDefaults())
+            .oauth2Login( oauth -> oauth.successHandler(authenticationSuccessHandler))
             .build();
 }
 
