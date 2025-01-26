@@ -41,7 +41,10 @@ public class FederatedIdentityAuthenticationSuccessHandler implements Authentica
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         if (authentication instanceof OAuth2AuthenticationToken) {
-            authorizationService.registerUser((OAuth2User) authentication.getPrincipal());
+            authorizationService.registerUser(
+                    ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId(),
+                    (OAuth2User) authentication.getPrincipal()
+            );
         }
 
     }
