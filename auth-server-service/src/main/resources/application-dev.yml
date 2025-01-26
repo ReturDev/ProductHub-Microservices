@@ -4,6 +4,37 @@ spring:
   cloud:
     config:
       enabled: false
+  security:
+    oauth2:
+      client:
+        google:
+          client-id: 593475890221-59ii7ul68sk94jq1mv3momval1lai1iu.apps.googleusercontent.com
+          client-secret: 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
+          scope:
+            - email
+      authorizationserver:
+        client:
+          product-hub-client:
+            registration:
+              client-id: "product-hub-client-consumer"
+              client-secret: "{noop}1234"
+              client-authentication-methods:
+                - "client_secret_basic"
+              authorization-grant-types:
+                - "authorization_code"
+                - "refresh_token"
+              redirect-uris:
+                - "http://localhost:8081/login/oauth2/code/my-server/product-hub-client"
+              scopes:
+                - "profile"
+              require-authorization-consent: true
+              token:
+                  access-token-time-to-live: 3600000
+                  refresh-token-time-to-live: 86400000
+
+server:
+  port: 8081
 eureka:
   client:
     enabled: false
+
