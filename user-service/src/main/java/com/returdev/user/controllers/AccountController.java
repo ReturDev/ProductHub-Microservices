@@ -46,7 +46,7 @@ public class AccountController {
      * @param email The email of the user account to be retrieved.
      * @return {@link AccountResponseDTO} containing the user account details.
      */
-    @GetMapping("/email/{email}")
+    @GetMapping("/{email}")
     @ResponseStatus(HttpStatus.OK)
     AccountResponseDTO getAccountByEmail(
             @PathVariable("email") String email
