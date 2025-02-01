@@ -4,9 +4,7 @@ package com.returdev.user.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.returdev.user.exceptions.InvalidEnumValueException;
 import com.returdev.user.util.EnumUtil;
-import org.apache.catalina.User;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,7 +13,7 @@ import java.util.List;
  * This enum defines a set of user roles with varying levels of privileges.
  * </p>
  * <ul>
- *     <li>{@code GOD} - A super user with the highest level of privileges.</li>
+ *     <li>{@code GOD} - A superuser with the highest level of privileges.</li>
  *     <li>{@code ADMIN} - A user with administrative privileges.</li>
  *     <li>{@code MANAGER} - A user with managerial privileges.</li>
  *     <li>{@code USER} - A standard user with basic privileges.</li>
