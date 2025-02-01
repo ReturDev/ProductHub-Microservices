@@ -26,6 +26,9 @@
 		<module>
 			eureka-server
 		</module>
+		<module>
+			auth-server-service
+		</module>
 	</modules>
 
 	<properties>
